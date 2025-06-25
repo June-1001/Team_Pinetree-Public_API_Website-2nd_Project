@@ -5,6 +5,7 @@ const apiUrl = {
     numOfRows: 10,
     pageNo: 1,
     type: "json",
+
     //숲길명
     srchFrtrlNm: "",
   },
@@ -15,8 +16,10 @@ const apiUrl = {
     numOfRows: 10,
     pageNo: 1,
     type: "json",
+
     // 숲길명
     srchFrtrlNm: "",
+
     // 난이도 : 001 - 쉬움 / 002 - 보통 / 003 - 어려움
     srchDgdfCd: "",
   },
@@ -27,8 +30,14 @@ const apiUrl = {
     pageNo: 1,
     numOfRows: 1000,
     dataType: "json",
+
+    // 측정 일자
     base_date: "20250625",
+
+    // 측정 시간
     base_time: "0500",
+
+    // 좌표
     nx: 55,
     ny: 127,
   },
