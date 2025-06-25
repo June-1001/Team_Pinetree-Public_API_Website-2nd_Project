@@ -1,5 +1,3 @@
-const APISettings = {};
-
 const apiUrl = {
   // 한국등산트레킹지원센터_전국주요봉우리 문화자원 POI 정보 서비스
   cultural: {
