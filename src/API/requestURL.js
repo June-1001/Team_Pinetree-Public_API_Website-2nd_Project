@@ -44,7 +44,7 @@ const apiUrl = {
 };
 
 // API 키
-const apiKey = `ErCuM5KvYasv6PiohNILSbv%2BloBCCBgMSv2rgzbrGMxQpVDNjuLn%2B3yhaGiW3ftEEcm58h0r%2BIUpyn8bJi4lLQ%3D%3D`;
+const dataApiKey = `ErCuM5KvYasv6PiohNILSbv%2BloBCCBgMSv2rgzbrGMxQpVDNjuLn%2B3yhaGiW3ftEEcm58h0r%2BIUpyn8bJi4lLQ%3D%3D`;
 
 // 요청 URL 생성
 export function GetRequestUrl(item) {
@@ -62,7 +62,7 @@ export function GetRequestUrl(item) {
       if (apiUrl[item].pageNo) {
         params.push("pageNo=" + apiUrl[item].pageNo);
       }
-      params.push("serviceKey=" + apiKey);
+      params.push("serviceKey=" + dataApiKey);
       if (apiUrl[item].type) {
         params.push("type=" + apiUrl[item].type);
       }
@@ -81,7 +81,7 @@ export function GetRequestUrl(item) {
       if (apiUrl[item].pageNo) {
         params.push("pageNo=" + apiUrl[item].pageNo);
       }
-      params.push("serviceKey=" + apiKey);
+      params.push("serviceKey=" + dataApiKey);
       if (apiUrl[item].type) {
         params.push("type=" + apiUrl[item].type);
       }
@@ -97,7 +97,7 @@ export function GetRequestUrl(item) {
   if (item === "weather") {
     {
       baseUrl = apiUrl[item].url + "/getVilageFcst?";
-      params.push("serviceKey=" + apiKey);
+      params.push("serviceKey=" + dataApiKey);
       if (apiUrl[item].pageNo) {
         params.push("pageNo=" + apiUrl[item].pageNo);
       }
