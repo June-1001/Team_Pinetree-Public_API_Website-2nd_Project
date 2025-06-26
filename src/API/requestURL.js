@@ -54,71 +54,65 @@ export function GetRequestUrl(item) {
   const params = [];
 
   if (item === "cultural") {
-    {
-      baseUrl = apiUrl[item].url + "/getCulturalInfoList?";
-      if (apiUrl[item].numOfRows) {
-        params.push("numOfRows=" + apiUrl[item].numOfRows);
-      }
-      if (apiUrl[item].pageNo) {
-        params.push("pageNo=" + apiUrl[item].pageNo);
-      }
-      params.push("serviceKey=" + dataApiKey);
-      if (apiUrl[item].type) {
-        params.push("type=" + apiUrl[item].type);
-      }
-      if (apiUrl[item].srchFrtrlNm) {
-        params.push("srchFrtrlNm=" + apiUrl[item].srchFrtrlNm);
-      }
+    baseUrl = apiUrl[item].url + "/getCulturalInfoList?";
+    if (apiUrl[item].numOfRows) {
+      params.push("numOfRows=" + apiUrl[item].numOfRows);
+    }
+    if (apiUrl[item].pageNo) {
+      params.push("pageNo=" + apiUrl[item].pageNo);
+    }
+    params.push("serviceKey=" + dataApiKey);
+    if (apiUrl[item].type) {
+      params.push("type=" + apiUrl[item].type);
+    }
+    if (apiUrl[item].srchFrtrlNm) {
+      params.push("srchFrtrlNm=" + encodeURIComponent(apiUrl[item].srchFrtrlNm));
     }
   }
 
   if (item === "health") {
-    {
-      baseUrl = apiUrl[item].url + "/getHlthEffctInfoList?";
-      if (apiUrl[item].numOfRows) {
-        params.push("numOfRows=" + apiUrl[item].numOfRows);
-      }
-      if (apiUrl[item].pageNo) {
-        params.push("pageNo=" + apiUrl[item].pageNo);
-      }
-      params.push("serviceKey=" + dataApiKey);
-      if (apiUrl[item].type) {
-        params.push("type=" + apiUrl[item].type);
-      }
-      if (apiUrl[item].srchFrtrlNm) {
-        params.push("srchFrtrlNm=" + apiUrl[item].srchFrtrlNm);
-      }
-      if (apiUrl[item].srchDgdfCd) {
-        params.push("srchDgdfCd=" + apiUrl[item].srchDgdfCd);
-      }
+    baseUrl = apiUrl[item].url + "/getHlthEffctInfoList?";
+    if (apiUrl[item].numOfRows) {
+      params.push("numOfRows=" + apiUrl[item].numOfRows);
+    }
+    if (apiUrl[item].pageNo) {
+      params.push("pageNo=" + apiUrl[item].pageNo);
+    }
+    params.push("serviceKey=" + dataApiKey);
+    if (apiUrl[item].type) {
+      params.push("type=" + apiUrl[item].type);
+    }
+    if (apiUrl[item].srchFrtrlNm) {
+      params.push("srchFrtrlNm=" + encodeURIComponent(apiUrl[item].srchFrtrlNm));
+    }
+    if (apiUrl[item].srchDgdfCd) {
+      params.push("srchDgdfCd=" + apiUrl[item].srchDgdfCd);
     }
   }
 
   if (item === "weather") {
-    {
-      baseUrl = apiUrl[item].url + "/getVilageFcst?";
-      params.push("serviceKey=" + dataApiKey);
-      if (apiUrl[item].pageNo) {
-        params.push("pageNo=" + apiUrl[item].pageNo);
-      }
-      if (apiUrl[item].numOfRows) {
-        params.push("numOfRows=" + apiUrl[item].numOfRows);
-      }
-      if (apiUrl[item].dataType) {
-        params.push("dataType=" + apiUrl[item].dataType);
-      }
-      if (apiUrl[item].base_date) {
-        params.push("base_date=" + apiUrl[item].base_date);
-      }
-      if (apiUrl[item].base_time) {
-        params.push("base_time=" + apiUrl[item].base_time);
-      }
-      if (apiUrl[item].nx) {
-        params.push("nx=" + apiUrl[item].nx);
-      }
-      if (apiUrl[item].ny) {
-        params.push("ny=" + apiUrl[item].ny);
-      }
+    baseUrl = apiUrl[item].url + "/getVilageFcst?";
+    params.push("serviceKey=" + dataApiKey);
+    if (apiUrl[item].pageNo) {
+      params.push("pageNo=" + apiUrl[item].pageNo);
+    }
+    if (apiUrl[item].numOfRows) {
+      params.push("numOfRows=" + apiUrl[item].numOfRows);
+    }
+    if (apiUrl[item].dataType) {
+      params.push("dataType=" + apiUrl[item].dataType);
+    }
+    if (apiUrl[item].base_date) {
+      params.push("base_date=" + apiUrl[item].base_date);
+    }
+    if (apiUrl[item].base_time) {
+      params.push("base_time=" + apiUrl[item].base_time);
+    }
+    if (apiUrl[item].nx) {
+      params.push("nx=" + apiUrl[item].nx);
+    }
+    if (apiUrl[item].ny) {
+      params.push("ny=" + apiUrl[item].ny);
     }
   }
 
