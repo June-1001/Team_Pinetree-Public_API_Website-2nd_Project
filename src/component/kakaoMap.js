@@ -52,7 +52,6 @@ const KakaoMapAddressSearch = () => {
     });
     setMarker(newMarker);
 
-    // Reverse geocoding: get address
     const geocoder = new window.kakao.maps.services.Geocoder();
     geocoder.coord2Address(lon, lat, (result, status) => {
       if (status === window.kakao.maps.services.Status.OK) {
