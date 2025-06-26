@@ -1,4 +1,4 @@
-const apiUrl = {
+const apiParams = {
   // 한국등산트레킹지원센터_전국주요봉우리 문화자원 POI 정보 서비스
   cultural: {
     url: `https://apis.data.go.kr/B553662/culturalInfoService`,
@@ -46,7 +46,7 @@ const apiUrl = {
 // API 키
 const dataApiKey = `ErCuM5KvYasv6PiohNILSbv%2BloBCCBgMSv2rgzbrGMxQpVDNjuLn%2B3yhaGiW3ftEEcm58h0r%2BIUpyn8bJi4lLQ%3D%3D`;
 
-// 요청 URL 생성
+// 공공 API 요청 URL 생성
 export function GetRequestUrl(item) {
   if (!apiUrl[item]) return null;
 
