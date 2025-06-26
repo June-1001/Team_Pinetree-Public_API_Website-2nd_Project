@@ -7,6 +7,7 @@ const KakaoMapAddressSearch = () => {
   const [lon, setLon] = useState("");
   const [map, setMap] = useState(null);
   const [marker, setMarker] = useState(null);
+  const [address, setAddress] = useState("");
 
   useEffect(() => {
     if (window.kakao && window.kakao.maps) {
@@ -51,14 +52,16 @@ const KakaoMapAddressSearch = () => {
     });
     setMarker(newMarker);
 
-    // Optional reverse geocoding to show address
+    // Reverse geocoding: get address
     const geocoder = new window.kakao.maps.services.Geocoder();
     geocoder.coord2Address(lon, lat, (result, status) => {
       if (status === window.kakao.maps.services.Status.OK) {
-        const address = result[0].road_address
+        const addr = result[0].road_address
           ? result[0].road_address.address_name
           : result[0].address.address_name;
-        alert("주소: " + address);
+        setAddress(addr);
+      } else {
+        setAddress("주소를 찾을 수 없습니다.");
       }
     });
   };
@@ -85,6 +88,8 @@ const KakaoMapAddressSearch = () => {
         id="kakao_map_container"
         style={{ width: "500px", height: "400px", marginTop: "10px" }}
       ></div>
+
+      {address && <div style={{ marginTop: "10px", fontWeight: "bold" }}>주소: {address}</div>}
     </div>
   );
 };

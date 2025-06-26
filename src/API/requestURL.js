@@ -48,71 +48,71 @@ const dataApiKey = `ErCuM5KvYasv6PiohNILSbv%2BloBCCBgMSv2rgzbrGMxQpVDNjuLn%2B3yh
 
 // 공공 API 요청 URL 생성
 export function GetRequestUrl(item) {
-  if (!apiUrl[item]) return null;
+  if (!apiParams[item]) return null;
 
   let baseUrl = "";
   const params = [];
 
   if (item === "cultural") {
-    baseUrl = apiUrl[item].url + "/getCulturalInfoList?";
-    if (apiUrl[item].numOfRows) {
-      params.push("numOfRows=" + apiUrl[item].numOfRows);
+    baseUrl = apiParams[item].url + "/getCulturalInfoList?";
+    if (apiParams[item].numOfRows) {
+      params.push("numOfRows=" + apiParams[item].numOfRows);
     }
-    if (apiUrl[item].pageNo) {
-      params.push("pageNo=" + apiUrl[item].pageNo);
+    if (apiParams[item].pageNo) {
+      params.push("pageNo=" + apiParams[item].pageNo);
     }
     params.push("serviceKey=" + dataApiKey);
-    if (apiUrl[item].type) {
-      params.push("type=" + apiUrl[item].type);
+    if (apiParams[item].type) {
+      params.push("type=" + apiParams[item].type);
     }
-    if (apiUrl[item].srchFrtrlNm) {
-      params.push("srchFrtrlNm=" + encodeURIComponent(apiUrl[item].srchFrtrlNm));
+    if (apiParams[item].srchFrtrlNm) {
+      params.push("srchFrtrlNm=" + encodeURIComponent(apiParams[item].srchFrtrlNm));
     }
   }
 
   if (item === "health") {
-    baseUrl = apiUrl[item].url + "/getHlthEffctInfoList?";
-    if (apiUrl[item].numOfRows) {
-      params.push("numOfRows=" + apiUrl[item].numOfRows);
+    baseUrl = apiParams[item].url + "/getHlthEffctInfoList?";
+    if (apiParams[item].numOfRows) {
+      params.push("numOfRows=" + apiParams[item].numOfRows);
     }
-    if (apiUrl[item].pageNo) {
-      params.push("pageNo=" + apiUrl[item].pageNo);
+    if (apiParams[item].pageNo) {
+      params.push("pageNo=" + apiParams[item].pageNo);
     }
     params.push("serviceKey=" + dataApiKey);
-    if (apiUrl[item].type) {
-      params.push("type=" + apiUrl[item].type);
+    if (apiParams[item].type) {
+      params.push("type=" + apiParams[item].type);
     }
-    if (apiUrl[item].srchFrtrlNm) {
-      params.push("srchFrtrlNm=" + encodeURIComponent(apiUrl[item].srchFrtrlNm));
+    if (apiParams[item].srchFrtrlNm) {
+      params.push("srchFrtrlNm=" + encodeURIComponent(apiParams[item].srchFrtrlNm));
     }
-    if (apiUrl[item].srchDgdfCd) {
-      params.push("srchDgdfCd=" + apiUrl[item].srchDgdfCd);
+    if (apiParams[item].srchDgdfCd) {
+      params.push("srchDgdfCd=" + apiParams[item].srchDgdfCd);
     }
   }
 
   if (item === "weather") {
-    baseUrl = apiUrl[item].url + "/getVilageFcst?";
+    baseUrl = apiParams[item].url + "/getVilageFcst?";
     params.push("serviceKey=" + dataApiKey);
-    if (apiUrl[item].pageNo) {
-      params.push("pageNo=" + apiUrl[item].pageNo);
+    if (apiParams[item].pageNo) {
+      params.push("pageNo=" + apiParams[item].pageNo);
     }
-    if (apiUrl[item].numOfRows) {
-      params.push("numOfRows=" + apiUrl[item].numOfRows);
+    if (apiParams[item].numOfRows) {
+      params.push("numOfRows=" + apiParams[item].numOfRows);
     }
-    if (apiUrl[item].dataType) {
-      params.push("dataType=" + apiUrl[item].dataType);
+    if (apiParams[item].dataType) {
+      params.push("dataType=" + apiParams[item].dataType);
     }
-    if (apiUrl[item].base_date) {
-      params.push("base_date=" + apiUrl[item].base_date);
+    if (apiParams[item].base_date) {
+      params.push("base_date=" + apiParams[item].base_date);
     }
-    if (apiUrl[item].base_time) {
-      params.push("base_time=" + apiUrl[item].base_time);
+    if (apiParams[item].base_time) {
+      params.push("base_time=" + apiParams[item].base_time);
     }
-    if (apiUrl[item].nx) {
-      params.push("nx=" + apiUrl[item].nx);
+    if (apiParams[item].nx) {
+      params.push("nx=" + apiParams[item].nx);
     }
-    if (apiUrl[item].ny) {
-      params.push("ny=" + apiUrl[item].ny);
+    if (apiParams[item].ny) {
+      params.push("ny=" + apiParams[item].ny);
     }
   }
 
