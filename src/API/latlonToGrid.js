@@ -1,6 +1,6 @@
 // 기상청 API 그리드 변환용
 // 위도, 경도 입력 시 기상청 좌표로 변환하는 함수
-export function latLonToGrid(lat, lon) {
+export function latlonToGrid(lat, lon) {
   const RE = 6371.00877;
   const GRID = 5.0;
   const SLAT1 = 30.0;

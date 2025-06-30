@@ -1,4 +1,4 @@
-import { latLonToGrid } from "./latlonToGrid";
+import { latlonToGrid } from "./latlonToGrid";
 
 const publicDataApiKey = `ErCuM5KvYasv6PiohNILSbv%2BloBCCBgMSv2rgzbrGMxQpVDNjuLn%2B3yhaGiW3ftEEcm58h0r%2BIUpyn8bJi4lLQ%3D%3D`;
 const vworldApiKey = `31198BF5-179E-3380-947F-F97448ED7D34`;
@@ -45,14 +45,24 @@ export function GetRequestUrl(item, lat, lon) {
   if (item === "weather") {
     baseUrl = apiType.url + "/getVilageFcst?";
     params.push("serviceKey=" + publicDataApiKey);
-    if (apiType.pageNo) params.push("pageNo=" + apiType.pageNo);
-    if (apiType.numOfRows) params.push("numOfRows=" + apiType.numOfRows);
-    if (apiType.dataType) params.push("dataType=" + apiType.dataType);
-    if (apiType.base_date) params.push("base_date=" + apiType.base_date);
-    if (apiType.base_time) params.push("base_time=" + apiType.base_time);
+    if (apiType.pageNo) {
+      params.push("pageNo=" + apiType.pageNo);
+    }
+    if (apiType.numOfRows) {
+      params.push("numOfRows=" + apiType.numOfRows);
+    }
+    if (apiType.dataType) {
+      params.push("dataType=" + apiType.dataType);
+    }
+    if (apiType.base_date) {
+      params.push("base_date=" + apiType.base_date);
+    }
+    if (apiType.base_time) {
+      params.push("base_time=" + apiType.base_time);
+    }
 
     if (lat !== undefined && lon !== undefined) {
-      const { x: nx, y: ny } = latLonToGrid(lat, lon);
+      const { x: nx, y: ny } = latlonToGrid(lat, lon);
       params.push("nx=" + nx);
       params.push("ny=" + ny);
     }
@@ -61,20 +71,36 @@ export function GetRequestUrl(item, lat, lon) {
   if (item === "hiking") {
     baseUrl = apiType.url + "?";
     params.push("key=" + vworldApiKey);
-    if (apiType.service) params.push("service=" + apiType.service);
-    if (apiType.request) params.push("request=" + apiType.request);
-    if (apiType.format) params.push("format=" + apiType.format);
-    if (apiType.data) params.push("data=" + apiType.data);
-    if (apiType.size) params.push("size=" + apiType.size);
-    if (apiType.page) params.push("page=" + apiType.page);
-    if (apiType.domain) params.push("domain=" + apiType.domain);
+    if (apiType.service) {
+      params.push("service=" + apiType.service);
+    }
+    if (apiType.request) {
+      params.push("request=" + apiType.request);
+    }
+    if (apiType.format) {
+      params.push("format=" + apiType.format);
+    }
+    if (apiType.data) {
+      params.push("data=" + apiType.data);
+    }
+    if (apiType.size) {
+      params.push("size=" + apiType.size);
+    }
+    if (apiType.page) {
+      params.push("page=" + apiType.page);
+    }
+    if (apiType.domain) {
+      params.push("domain=" + apiType.domain);
+    }
 
     if (lat !== undefined && lon !== undefined) {
       const point = { x: lon, y: lat };
       params.push("geomFilter=" + setHikingGeomFilterFromPoint(point, 3));
     }
 
-    if (apiType.attrFilter) params.push("attrFilter=" + apiType.attrFilter);
+    if (apiType.attrFilter) {
+      params.push("attrFilter=" + apiType.attrFilter);
+    }
   }
 
   return baseUrl + params.join("&");
