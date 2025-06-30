@@ -1,29 +1,4 @@
 const apiParams = {
-  // 한국등산트레킹지원센터_전국주요봉우리 문화자원 POI 정보 서비스
-  cultural: {
-    url: `https://apis.data.go.kr/B553662/culturalInfoService`,
-    numOfRows: 10,
-    pageNo: 1,
-    type: "json",
-
-    //숲길명
-    srchFrtrlNm: "",
-  },
-
-  // 한국등산트레킹지원센터_전국주요봉우리 건강효과 POI 정보 서비스
-  health: {
-    url: `https://apis.data.go.kr/B553662/hlthEffctInfoService`,
-    numOfRows: 10,
-    pageNo: 1,
-    type: "json",
-
-    // 숲길명
-    srchFrtrlNm: "",
-
-    // 난이도 : 001 - 쉬움 / 002 - 보통 / 003 - 어려움
-    srchDgdfCd: "",
-  },
-
   // 기상청_단기예보 ((구)_동네예보) 조회서비스
   weather: {
     url: `https://apis.data.go.kr/1360000/VilageFcstInfoService_2.0`,
@@ -31,88 +6,122 @@ const apiParams = {
     numOfRows: 1000,
     dataType: "json",
 
-    // 측정 일자
-    base_date: "20250625",
-
-    // 측정 시간
+    base_date: "20250630",
     base_time: "0500",
-
-    // 좌표
     nx: 55,
     ny: 127,
   },
+
+  // V-WORLD 등산로 API
+  hiking: {
+    url: "https://api.vworld.kr/req/data",
+    domain: "localhost:3000",
+    service: "data",
+    request: "getfeature",
+    format: "json",
+    data: "LT_L_FRSTCLIMB",
+    size: 1000,
+    page: 1,
+    geomFilter: setHikingGeomFilterFromPoint({ x: 126.96, y: 37.65 }, 5),
+    attrFilter: `cat_nam:=:하|mntn_nm:=:족두리봉아래`,
+  },
 };
 
+// V-WORLD 좌표 지정
+function setHikingGeomFilterFromPoint(point, bufferKm) {
+  const bufferLat = bufferKm / 111;
+  const bufferLon = bufferKm / (111 * Math.cos((point.y * Math.PI) / 180));
+
+  const round = (num) => Math.round(num * 1000) / 1000;
+
+  const minx = round(point.x - bufferLon);
+  const maxx = round(point.x + bufferLon);
+  const miny = round(point.y - bufferLat);
+  const maxy = round(point.y + bufferLat);
+
+  return `BOX(${minx},${miny},${maxx},${maxy})`;
+}
+
 // API 키
-const dataApiKey = `ErCuM5KvYasv6PiohNILSbv%2BloBCCBgMSv2rgzbrGMxQpVDNjuLn%2B3yhaGiW3ftEEcm58h0r%2BIUpyn8bJi4lLQ%3D%3D`;
+const publicDataApiKey = `ErCuM5KvYasv6PiohNILSbv%2BloBCCBgMSv2rgzbrGMxQpVDNjuLn%2B3yhaGiW3ftEEcm58h0r%2BIUpyn8bJi4lLQ%3D%3D`;
+const vworldApiKey = `31198BF5-179E-3380-947F-F97448ED7D34`;
 
 // 공공 API 요청 URL 생성
 export function GetRequestUrl(item) {
-  if (!apiParams[item]) return null;
-
+  const apiType = apiParams[item];
   let baseUrl = "";
   const params = [];
 
-  if (item === "cultural") {
-    baseUrl = apiParams[item].url + "/getCulturalInfoList?";
-    if (apiParams[item].numOfRows) {
-      params.push("numOfRows=" + apiParams[item].numOfRows);
-    }
-    if (apiParams[item].pageNo) {
-      params.push("pageNo=" + apiParams[item].pageNo);
-    }
-    params.push("serviceKey=" + dataApiKey);
-    if (apiParams[item].type) {
-      params.push("type=" + apiParams[item].type);
-    }
-    if (apiParams[item].srchFrtrlNm) {
-      params.push("srchFrtrlNm=" + encodeURIComponent(apiParams[item].srchFrtrlNm));
-    }
-  }
-
-  if (item === "health") {
-    baseUrl = apiParams[item].url + "/getHlthEffctInfoList?";
-    if (apiParams[item].numOfRows) {
-      params.push("numOfRows=" + apiParams[item].numOfRows);
-    }
-    if (apiParams[item].pageNo) {
-      params.push("pageNo=" + apiParams[item].pageNo);
-    }
-    params.push("serviceKey=" + dataApiKey);
-    if (apiParams[item].type) {
-      params.push("type=" + apiParams[item].type);
-    }
-    if (apiParams[item].srchFrtrlNm) {
-      params.push("srchFrtrlNm=" + encodeURIComponent(apiParams[item].srchFrtrlNm));
-    }
-    if (apiParams[item].srchDgdfCd) {
-      params.push("srchDgdfCd=" + apiParams[item].srchDgdfCd);
-    }
-  }
-
   if (item === "weather") {
-    baseUrl = apiParams[item].url + "/getVilageFcst?";
-    params.push("serviceKey=" + dataApiKey);
-    if (apiParams[item].pageNo) {
-      params.push("pageNo=" + apiParams[item].pageNo);
+    baseUrl = apiType.url + "/getVilageFcst?";
+    params.push("serviceKey=" + publicDataApiKey);
+
+    if (apiType.pageNo) {
+      params.push("pageNo=" + apiType.pageNo);
     }
-    if (apiParams[item].numOfRows) {
-      params.push("numOfRows=" + apiParams[item].numOfRows);
+
+    if (apiType.numOfRows) {
+      params.push("numOfRows=" + apiType.numOfRows);
     }
-    if (apiParams[item].dataType) {
-      params.push("dataType=" + apiParams[item].dataType);
+
+    if (apiType.dataType) {
+      params.push("dataType=" + apiType.dataType);
     }
-    if (apiParams[item].base_date) {
-      params.push("base_date=" + apiParams[item].base_date);
+
+    if (apiType.base_date) {
+      params.push("base_date=" + apiType.base_date);
     }
-    if (apiParams[item].base_time) {
-      params.push("base_time=" + apiParams[item].base_time);
+
+    if (apiType.base_time) {
+      params.push("base_time=" + apiType.base_time);
     }
-    if (apiParams[item].nx) {
-      params.push("nx=" + apiParams[item].nx);
+
+    if (apiType.nx) {
+      params.push("nx=" + apiType.nx);
     }
-    if (apiParams[item].ny) {
-      params.push("ny=" + apiParams[item].ny);
+
+    if (apiType.ny) {
+      params.push("ny=" + apiType.ny);
+    }
+  }
+
+  if (item === "hiking") {
+    baseUrl = apiType.url + "?";
+    params.push("key=" + vworldApiKey);
+
+    if (apiType.service) {
+      params.push("service=" + apiType.service);
+    }
+
+    if (apiType.request) {
+      params.push("request=" + apiType.request);
+    }
+
+    if (apiType.format) {
+      params.push("format=" + apiType.format);
+    }
+
+    if (apiType.data) {
+      params.push("data=" + apiType.data);
+    }
+
+    if (apiType.size) {
+      params.push("size=" + apiType.size);
+    }
+
+    if (apiType.page) {
+      params.push("page=" + apiType.page);
+    }
+
+    if (apiType.domain) {
+      params.push("domain=" + apiType.domain);
+    }
+
+    if (apiType.geomFilter) {
+      params.push("geomFilter=" + apiType.geomFilter);
+    }
+    if (apiType.attrFilter) {
+      params.push("attrFilter=" + apiType.attrFilter);
     }
   }
 
