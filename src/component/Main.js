@@ -31,18 +31,14 @@ const MainPage = () => {
       style={{
         width: "100vw",
         height: "100vh",
-        position: "relative",
-        overflow: "hidden",
+        display: "flex",
+        flexDirection: "column",
       }}
     >
       <div
         style={{
-          position: "absolute",
-          top: searched ? 0 : "50%",
-          left: 0,
-          width: "100vw",
-          transform: searched ? "translateY(0)" : "translateY(-50%)",
-          transition: "top 0.4s ease, transform 0.4s ease",
+          marginTop: searched ? "0" : "calc(50vh - 40px)", // adjust 40px to approx half input height
+          transition: "margin-top 0.4s ease",
           backgroundColor: "#064420",
           padding: "10px 0",
           textAlign: "center",
@@ -91,7 +87,7 @@ const MainPage = () => {
 
       <div
         style={{
-          height: "100%",
+          flexGrow: 1,
           opacity: showMap ? 1 : 0,
           transition: "opacity 0.4s ease",
           pointerEvents: showMap ? "auto" : "none",

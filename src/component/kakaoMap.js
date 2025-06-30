@@ -76,7 +76,7 @@ const KakaoMap = ({ keyword, searched }) => {
     <div
       ref={mapRef}
       style={{
-        width: "40vw",
+        width: "45vw",
         height: "50vh",
         position: "relative",
         top: 0,
