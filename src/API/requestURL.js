@@ -1,3 +1,7 @@
+// API 키
+const publicDataApiKey = `ErCuM5KvYasv6PiohNILSbv%2BloBCCBgMSv2rgzbrGMxQpVDNjuLn%2B3yhaGiW3ftEEcm58h0r%2BIUpyn8bJi4lLQ%3D%3D`;
+const vworldApiKey = `31198BF5-179E-3380-947F-F97448ED7D34`;
+
 const apiParams = {
   // 기상청_단기예보 ((구)_동네예보) 조회서비스
   weather: {
@@ -41,10 +45,6 @@ function setHikingGeomFilterFromPoint(point, bufferKm) {
 
   return `BOX(${minx},${miny},${maxx},${maxy})`;
 }
-
-// API 키
-const publicDataApiKey = `ErCuM5KvYasv6PiohNILSbv%2BloBCCBgMSv2rgzbrGMxQpVDNjuLn%2B3yhaGiW3ftEEcm58h0r%2BIUpyn8bJi4lLQ%3D%3D`;
-const vworldApiKey = `31198BF5-179E-3380-947F-F97448ED7D34`;
 
 // 공공 API 요청 URL 생성
 export function GetRequestUrl(item) {
