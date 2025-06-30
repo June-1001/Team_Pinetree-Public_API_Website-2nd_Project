@@ -1,30 +1,19 @@
 import { latlonToGrid } from "./latlonToGrid";
+import { lat, lon } from "../component/kakaoMap";
 
 const publicDataApiKey = `ErCuM5KvYasv6PiohNILSbv%2BloBCCBgMSv2rgzbrGMxQpVDNjuLn%2B3yhaGiW3ftEEcm58h0r%2BIUpyn8bJi4lLQ%3D%3D`;
 const vworldApiKey = `31198BF5-179E-3380-947F-F97448ED7D34`;
 
-const apiParams = {
-  weather: {
-    url: `https://apis.data.go.kr/1360000/VilageFcstInfoService_2.0`,
-    pageNo: 1,
-    numOfRows: 1000,
-    dataType: "json",
-    base_date: "20250630",
-    base_time: "0500",
-  },
-
-  hiking: {
-    url: "https://api.vworld.kr/req/data",
-    domain: "localhost:3000",
-    service: "data",
-    request: "getfeature",
-    format: "json",
-    data: "LT_L_FRSTCLIMB",
-    size: 1000,
-    page: 1,
-    attrFilter: `cat_nam:=:하|mntn_nm:=:족두리봉아래`,
-  },
-};
+function getTodayDateString() {
+  const now = new Date();
+  if (now.getHours() < 2) {
+    now.setDate(now.getDate() - 1);
+  }
+  const yyyy = now.getFullYear();
+  const mm = String(now.getMonth() + 1).padStart(2, "0");
+  const dd = String(now.getDate()).padStart(2, "0");
+  return `${yyyy}${mm}${dd}`;
+}
 
 function setHikingGeomFilterFromPoint(point, bufferKm) {
   const bufferLat = bufferKm / 111;
@@ -37,7 +26,33 @@ function setHikingGeomFilterFromPoint(point, bufferKm) {
   return `BOX(${minx},${miny},${maxx},${maxy})`;
 }
 
-export function GetRequestUrl(item, lat, lon) {
+const point = { x: lon, y: lat };
+
+const apiParams = {
+  weather: {
+    url: `https://apis.data.go.kr/1360000/VilageFcstInfoService_2.0`,
+    pageNo: 1,
+    numOfRows: 1000,
+    dataType: "json",
+    base_date: getTodayDateString(),
+    base_time: "0200",
+  },
+
+  hiking: {
+    url: "https://api.vworld.kr/req/data",
+    domain: "localhost:3000",
+    service: "data",
+    request: "getfeature",
+    format: "json",
+    data: "LT_L_FRSTCLIMB",
+    size: 1000,
+    page: 1,
+    geomFilter: setHikingGeomFilterFromPoint(point, 3),
+    attrFilter: `cat_nam:=:하|mntn_nm:=:족두리봉아래`,
+  },
+};
+
+export function GetRequestUrl(item) {
   const apiType = apiParams[item];
   let baseUrl = "";
   const params = [];
@@ -45,18 +60,23 @@ export function GetRequestUrl(item, lat, lon) {
   if (item === "weather") {
     baseUrl = apiType.url + "/getVilageFcst?";
     params.push("serviceKey=" + publicDataApiKey);
+
     if (apiType.pageNo) {
       params.push("pageNo=" + apiType.pageNo);
     }
+
     if (apiType.numOfRows) {
       params.push("numOfRows=" + apiType.numOfRows);
     }
+
     if (apiType.dataType) {
       params.push("dataType=" + apiType.dataType);
     }
+
     if (apiType.base_date) {
       params.push("base_date=" + apiType.base_date);
     }
+
     if (apiType.base_time) {
       params.push("base_time=" + apiType.base_time);
     }
@@ -71,31 +91,37 @@ export function GetRequestUrl(item, lat, lon) {
   if (item === "hiking") {
     baseUrl = apiType.url + "?";
     params.push("key=" + vworldApiKey);
+
     if (apiType.service) {
       params.push("service=" + apiType.service);
     }
+
     if (apiType.request) {
       params.push("request=" + apiType.request);
     }
+
     if (apiType.format) {
       params.push("format=" + apiType.format);
     }
+
     if (apiType.data) {
       params.push("data=" + apiType.data);
     }
+
     if (apiType.size) {
       params.push("size=" + apiType.size);
     }
+
     if (apiType.page) {
       params.push("page=" + apiType.page);
     }
+
     if (apiType.domain) {
       params.push("domain=" + apiType.domain);
     }
 
-    if (lat !== undefined && lon !== undefined) {
-      const point = { x: lon, y: lat };
-      params.push("geomFilter=" + setHikingGeomFilterFromPoint(point, 3));
+    if (apiType.geomFilter) {
+      params.push("geomFilter=" + apiType.geomFilter);
     }
 
     if (apiType.attrFilter) {

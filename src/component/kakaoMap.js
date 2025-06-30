@@ -1,33 +1,32 @@
-import React, { useEffect, useRef, useState, forwardRef, useImperativeHandle } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 const kakaoApiKey = "5f283b38458e2a36a38d8894a017f5de";
 
-const KakaoMap = forwardRef(({ keyword, triggerSearch }, ref) => {
+export let lat = null;
+export let lon = null;
+
+const KakaoMap = ({ keyword, searched }) => {
   const mapRef = useRef(null);
   const mapInstance = useRef(null);
   const markerInstance = useRef(null);
   const [kakaoLoaded, setKakaoLoaded] = useState(false);
-  const lastCoords = useRef({ lat: null, lon: null });
-
-  useImperativeHandle(ref, () => ({
-    getLatLng: () => lastCoords.current,
-  }));
 
   useEffect(() => {
     if (window.kakao && window.kakao.maps) {
       setKakaoLoaded(true);
-    } else {
-      const script = document.createElement("script");
-      script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${kakaoApiKey}&autoload=false&libraries=services`;
-      script.async = true;
-      document.head.appendChild(script);
-
-      script.onload = () => {
-        window.kakao.maps.load(() => {
-          setKakaoLoaded(true);
-        });
-      };
+      return;
     }
+
+    const script = document.createElement("script");
+    script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${kakaoApiKey}&autoload=false&libraries=services`;
+    script.async = true;
+    document.head.appendChild(script);
+
+    script.onload = () => {
+      window.kakao.maps.load(() => {
+        setKakaoLoaded(true);
+      });
+    };
   }, []);
 
   useEffect(() => {
@@ -37,55 +36,49 @@ const KakaoMap = forwardRef(({ keyword, triggerSearch }, ref) => {
         center: new window.kakao.maps.LatLng(37.5665, 126.978),
         level: 3,
       };
-      mapInstance.current = new window.kakao.maps.Map(container, options);
+      const map = new window.kakao.maps.Map(container, options);
+      mapInstance.current = map;
 
-      markerInstance.current = new window.kakao.maps.Marker({
-        position: options.center,
-        map: mapInstance.current,
+      const marker = new window.kakao.maps.Marker({
+        position: map.getCenter(),
+        map: map,
       });
+      markerInstance.current = marker;
 
-      window.kakao.maps.event.addListener(mapInstance.current, "center_changed", () => {
-        const center = mapInstance.current.getCenter();
-        markerInstance.current.setPosition(center);
-        lastCoords.current = {
-          lat: center.getLat(),
-          lon: center.getLng(),
-        };
+      window.kakao.maps.event.addListener(map, "center_changed", () => {
+        const center = map.getCenter();
+        marker.setPosition(center);
+        lat = center.getLat();
+        lon = center.getLng();
       });
-
-      lastCoords.current = {
-        lat: options.center.getLat(),
-        lon: options.center.getLng(),
-      };
     }
   }, [kakaoLoaded]);
 
   useEffect(() => {
-    if (!kakaoLoaded || !mapInstance.current || !keyword.trim()) return;
+    if (!searched || !kakaoLoaded || !mapInstance.current || !keyword.trim()) return;
 
     const ps = new window.kakao.maps.services.Places();
-
     ps.keywordSearch(keyword, (data, status) => {
       if (status === window.kakao.maps.services.Status.OK && data.length > 0) {
         const place = data[0];
-        const lat = parseFloat(place.y);
-        const lon = parseFloat(place.x);
+        lat = parseFloat(place.y);
+        lon = parseFloat(place.x);
+
         const position = new window.kakao.maps.LatLng(lat, lon);
-
         mapInstance.current.setCenter(position);
-
-        lastCoords.current = { lat, lon };
+      } else {
+        alert("검색 결과가 없습니다.");
       }
     });
-  }, [triggerSearch, kakaoLoaded, keyword]);
+  }, [searched, keyword, kakaoLoaded]);
 
   return (
     <div
       ref={mapRef}
       style={{
-        width: "50vw",
-        height: "100vh",
-        position: "fixed",
+        width: "40vw",
+        height: "50vh",
+        position: "relative",
         top: 0,
         left: 0,
         zIndex: 1,
@@ -93,6 +86,6 @@ const KakaoMap = forwardRef(({ keyword, triggerSearch }, ref) => {
       id="kakao_map_container"
     />
   );
-});
+};
 
 export default KakaoMap;

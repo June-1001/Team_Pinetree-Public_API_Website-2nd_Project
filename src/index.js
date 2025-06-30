@@ -8,6 +8,10 @@ import MainPage from "./component/Main";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
-root.render(<MainPage />);
+root.render(
+  <div>
+    <MainPage />
+  </div>
+);
 
 reportWebVitals();

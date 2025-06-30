@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import KakaoMap from "./kakaoMap";
 
 const MainPage = () => {
   const [keyword, setKeyword] = useState("");
   const [searched, setSearched] = useState(false);
+  const [showMap, setShowMap] = useState(false);
   const [triggerSearch, setTriggerSearch] = useState(false);
   const [searchKeyword, setSearchKeyword] = useState("");
 
@@ -14,16 +15,28 @@ const MainPage = () => {
     setSearched(true);
   };
 
+  useEffect(() => {
+    if (searched) {
+      const timer = setTimeout(() => {
+        setShowMap(true);
+      }, 400);
+      return () => clearTimeout(timer);
+    } else {
+      setShowMap(false);
+    }
+  }, [searched]);
+
   return (
-    <div style={{ width: "100vw", height: "100vh", position: "relative" }}>
+    <div
+      style={{
+        width: "100vw",
+        height: "100vh",
+        display: "flex",
+        flexDirection: "column",
+      }}
+    >
       <div
         style={{
-          position: "absolute",
-          top: searched ? 0 : "50%",
-          left: 0,
-          width: "100vw",
-          transform: searched ? "none" : "translateY(-50%)",
-          transition: "top 0.4s ease, transform 0.4s ease",
           backgroundColor: "#064420",
           padding: "10px 0",
           textAlign: "center",
@@ -41,9 +54,7 @@ const MainPage = () => {
           <input
             type="text"
             value={keyword}
-            onChange={(e) => {
-              setKeyword(e.target.value);
-            }}
+            onChange={(e) => setKeyword(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && handleSearch()}
             style={{
               width: "300px",
@@ -72,7 +83,17 @@ const MainPage = () => {
         </div>
       </div>
 
-      {searched && <KakaoMap keyword={searchKeyword} triggerSearch={triggerSearch} />}
+      <div
+        style={{
+          flexGrow: 1,
+          position: "relative",
+          opacity: showMap ? 1 : 0,
+          transition: "opacity 0.4s ease",
+          pointerEvents: showMap ? "auto" : "none",
+        }}
+      >
+        {showMap && <KakaoMap keyword={searchKeyword} triggerSearch={triggerSearch} />}
+      </div>
     </div>
   );
 };
