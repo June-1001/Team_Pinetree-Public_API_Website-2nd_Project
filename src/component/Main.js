@@ -31,12 +31,18 @@ const MainPage = () => {
       style={{
         width: "100vw",
         height: "100vh",
-        display: "flex",
-        flexDirection: "column",
+        position: "relative",
+        overflow: "hidden",
       }}
     >
       <div
         style={{
+          position: "absolute",
+          top: searched ? 0 : "50%",
+          left: 0,
+          width: "100vw",
+          transform: searched ? "translateY(0)" : "translateY(-50%)",
+          transition: "top 0.4s ease, transform 0.4s ease",
           backgroundColor: "#064420",
           padding: "10px 0",
           textAlign: "center",
@@ -85,8 +91,7 @@ const MainPage = () => {
 
       <div
         style={{
-          flexGrow: 1,
-          position: "relative",
+          height: "100%",
           opacity: showMap ? 1 : 0,
           transition: "opacity 0.4s ease",
           pointerEvents: showMap ? "auto" : "none",
