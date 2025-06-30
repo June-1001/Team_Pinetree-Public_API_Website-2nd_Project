@@ -22,7 +22,7 @@ const apiParams = {
     data: "LT_L_FRSTCLIMB",
     size: 1000,
     page: 1,
-    geomFilter: setHikingGeomFilterFromPoint({ x: 126.96, y: 37.65 }, 5),
+    geomFilter: setHikingGeomFilterFromPoint({ x: 126.96, y: 37.65 }, 3),
     attrFilter: `cat_nam:=:하|mntn_nm:=:족두리봉아래`,
   },
 };

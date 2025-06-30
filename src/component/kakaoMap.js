@@ -2,12 +2,10 @@ import React, { useEffect, useState } from "react";
 
 const kakaoApiKey = "5f283b38458e2a36a38d8894a017f5de";
 
-const KakaoMapAddressSearch = () => {
-  const [lat, setLat] = useState("");
-  const [lon, setLon] = useState("");
+const KakaoMapSingleKeywordSearch = () => {
+  const [keyword, setKeyword] = useState("");
   const [map, setMap] = useState(null);
   const [marker, setMarker] = useState(null);
-  const [address, setAddress] = useState("");
 
   useEffect(() => {
     if (window.kakao && window.kakao.maps) {
@@ -36,31 +34,30 @@ const KakaoMapAddressSearch = () => {
     }
   }, []);
 
-  const handleLatLonSubmit = () => {
-    if (!map || !lat || !lon) return;
+  const handleKeywordSearch = () => {
+    if (!keyword || !map) return;
 
-    const coords = new window.kakao.maps.LatLng(lat, lon);
-    map.setCenter(coords);
+    const ps = new window.kakao.maps.services.Places();
 
-    if (marker) {
-      marker.setMap(null);
-    }
+    ps.keywordSearch(keyword, (data, status) => {
+      if (status === window.kakao.maps.services.Status.OK && data.length > 0) {
+        const firstPlace = data[0];
+        const coords = new window.kakao.maps.LatLng(firstPlace.y, firstPlace.x);
 
-    const newMarker = new window.kakao.maps.Marker({
-      map: map,
-      position: coords,
-    });
-    setMarker(newMarker);
+        map.setCenter(coords);
 
-    const geocoder = new window.kakao.maps.services.Geocoder();
-    geocoder.coord2Address(lon, lat, (result, status) => {
-      if (status === window.kakao.maps.services.Status.OK) {
-        const addr = result[0].road_address
-          ? result[0].road_address.address_name
-          : result[0].address.address_name;
-        setAddress(addr);
+        if (marker) {
+          marker.setMap(null);
+        }
+
+        const newMarker = new window.kakao.maps.Marker({
+          map: map,
+          position: coords,
+        });
+
+        setMarker(newMarker);
       } else {
-        setAddress("주소를 찾을 수 없습니다.");
+        alert("검색 결과가 없습니다.");
       }
     });
   };
@@ -69,28 +66,19 @@ const KakaoMapAddressSearch = () => {
     <div>
       <input
         type="text"
-        placeholder="위도 (lat)"
-        value={lat}
-        onChange={(e) => setLat(e.target.value)}
-        style={{ width: "150px", marginRight: "10px" }}
+        placeholder="키워드를 입력하세요."
+        value={keyword}
+        onChange={(e) => setKeyword(e.target.value)}
+        style={{ width: "300px", marginRight: "10px" }}
       />
-      <input
-        type="text"
-        placeholder="경도 (lon)"
-        value={lon}
-        onChange={(e) => setLon(e.target.value)}
-        style={{ width: "150px", marginRight: "10px" }}
-      />
-      <button onClick={handleLatLonSubmit}>지도 이동</button>
+      <button onClick={handleKeywordSearch}>검색</button>
 
       <div
         id="kakao_map_container"
         style={{ width: "500px", height: "400px", marginTop: "10px" }}
       ></div>
-
-      {address && <div style={{ marginTop: "10px", fontWeight: "bold" }}>주소: {address}</div>}
     </div>
   );
 };
 
-export default KakaoMapAddressSearch;
+export default KakaoMapSingleKeywordSearch;

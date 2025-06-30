@@ -9,6 +9,11 @@ import DataTest from "./API/testURL";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
-root.render(<DataTest item="hiking" />);
+root.render(
+  <div>
+    <DataTest item="hiking" />
+    <KakaoMapAddressSearch />
+  </div>
+);
 
 reportWebVitals();
