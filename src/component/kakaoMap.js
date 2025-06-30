@@ -1,15 +1,21 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState, forwardRef, useImperativeHandle } from "react";
 
 const kakaoApiKey = "5f283b38458e2a36a38d8894a017f5de";
 
-const KakaoMapSingleKeywordSearch = () => {
-  const [keyword, setKeyword] = useState("");
-  const [map, setMap] = useState(null);
-  const [marker, setMarker] = useState(null);
+const KakaoMap = forwardRef(({ keyword, triggerSearch }, ref) => {
+  const mapRef = useRef(null);
+  const mapInstance = useRef(null);
+  const markerInstance = useRef(null);
+  const [kakaoLoaded, setKakaoLoaded] = useState(false);
+  const lastCoords = useRef({ lat: null, lon: null });
+
+  useImperativeHandle(ref, () => ({
+    getLatLng: () => lastCoords.current,
+  }));
 
   useEffect(() => {
     if (window.kakao && window.kakao.maps) {
-      initializeMap();
+      setKakaoLoaded(true);
     } else {
       const script = document.createElement("script");
       script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${kakaoApiKey}&autoload=false&libraries=services`;
@@ -18,67 +24,75 @@ const KakaoMapSingleKeywordSearch = () => {
 
       script.onload = () => {
         window.kakao.maps.load(() => {
-          initializeMap();
+          setKakaoLoaded(true);
         });
       };
     }
+  }, []);
 
-    function initializeMap() {
-      const container = document.getElementById("kakao_map_container");
+  useEffect(() => {
+    if (kakaoLoaded && mapRef.current && !mapInstance.current) {
+      const container = mapRef.current;
       const options = {
         center: new window.kakao.maps.LatLng(37.5665, 126.978),
         level: 3,
       };
-      const mapInstance = new window.kakao.maps.Map(container, options);
-      setMap(mapInstance);
-    }
-  }, []);
+      mapInstance.current = new window.kakao.maps.Map(container, options);
 
-  const handleKeywordSearch = () => {
-    if (!keyword || !map) return;
+      markerInstance.current = new window.kakao.maps.Marker({
+        position: options.center,
+        map: mapInstance.current,
+      });
+
+      window.kakao.maps.event.addListener(mapInstance.current, "center_changed", () => {
+        const center = mapInstance.current.getCenter();
+        markerInstance.current.setPosition(center);
+        lastCoords.current = {
+          lat: center.getLat(),
+          lon: center.getLng(),
+        };
+      });
+
+      lastCoords.current = {
+        lat: options.center.getLat(),
+        lon: options.center.getLng(),
+      };
+    }
+  }, [kakaoLoaded]);
+
+  useEffect(() => {
+    if (!kakaoLoaded || !mapInstance.current || !keyword.trim()) return;
 
     const ps = new window.kakao.maps.services.Places();
 
     ps.keywordSearch(keyword, (data, status) => {
       if (status === window.kakao.maps.services.Status.OK && data.length > 0) {
-        const firstPlace = data[0];
-        const coords = new window.kakao.maps.LatLng(firstPlace.y, firstPlace.x);
+        const place = data[0];
+        const lat = parseFloat(place.y);
+        const lon = parseFloat(place.x);
+        const position = new window.kakao.maps.LatLng(lat, lon);
 
-        map.setCenter(coords);
+        mapInstance.current.setCenter(position);
 
-        if (marker) {
-          marker.setMap(null);
-        }
-
-        const newMarker = new window.kakao.maps.Marker({
-          map: map,
-          position: coords,
-        });
-
-        setMarker(newMarker);
-      } else {
-        alert("검색 결과가 없습니다.");
+        lastCoords.current = { lat, lon };
       }
     });
-  };
+  }, [triggerSearch, kakaoLoaded, keyword]);
 
   return (
-    <div>
-      <input
-        type="text"
-        placeholder="키워드를 입력하세요."
-        value={keyword}
-        onChange={(e) => setKeyword(e.target.value)}
-        style={{ width: "300px", marginRight: "10px" }}
-      />
-      <button onClick={handleKeywordSearch}>검색</button>
-
-      <div
-        id="kakao_map_container"
-        style={{ width: "500px", height: "400px", marginTop: "10px" }}
-      ></div>
-    </div>
+    <div
+      ref={mapRef}
+      style={{
+        width: "50vw",
+        height: "100vh",
+        position: "fixed",
+        top: 0,
+        left: 0,
+        zIndex: 1,
+      }}
+      id="kakao_map_container"
+    />
   );
-};
+});
 
-export default KakaoMapSingleKeywordSearch;
+export default KakaoMap;

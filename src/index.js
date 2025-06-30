@@ -2,18 +2,12 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
 
-import KakaoMapAddressSearch from "./component/kakaoMap";
-
 import reportWebVitals from "./reportWebVitals";
-import DataTest from "./API/testURL";
+
+import MainPage from "./component/Main";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
-root.render(
-  <div>
-    <DataTest item="hiking" />
-    <KakaoMapAddressSearch />
-  </div>
-);
+root.render(<MainPage />);
 
 reportWebVitals();
