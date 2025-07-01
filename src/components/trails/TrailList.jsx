@@ -2,18 +2,19 @@ import React, { useState, useEffect } from "react";
 import TrailCard from "./TrailCard";
 
 function TrailList(props) {
-  const [expandedMountains, setExpandedMountains] = useState({});
+  const [expandedMountain, setExpandedMountain] = useState(null);
 
   useEffect(() => {
-    setExpandedMountains({}); // collapse all when trigger changes
+    setExpandedMountain(null);
   }, [props.collapseAllTrigger]);
 
   if (!Array.isArray(props.trailData)) {
     return null;
   }
 
+  // 산 이름 별로 하나의 그룹 생성
   const groupedByMountain = props.trailData.reduce((acc, trail) => {
-    const mountain = trail?.properties?.mntn_nm || "Unknown";
+    const mountain = trail.properties.mntn_nm || "Unknown";
     if (!acc[mountain]) {
       acc[mountain] = [];
     }
@@ -23,15 +24,13 @@ function TrailList(props) {
 
   const mountainNames = Object.keys(groupedByMountain);
 
+  // 클릭 시 카드 목록 열고 닫기
   function toggleMountain(mountain) {
-    setExpandedMountains((prev) => {
-      const newState = { ...prev };
-      if (newState[mountain]) {
-        delete newState[mountain];
-      } else {
-        newState[mountain] = true;
+    setExpandedMountain((prev) => {
+      if (prev === mountain) {
+        return null;
       }
-      return newState;
+      return mountain;
     });
   }
 
@@ -42,7 +41,7 @@ function TrailList(props) {
         if (!trails) {
           return null;
         }
-        const isExpanded = !!expandedMountains[name];
+        const isExpanded = expandedMountain === name;
         return (
           <div key={name} style={{ marginBottom: "12px" }}>
             <div

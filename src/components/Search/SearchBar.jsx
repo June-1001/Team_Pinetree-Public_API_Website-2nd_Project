@@ -1,5 +1,7 @@
 import React from "react";
 
+// 검색창 키워드
+// 엔터 눌러서 검색 가능
 const SearchBar = ({ keyword, setKeyword, onSearch }) => {
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {

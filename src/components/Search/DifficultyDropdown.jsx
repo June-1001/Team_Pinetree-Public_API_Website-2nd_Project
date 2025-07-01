@@ -1,5 +1,6 @@
 import React from "react";
 
+// 등산로 난이도 드랍다운 목록
 const DifficultyDropdown = ({ value, setValue }) => {
   const options = ["전체", "상", "중", "하"];
 

@@ -213,37 +213,6 @@ function HikingMap(props) {
         selectedOverlay.current.setMap(null);
       });
 
-      selectedStartMarker.current = new window.kakao.maps.CustomOverlay({
-        position: path[0],
-        content: `<div style="
-          padding: 2px 6px;
-          background: white;
-          border: 1px solid black;
-          border-radius: 3px;
-          font-size: 12px;
-          font-weight: bold;
-          ">도착지</div>`,
-        yAnchor: 1,
-        zIndex: 5,
-      });
-
-      selectedEndMarker.current = new window.kakao.maps.CustomOverlay({
-        position: path[path.length - 1],
-        content: `<div style="
-          padding: 2px 6px;
-          background: white;
-          border: 1px solid black;
-          border-radius: 3px;
-          font-size: 12px;
-          font-weight: bold;
-          ">출발지</div>`,
-        yAnchor: 1,
-        zIndex: 5,
-      });
-
-      selectedStartMarker.current.setMap(mapInstance.current);
-      selectedEndMarker.current.setMap(mapInstance.current);
-
       const startPoint = path[0];
       mapInstance.current.panTo(startPoint);
     }
