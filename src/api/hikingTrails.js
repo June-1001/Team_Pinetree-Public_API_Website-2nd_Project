@@ -8,6 +8,7 @@ const hiking = {
   format: "json",
   data: "LT_L_FRSTCLIMB",
   size: 1000,
+  page: 1,
 };
 
 function round(num) {

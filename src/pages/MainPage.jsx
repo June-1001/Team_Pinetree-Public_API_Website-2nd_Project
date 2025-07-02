@@ -33,7 +33,11 @@ export default function MainPage() {
   const weatherData = useWeatherData(lat, lon);
 
   // 등산로 데이터
-  const trailData = useTrailData(lat, lon, minRange, maxRange, difficulty);
+  const {
+    data: trailData,
+    isLoading: trailsLoading,
+    error: trailsError,
+  } = useTrailData(lat, lon, minRange, maxRange, difficulty);
 
   useEffect(() => {
     setSearched(false);
@@ -83,12 +87,14 @@ export default function MainPage() {
       />
 
       {/* 등산로 목록 */}
-      <TrailList
-        trailData={trailData}
-        selectedTrail={selectedTrail}
-        setSelectedTrail={setSelectedTrail}
-        collapseAllTrigger={collapseAllTrigger}
-      />
+      {!trailsLoading && !trailsError && (
+        <TrailList
+          trailData={trailData}
+          selectedTrail={selectedTrail}
+          setSelectedTrail={setSelectedTrail}
+          collapseAllTrigger={collapseAllTrigger}
+        />
+      )}
     </div>
   );
 }
