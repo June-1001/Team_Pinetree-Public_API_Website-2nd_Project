@@ -10,8 +10,6 @@ function HikingMap(props) {
   const allOverlays = useRef([]);
   const selectedPolyline = useRef(null);
   const selectedOverlay = useRef(null);
-  const selectedStartMarker = useRef(null);
-  const selectedEndMarker = useRef(null);
 
   const [mapReady, setMapReady] = useState(false);
 
@@ -95,14 +93,6 @@ function HikingMap(props) {
         selectedOverlay.current.setMap(null);
         selectedOverlay.current = null;
       }
-      if (selectedStartMarker.current) {
-        selectedStartMarker.current.setMap(null);
-        selectedStartMarker.current = null;
-      }
-      if (selectedEndMarker.current) {
-        selectedEndMarker.current.setMap(null);
-        selectedEndMarker.current = null;
-      }
     };
   }, []);
 
@@ -113,6 +103,8 @@ function HikingMap(props) {
 
     allPolylines.current.forEach((poly) => poly.setMap(null));
     allPolylines.current = [];
+    allOverlays.current.forEach((ov) => ov.setMap(null));
+    allOverlays.current = [];
 
     props.trailData.forEach((trail) => {
       const coords = extractCoords(trail.geometry);
@@ -140,15 +132,13 @@ function HikingMap(props) {
       });
 
       window.kakao.maps.event.addListener(polyline, "mouseover", () => {
+        if (selectedOverlay.current) {
+          selectedOverlay.current.setMap(null);
+        }
+        allOverlays.current.forEach((ov) => {
+          ov.setMap(null);
+        });
         overlay.setMap(mapInstance.current);
-      });
-
-      window.kakao.maps.event.addListener(polyline, "mouseout", () => {
-        overlay.setMap(null);
-      });
-
-      window.kakao.maps.event.addListener(polyline, "click", () => {
-        props.setSelectedTrail(trail);
       });
 
       allPolylines.current.push(polyline);
@@ -168,14 +158,6 @@ function HikingMap(props) {
     if (selectedOverlay.current) {
       selectedOverlay.current.setMap(null);
       selectedOverlay.current = null;
-    }
-    if (selectedStartMarker.current) {
-      selectedStartMarker.current.setMap(null);
-      selectedStartMarker.current = null;
-    }
-    if (selectedEndMarker.current) {
-      selectedEndMarker.current.setMap(null);
-      selectedEndMarker.current = null;
     }
 
     if (props.selectedTrail) {
@@ -198,6 +180,10 @@ function HikingMap(props) {
 
       const content = `<div class="trail-overlay selected">${props.selectedTrail.properties.mntn_nm} / ${props.selectedTrail.properties.sec_len}m / ${props.selectedTrail.properties.cat_nam}</div>`;
 
+      allOverlays.current.forEach((ov) => {
+        ov.setMap(null);
+      });
+
       selectedOverlay.current = new window.kakao.maps.CustomOverlay({
         position: midPoint,
         content: content,
@@ -205,13 +191,7 @@ function HikingMap(props) {
         zIndex: 4,
       });
 
-      window.kakao.maps.event.addListener(selectedPolyline.current, "mouseover", () => {
-        selectedOverlay.current.setMap(mapInstance.current);
-      });
-
-      window.kakao.maps.event.addListener(selectedPolyline.current, "mouseout", () => {
-        selectedOverlay.current.setMap(null);
-      });
+      selectedOverlay.current.setMap(mapInstance.current);
 
       const startPoint = path[0];
       mapInstance.current.panTo(startPoint);
