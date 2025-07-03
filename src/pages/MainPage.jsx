@@ -57,8 +57,10 @@ export default function MainPage() {
     setCollapseAllTrigger((prev) => prev + 1);
   }
 
-  return (
+  return (    
     <div className="main-container">
+      <h1 className="title">등산로 지역별, 산이름, 위치 데이터를 이용한 날씨 API 데이터 정보</h1>
+
       {/* 검색창 */}
       <SearchFilterSection
         keyword={keyword}

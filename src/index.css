@@ -4,6 +4,37 @@ body,
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  width: 100vw;
+  /* width: 100vw; */
   height: 100vh;
+}
+.title{
+  text-align: center;
+}
+.main-container{
+  margin: 10px 20px;
+}
+
+.search-bar, .range-section, .difficulty-section{
+  margin-bottom: 10px;
+}
+.search-bar input{
+  display: inline-block;
+  margin-left: 10px;
+}
+
+.range-section input{
+  margin-left: 10px;
+}
+
+input{
+  padding: 5px;
+}
+select{
+  margin-left: 10px;
+  width: 120px;
+  padding: 5px;
+}
+
+button{
+  margin-left: 10px;
 }

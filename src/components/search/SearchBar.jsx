@@ -12,6 +12,7 @@ const SearchBar = ({ keyword, setKeyword, onSearch }) => {
 
   return (
     <div className="search-bar">
+      <span>지역검색 :</span>
       <input
         type="text"
         value={keyword}
