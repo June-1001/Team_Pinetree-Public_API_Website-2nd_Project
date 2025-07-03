@@ -16,7 +16,6 @@ async function fetchTrailDataPage(lat, lon, min, max, diff, page = 1) {
           return;
         }
 
-        // Extract features based on different possible structures
         const fc = data.response.result?.featureCollection;
         let features = [];
 
@@ -42,16 +41,13 @@ async function fetchTrailDataPage(lat, lon, min, max, diff, page = 1) {
 
 async function fetchAllTrailData(lat, lon, min, max, diff) {
   try {
-    // First fetch to get total pages
     const firstPage = await fetchTrailDataPage(lat, lon, min, max, diff, 1);
     const totalPages = firstPage.totalPages;
 
-    // If only one page, return immediately
     if (totalPages <= 1) {
       return firstPage.features;
     }
 
-    // Fetch remaining pages in parallel
     const pagePromises = [];
     for (let page = 2; page <= totalPages; page++) {
       pagePromises.push(fetchTrailDataPage(lat, lon, min, max, diff, page));
@@ -59,10 +55,8 @@ async function fetchAllTrailData(lat, lon, min, max, diff) {
 
     const remainingPages = await Promise.all(pagePromises);
 
-    // Combine all features
     const allFeatures = firstPage.features.concat(...remainingPages.map((page) => page.features));
 
-    console.log(`✅ Fetched all ${allFeatures.length} records across ${totalPages} pages`);
     return allFeatures;
   } catch (err) {
     console.error("Error fetching trail data:", err);
