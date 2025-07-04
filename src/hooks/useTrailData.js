@@ -27,11 +27,17 @@ async function fetchTrailDataPage(lat, lon, min, max, diff, page = 1) {
           features = data.features;
         }
 
+        const currentPage = parseInt(data.response.page?.current) || 1;
+        const totalPages = parseInt(data.response.page?.total) || 1;
+        const totalRecords = parseInt(data.response.record?.total) || features.length;
+
+        console.log(`▶ Page ${currentPage}/${totalPages} loaded. Features: ${features.length}`);
+
         resolve({
           features,
-          totalPages: parseInt(data.response.page?.total) || 1,
-          currentPage: parseInt(data.response.page?.current) || 1,
-          totalRecords: parseInt(data.response.record?.total) || features.length,
+          totalPages,
+          currentPage,
+          totalRecords,
         });
       },
       error: reject,
@@ -43,8 +49,13 @@ async function fetchAllTrailData(lat, lon, min, max, diff) {
   try {
     const firstPage = await fetchTrailDataPage(lat, lon, min, max, diff, 1);
     const totalPages = firstPage.totalPages;
+    const totalRecords = firstPage.totalRecords;
+
+    console.log(`▶ Total pages to fetch: ${totalPages}`);
+    console.log(`▶ Total expected records: ${totalRecords}`);
 
     if (totalPages <= 1) {
+      console.log(`▶ All features loaded: ${firstPage.features.length}`);
       return firstPage.features;
     }
 
@@ -56,6 +67,12 @@ async function fetchAllTrailData(lat, lon, min, max, diff) {
     const remainingPages = await Promise.all(pagePromises);
 
     const allFeatures = firstPage.features.concat(...remainingPages.map((page) => page.features));
+
+    console.log(`▶ Total features collected: ${allFeatures.length}`);
+
+    if (allFeatures.length !== totalRecords) {
+      console.warn(`⚠ Mismatch: expected ${totalRecords}, got ${allFeatures.length}`);
+    }
 
     return allFeatures;
   } catch (err) {

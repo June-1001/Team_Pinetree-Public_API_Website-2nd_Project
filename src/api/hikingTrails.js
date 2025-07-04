@@ -8,7 +8,6 @@ const hiking = {
   format: "json",
   data: "LT_L_FRSTCLIMB",
   size: 1000,
-  page: 1,
 };
 
 function round(num) {
@@ -45,7 +44,7 @@ function setAttrFilter(min, max, diff) {
   return filters.join("|");
 }
 
-export function getHikingUrl(lat, lon, min, max, diff) {
+export function getHikingUrl(lat, lon, min, max, diff, page = 1) {
   const params = [];
 
   params.push("key=" + vworldApiKey);
@@ -54,6 +53,7 @@ export function getHikingUrl(lat, lon, min, max, diff) {
   params.push("format=" + hiking.format);
   params.push("data=" + hiking.data);
   params.push("size=" + hiking.size);
+  params.push("page=" + page);
   params.push("domain=" + hiking.domain);
 
   let geomFilter = null;
