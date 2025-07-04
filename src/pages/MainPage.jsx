@@ -6,44 +6,62 @@ import { useTrailData } from "../hooks/useTrailData";
 import { useWeatherData } from "../hooks/useWeatherData";
 
 export default function MainPage() {
-  // 검색 키워드
   const [keyword, setKeyword] = useState("");
-
-  // 등산로 최소 최대 길이 지정
   const [minRange, setMinRange] = useState("");
   const [maxRange, setMaxRange] = useState("");
-
-  // 등산로 난이도 지정
   const [difficulty, setDifficulty] = useState("");
-
-  //검색 시 검색됨 상태로 변경
   const [searched, setSearched] = useState(false);
-
-  // 위도 및 경도
   const [lat, setLat] = useState(null);
   const [lon, setLon] = useState(null);
-
-  // 현재 선택한 등산로
   const [selectedTrail, setSelectedTrail] = useState(null);
-
-  // 등산로 드롭다운 전체 닫기
   const [collapseAllTrigger, setCollapseAllTrigger] = useState(0);
 
-  // 날씨 데이터
+  const [zoom, setZoom] = useState(1);
+  const [containerHeight, setContainerHeight] = useState(800);
+
   const weatherData = useWeatherData(lat, lon);
 
-  // 등산로 데이터
   const {
     data: trailData,
     isLoading: trailsLoading,
     error: trailsError,
-  } = useTrailData(lat, lon, minRange, maxRange, difficulty);
+  } = useTrailData(lat, lon, minRange, maxRange, difficulty, searched);
 
+  // 창 크기에 따라서 검색 결과 div zoom 컨트롤
+  useEffect(() => {
+    const baseWidth = 1280;
+    const baseHeight = 800;
+    const maxHeight = 800;
+
+    function handleResize() {
+      const scale = window.innerWidth / baseWidth;
+      const scaledHeight = baseHeight * scale;
+
+      if (scaledHeight > maxHeight) {
+        setZoom(maxHeight / baseHeight);
+        setContainerHeight(maxHeight);
+      } else {
+        setZoom(scale);
+        setContainerHeight(scaledHeight);
+      }
+    }
+
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  useEffect(() => {
+    if (trailsLoading === false && searched === true) {
+      setSearched(false);
+    }
+  }, [trailsLoading, searched]);
+
+  // 키워드 입력 시 검색 초기화
   useEffect(() => {
     setSearched(false);
   }, [keyword]);
 
-  // 키워드 검색 시 사용
   function handleSearch() {
     if (keyword.trim() === "") {
       return;
@@ -51,17 +69,15 @@ export default function MainPage() {
     setSearched(true);
   }
 
-  // 드롭다운 전체 닫기 - 우클릭 시 사용
   function clearSelection() {
     setSelectedTrail(null);
     setCollapseAllTrigger((prev) => prev + 1);
   }
 
-  return (    
-    <div className="main-container">
+  return (
+    <div className="mainContainer">
       <h1 className="title">등산로 지역별, 산이름, 위치 데이터를 이용한 날씨 API 데이터 정보</h1>
-
-      {/* 검색창 */}
+      
       <SearchFilterSection
         keyword={keyword}
         setKeyword={setKeyword}
@@ -73,30 +89,40 @@ export default function MainPage() {
         difficulty={difficulty}
         setDifficulty={setDifficulty}
       />
-
-      {/* 등산로 지도 */}
-      <HikingMap
-        keyword={keyword}
-        searched={searched}
-        trailData={trailData}
-        selectedTrail={selectedTrail}
-        setSelectedTrail={setSelectedTrail}
-        onCenterChanged={(lat, lon) => {
-          setLat(lat);
-          setLon(lon);
+      <div
+        id="searchResults"
+        style={{
+          display: "flex",
+          height: containerHeight,
+          alignItems: "stretch",
+          zoom: zoom,
         }}
-        onClearSelection={clearSelection}
-      />
-
-      {/* 등산로 목록 */}
-      {!trailsLoading && !trailsError && (
-        <TrailList
+      >
+        <HikingMap
+          className={searched ? "none" : "block"}
+          keyword={keyword}
+          searched={searched}
           trailData={trailData}
           selectedTrail={selectedTrail}
           setSelectedTrail={setSelectedTrail}
-          collapseAllTrigger={collapseAllTrigger}
+          onCenterChanged={(lat, lon) => {
+            setLat(lat);
+            setLon(lon);
+          }}
+          onClearSelection={clearSelection}
+          style={{ width: 600, height: "100%" }}
         />
-      )}
+
+        {!trailsLoading && !trailsError && (
+          <TrailList
+            trailData={trailData}
+            selectedTrail={selectedTrail}
+            setSelectedTrail={setSelectedTrail}
+            collapseAllTrigger={collapseAllTrigger}
+            style={{ flexGrow: 1, overflowY: "auto", height: "100%" }}
+          />
+        )}
+      </div>
     </div>
   );
 }

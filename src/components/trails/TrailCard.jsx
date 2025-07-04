@@ -16,6 +16,7 @@ function TrailCard(props) {
   // 카드 생성
   return (
     <div
+      className="trailCard"
       style={{
         border:
           props.selectedTrail && props.selectedTrail.id === props.trail.id
