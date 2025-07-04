@@ -75,7 +75,7 @@ export default function MainPage() {
   }
 
   return (
-    <div className="main-ㅊontainer">
+    <div className="main-container">
       <SearchFilterSection
         keyword={keyword}
         setKeyword={setKeyword}
