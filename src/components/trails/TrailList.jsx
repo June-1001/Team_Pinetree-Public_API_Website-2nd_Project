@@ -45,14 +45,14 @@ function TrailList(props) {
     sortedMountainNames.sort((a, b) => a.localeCompare(b));
   } else if (sortOption === "낮은거리순") {
     sortedMountainNames.sort((a, b) => {
-      const totalA = groupedByMountain[a].reduce((sum, trail) => sum + Number(trail.properties.length || 0), 0);
-      const totalB = groupedByMountain[b].reduce((sum, trail) => sum + Number(trail.properties.length || 0), 0);
+      const totalA = groupedByMountain[a].reduce((sum, trail) => sum + Number(trail.properties.sec_len.length || 0), 0);
+      const totalB = groupedByMountain[b].reduce((sum, trail) => sum + Number(trail.properties.sec_len.length || 0), 0);
       return totalA - totalB;
     });
   } else if (sortOption === "높은거리순") {
     sortedMountainNames.sort((a, b) => {
-      const totalA = groupedByMountain[a].reduce((sum, trail) => sum + Number(trail.properties.length || 0), 0);
-      const totalB = groupedByMountain[b].reduce((sum, trail) => sum + Number(trail.properties.length || 0), 0);
+      const totalA = groupedByMountain[a].reduce((sum, trail) => sum + Number(trail.properties.sec_len.length || 0), 0);
+      const totalB = groupedByMountain[b].reduce((sum, trail) => sum + Number(trail.properties.sec_len.length || 0), 0);
       return totalB - totalA;
     });
   }
