@@ -75,7 +75,7 @@ export default function MainPage() {
   }
 
   return (
-    <div className="mainContainer">
+    <div className="main-ㅊontainer">
       <SearchFilterSection
         keyword={keyword}
         setKeyword={setKeyword}
@@ -88,7 +88,7 @@ export default function MainPage() {
         setDifficulty={setDifficulty}
       />
       <div
-        id="searchResults"
+        id="search-results"
         style={{
           display: "flex",
           height: containerHeight,

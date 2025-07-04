@@ -11,17 +11,17 @@ body,
   height: 100vh;
 }
 
-#searchResults {
+#search-results {
   display: flex;
 }
 
-#hikingMap {
+#hiking-map {
   width: 800px;
   height: 600px;
   flex-shrink: 0;
 }
 
-.trailList {
+.trail-list {
   flex-grow: 1;
   max-height: 800px;
   overflow-y: auto;

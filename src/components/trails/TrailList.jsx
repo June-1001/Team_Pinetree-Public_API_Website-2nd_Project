@@ -35,7 +35,7 @@ function TrailList(props) {
   }
 
   return (
-    <div className="trailList">
+    <div className="trail-list">
       {mountainNames.map((name) => {
         const trails = groupedByMountain[name];
         if (!trails) {
