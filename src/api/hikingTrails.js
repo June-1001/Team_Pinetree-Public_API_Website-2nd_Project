@@ -1,3 +1,5 @@
+// 등산로 API 불러올 URL 생성
+
 const vworldApiKey = `31198BF5-179E-3380-947F-F97448ED7D34`;
 
 const hiking = {

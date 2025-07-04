@@ -39,6 +39,7 @@ async function fetchTrailDataPage(lat, lon, min, max, diff, page = 1) {
   });
 }
 
+// 페이지가 1페이지 이상이면 모든 페이지에서 데이터 받아오기
 async function fetchAllTrailData(lat, lon, min, max, diff) {
   const firstPage = await fetchTrailDataPage(lat, lon, min, max, diff, 1);
   const totalPages = firstPage.totalPages;
@@ -78,6 +79,7 @@ export function useTrailData(lat, lon, minRange, maxRange, difficulty) {
         const allFeatures = await fetchAllTrailData(lat, lon, minRange, maxRange, difficulty);
 
         const sortedFeatures = allFeatures
+          // 위경도 좌표로 현재 위치와의 거리 계산해서 거리 순으로 정렬
           .map((trail) => {
             const [lon_, lat_] = trail.geometry?.coordinates?.[0]?.[0] || [0, 0];
             const distance = getDistanceByLatlon(lat, lon, lat_, lon_);

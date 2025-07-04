@@ -25,6 +25,7 @@ function HikingMap(props) {
     }
   }
 
+  // 카카오 맵 초기 상태
   useEffect(() => {
     const script = document.createElement("script");
     script.src =
@@ -34,6 +35,7 @@ function HikingMap(props) {
     script.async = true;
     script.onload = () => {
       window.kakao.maps.load(() => {
+        // 기본 값 - 서울
         const center = new window.kakao.maps.LatLng(37.5665, 126.978);
         const options = {
           center: center,
@@ -41,6 +43,7 @@ function HikingMap(props) {
         };
         mapInstance.current = new window.kakao.maps.Map(mapRef.current, options);
 
+        // 우클릭 시 클릭한 위경도 좌표로 이동
         window.kakao.maps.event.addListener(mapInstance.current, "rightclick", (mouseEvent) => {
           const lat = mouseEvent.latLng.getLat();
           const lon = mouseEvent.latLng.getLng();
@@ -55,6 +58,7 @@ function HikingMap(props) {
             position: mouseEvent.latLng,
           });
 
+          // 폴리라인 컨트롤
           allPolylines.current.forEach((poly) => poly.setMap(null));
           allPolylines.current = [];
           if (selectedPolyline.current) {
@@ -102,8 +106,11 @@ function HikingMap(props) {
       return;
     }
 
+    // 폴리라인 표시
     allPolylines.current.forEach((poly) => poly.setMap(null));
     allPolylines.current = [];
+
+    // 오버레이 표시
     allOverlays.current.forEach((ov) => ov.setMap(null));
     allOverlays.current = [];
 
@@ -113,6 +120,7 @@ function HikingMap(props) {
 
       const path = coords.map((pair) => new window.kakao.maps.LatLng(pair[1], pair[0]));
 
+      // 등산로 데이터 받아온 좌표로 폴리라인 표신
       const polyline = new window.kakao.maps.Polyline({
         path: path,
         strokeWeight: 2,
@@ -132,6 +140,7 @@ function HikingMap(props) {
         zIndex: 3,
       });
 
+      // 폴리라인 위에 마우스 올렸을 때 오버레이 표시
       window.kakao.maps.event.addListener(polyline, "mouseover", () => {
         if (selectedOverlay.current) {
           selectedOverlay.current.setMap(null);
@@ -161,6 +170,7 @@ function HikingMap(props) {
       selectedOverlay.current = null;
     }
 
+    // 등산로 카드 선택 시 폴리라인 더 두껍게 그리기
     if (props.selectedTrail) {
       const coords = extractCoords(props.selectedTrail.geometry);
       if (coords.length === 0) return;
@@ -185,6 +195,7 @@ function HikingMap(props) {
         ov.setMap(null);
       });
 
+      // 등산로 카드 선택 시 오버레이 항상 표시하기
       selectedOverlay.current = new window.kakao.maps.CustomOverlay({
         position: midPoint,
         content: content,
