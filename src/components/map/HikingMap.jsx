@@ -25,7 +25,7 @@ function HikingMap(props) {
     }
   }
 
-  // 카카오 맵 초기 상태
+  // 카카오 맵 스크립트
   useEffect(() => {
     const script = document.createElement("script");
     script.src =
