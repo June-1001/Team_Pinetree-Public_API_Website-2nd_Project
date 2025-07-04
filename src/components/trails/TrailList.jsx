@@ -3,6 +3,7 @@ import TrailCard from "./TrailCard";
 
 function TrailList(props) {
   const [expandedMountain, setExpandedMountain] = useState(null);
+  const [sortOption, setSortOption] = useState("전체");
 
   useEffect(() => {
     setExpandedMountain(null);
@@ -34,9 +35,39 @@ function TrailList(props) {
     });
   }
 
+  function handleSortChange(e){
+    setSortOption(e.target.value);
+  }
+
+  let sortedMountainNames = [...mountainNames];
+
+  if (sortOption === "가나다순") {
+    sortedMountainNames.sort((a, b) => a.localeCompare(b));
+  } else if (sortOption === "낮은거리순") {
+    sortedMountainNames.sort((a, b) => {
+      const totalA = groupedByMountain[a].reduce((sum, trail) => sum + trail.properties.length || 0, 0);
+      const totalB = groupedByMountain[b].reduce((sum, trail) => sum + trail.properties.length || 0, 0);
+      return totalA - totalB;
+    });
+  } else if (sortOption === "높은거리순") {
+    sortedMountainNames.sort((a, b) => {
+      const totalA = groupedByMountain[a].reduce((sum, trail) => sum + trail.properties.length || 0, 0);
+      const totalB = groupedByMountain[b].reduce((sum, trail) => sum + trail.properties.length || 0, 0);
+      return totalB - totalA;
+    });
+  }
+
   return (
     <div className="trailList">
-      {mountainNames.map((name) => {
+      <div className="listAttribute">
+        <select value={sortOption} onChange={handleSortChange}>
+          <option value="전체">전체</option>
+          <option value="가나다순">가나다순</option>
+          <option value="낮은거리순">낮은거리순</option>
+          <option value="높은거리순">높은거리순</option>
+        </select>
+      </div>
+      {sortedMountainNames.map((name) => {
         const trails = groupedByMountain[name];
         if (!trails) {
           return null;
@@ -57,7 +88,7 @@ function TrailList(props) {
               {name} {isExpanded ? "▲" : "▼"}
             </div>
             {isExpanded && (
-              <div style={{ paddingLeft: "16px", marginTop: "8px" }}>
+              <div style={{ padding: "16px", marginTop: "8px" }}>
                 {trails.map((trail) => {
                   return (
                     <TrailCard

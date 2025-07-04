@@ -148,3 +148,8 @@ select{
 .mapList{
   margin-top: 20px;
 }
+
+.listAttribute{
+  text-align: right;
+  margin-bottom: 20px;
+}
