@@ -16,6 +16,9 @@ export default function MainPage() {
   const [selectedTrail, setSelectedTrail] = useState(null);
   const [collapseAllTrigger, setCollapseAllTrigger] = useState(0);
 
+  const [zoom, setZoom] = useState(1);
+  const [containerHeight, setContainerHeight] = useState(800);
+
   const weatherData = useWeatherData(lat, lon);
 
   const {
@@ -23,6 +26,30 @@ export default function MainPage() {
     isLoading: trailsLoading,
     error: trailsError,
   } = useTrailData(lat, lon, minRange, maxRange, difficulty, searched);
+
+  // 창 크기에 따라서 검색 결과 div zoom 컨트롤
+  useEffect(() => {
+    const baseWidth = 1280;
+    const baseHeight = 800;
+    const maxHeight = 800;
+
+    function handleResize() {
+      const scale = window.innerWidth / baseWidth;
+      const scaledHeight = baseHeight * scale;
+
+      if (scaledHeight > maxHeight) {
+        setZoom(maxHeight / baseHeight);
+        setContainerHeight(maxHeight);
+      } else {
+        setZoom(scale);
+        setContainerHeight(scaledHeight);
+      }
+    }
+
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   useEffect(() => {
     if (trailsLoading === false && searched === true) {
@@ -48,7 +75,7 @@ export default function MainPage() {
   }
 
   return (
-    <div className="main-container">
+    <div className="mainContainer">
       <SearchFilterSection
         keyword={keyword}
         setKeyword={setKeyword}
@@ -60,28 +87,39 @@ export default function MainPage() {
         difficulty={difficulty}
         setDifficulty={setDifficulty}
       />
-
-      <HikingMap
-        keyword={keyword}
-        searched={searched}
-        trailData={trailData}
-        selectedTrail={selectedTrail}
-        setSelectedTrail={setSelectedTrail}
-        onCenterChanged={(lat, lon) => {
-          setLat(lat);
-          setLon(lon);
+      <div
+        id="searchResults"
+        style={{
+          display: "flex",
+          height: containerHeight,
+          alignItems: "stretch",
+          zoom: zoom,
         }}
-        onClearSelection={clearSelection}
-      />
-
-      {!trailsLoading && !trailsError && (
-        <TrailList
+      >
+        <HikingMap
+          keyword={keyword}
+          searched={searched}
           trailData={trailData}
           selectedTrail={selectedTrail}
           setSelectedTrail={setSelectedTrail}
-          collapseAllTrigger={collapseAllTrigger}
+          onCenterChanged={(lat, lon) => {
+            setLat(lat);
+            setLon(lon);
+          }}
+          onClearSelection={clearSelection}
+          style={{ width: 600, height: "100%" }}
         />
-      )}
+
+        {!trailsLoading && !trailsError && (
+          <TrailList
+            trailData={trailData}
+            selectedTrail={selectedTrail}
+            setSelectedTrail={setSelectedTrail}
+            collapseAllTrigger={collapseAllTrigger}
+            style={{ flexGrow: 1, overflowY: "auto", height: "100%" }}
+          />
+        )}
+      </div>
     </div>
   );
 }

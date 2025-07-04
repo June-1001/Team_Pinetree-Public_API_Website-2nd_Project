@@ -35,7 +35,7 @@ function TrailList(props) {
   }
 
   return (
-    <div>
+    <div className="trailList">
       {mountainNames.map((name) => {
         const trails = groupedByMountain[name];
         if (!trails) {
@@ -57,7 +57,15 @@ function TrailList(props) {
               {name} {isExpanded ? "▲" : "▼"}
             </div>
             {isExpanded && (
-              <div style={{ paddingLeft: "16px", marginTop: "8px" }}>
+              <div
+                style={{
+                  paddingLeft: "16px",
+                  marginTop: "8px",
+                  display: "grid",
+                  gridTemplateColumns: "repeat(auto-fill, minmax(100px, 1fr))",
+                  gap: "12px",
+                }}
+              >
                 {trails.map((trail) => {
                   return (
                     <TrailCard

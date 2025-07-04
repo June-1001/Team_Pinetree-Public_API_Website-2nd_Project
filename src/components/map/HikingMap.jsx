@@ -261,7 +261,7 @@ function HikingMap(props) {
     });
   }, [props.searched, props.keyword, mapReady]);
 
-  return <div style={{ width: "100%", height: "500px" }} ref={mapRef}></div>;
+  return <div id="hikingMap" ref={mapRef}></div>;
 }
 
 export default HikingMap;
