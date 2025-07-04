@@ -218,6 +218,7 @@ function HikingMap(props) {
 
     const geocoder = new window.kakao.maps.services.Geocoder();
 
+    // 주소 검색
     geocoder.addressSearch(props.keyword, (result, status) => {
       if (status === window.kakao.maps.services.Status.OK && result.length > 0) {
         const first = result[0];
@@ -234,7 +235,9 @@ function HikingMap(props) {
           position: position,
         });
         props.onCenterChanged(lat, lon);
-      } else {
+      }
+      // 주소 없으면 키워드로 검색
+      else {
         const ps = new window.kakao.maps.services.Places();
         ps.keywordSearch(props.keyword, (result2, status2) => {
           if (status2 === window.kakao.maps.services.Status.OK && result2.length > 0) {
