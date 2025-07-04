@@ -13,6 +13,7 @@ function HikingMap(props) {
 
   const [mapReady, setMapReady] = useState(false);
 
+  // 좌표 추출
   function extractCoords(geometry) {
     if (!geometry || !geometry.coordinates) {
       return [];
@@ -198,13 +199,15 @@ function HikingMap(props) {
     }
   }, [props.selectedTrail, mapReady]);
 
+  // 주소 있으면 주소 먼저 사용, 없으면 키워드로 검색
   useEffect(() => {
     if (!mapReady || !props.searched || !props.keyword || !window.kakao || !mapInstance.current) {
       return;
     }
 
-    const ps = new window.kakao.maps.services.Places();
-    ps.keywordSearch(props.keyword, (result, status) => {
+    const geocoder = new window.kakao.maps.services.Geocoder();
+
+    geocoder.addressSearch(props.keyword, (result, status) => {
       if (status === window.kakao.maps.services.Status.OK && result.length > 0) {
         const first = result[0];
         const lat = parseFloat(first.y);
@@ -220,6 +223,26 @@ function HikingMap(props) {
           position: position,
         });
         props.onCenterChanged(lat, lon);
+      } else {
+        const ps = new window.kakao.maps.services.Places();
+        ps.keywordSearch(props.keyword, (result2, status2) => {
+          if (status2 === window.kakao.maps.services.Status.OK && result2.length > 0) {
+            const first2 = result2[0];
+            const lat2 = parseFloat(first2.y);
+            const lon2 = parseFloat(first2.x);
+            const position2 = new window.kakao.maps.LatLng(lat2, lon2);
+            mapInstance.current.setCenter(position2);
+
+            if (markerRef.current) {
+              markerRef.current.setMap(null);
+            }
+            markerRef.current = new window.kakao.maps.Marker({
+              map: mapInstance.current,
+              position: position2,
+            });
+            props.onCenterChanged(lat2, lon2);
+          }
+        });
       }
     });
   }, [props.searched, props.keyword, mapReady]);
