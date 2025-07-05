@@ -97,11 +97,10 @@ function TrailList(props) {
               {isExpanded && (
                 <div
                   style={{
-                    padding: "16px",
-                    marginTop: "8px",
+                    marginTop: "20px",
                     display: "grid",
-                    gridTemplateColumns: "repeat(auto-fill, minmax(114px, 1fr))",
-                    gap: "10px",
+                    gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))",
+                    gap: "20px",
                   }}
                 >
                   {trails.map((trail) => {

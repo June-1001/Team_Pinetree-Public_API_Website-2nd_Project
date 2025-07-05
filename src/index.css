@@ -26,13 +26,10 @@ select{
 .right{
   float: right;
 }
-
 /* 공통 css */
-
 #searchResults {
   display: flex;
 }
-
 #hikingMap {
   width: 600px;
   height: 600px;
@@ -40,7 +37,6 @@ select{
   border: 1px solid #ccc;
   border-radius: 10px;
 }
-
 .trailList {
   flex-grow: 1;
   height: 600px;
@@ -48,15 +44,12 @@ select{
   overflow-y: auto;
   margin-left: 20px;
 }
-
-
 .title{
   text-align: center;
 }
 .main-container{
   margin: 10px 20px;
 }
-
 .search-section{
   background: #fbfbfb;
   padding: 50px;
@@ -85,9 +78,7 @@ select{
 .difficulty-section span::after{
   content: ':';
   display: inline-block;
-
 }
-
 .search-bar input{
   display: inline-block;
   width: calc(100% - 240px);
@@ -104,7 +95,6 @@ select{
   font-size: 16px;
   color: #fff;    
 }
-
 .searchBtn{
   width: 100px;
   height: 50px;
@@ -119,13 +109,10 @@ select{
   flex-direction: column;
   gap: 10px;
 }
-
-
 .range-section{
   display: flex;
   align-items: center;
 }
-
 .range-section input{
   display: inline-block;
   width: calc(100% / 2 - 64px);
@@ -134,16 +121,13 @@ select{
   padding: 0 10px;
   margin: 0 10px 0 20px;
 }
-
 .range-section input:last-child{
   margin: 0 !important;
 }
-
 .difficulty-section{
   display: flex;
   align-items: center;
 }
-
 .difficulty-section select{
   width: calc(100% - 116px);
   height: 46px;
@@ -154,12 +138,10 @@ select{
 .mapList{
   margin-top: 20px;
 }
-
 .listAttribute{
   text-align: right;
   margin-bottom: 20px;
 }
-
 .trail-overlay{
   padding: 20px;
   background: #fff;
@@ -167,7 +149,7 @@ select{
   border-radius: 5px;
   position: relative;
   margin-bottom: 10px;
-  box-shadow: 10px 10px 10px 0px #a2a2a2;
+  box-shadow: 5px 5px 10px 0px #6b6b6b;
 }
 .trail-overlay::after{
   content: '▼';
@@ -176,11 +158,10 @@ select{
   color: #fff;
   position: absolute;
   left: 50%;
-  top: 47px;
+  top: 46px;
   transform: translate(-50%, 0);
   z-index: 1;
 }
-
 .mpaListItem{            
   padding: 14px 20px;
   font-weight: bold;
@@ -191,7 +172,9 @@ select{
 }
 .trailCard{
   padding: 20px 10px;
-  margin-bottom: 8px;
   cursor: pointer;
   border-radius: 10px;
-}            
+}
+.trailCard div{
+  margin-bottom: 5px;
+}
