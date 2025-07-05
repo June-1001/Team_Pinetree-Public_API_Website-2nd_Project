@@ -56,48 +56,25 @@ export default function MainPage() {
     if (trailsLoading === false && searched === true) {
       setSearched(false);
     }
-  }, [trailsLoading, searched]);
+  }, [trailsLoading, searched, showMap]);
 
   // 키워드 입력 시 검색 초기화
   useEffect(() => {
     setSearched(false);
   }, [keyword]);
 
-  async function handleSearch() {
-    if (keyword.trim() === "") return;
-
-    const coords = await geocodeKeyword(keyword);
-    if (coords) {
-      setLat(coords.lat);
-      setLon(coords.lon);
-      setShowMap(true);
-      setSearched(true);
-    } else {
-      alert("검색한 지역을 찾을 수 없습니다.");
+  function handleSearch() {
+    if (keyword.trim() === "") {
+      return;
     }
+    setSearched(true);
+    setShowMap(true);
   }
-
 
   function clearSelection() {
     setSelectedTrail(null);
     setCollapseAllTrigger((prev) => prev + 1);
   }
-
-async function geocodeKeyword(keyword) {
-  const response = await fetch(
-    `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(keyword)}`
-  );
-  const data = await response.json();
-  if (data.length > 0) {
-    return {
-      lat: parseFloat(data[0].lat),
-      lon: parseFloat(data[0].lon),
-    };
-  }
-  return null;
-}
-
-
 
   return (
     <div className="mainContainer">
@@ -125,7 +102,6 @@ async function geocodeKeyword(keyword) {
       >
         {showMap && (
           <HikingMap
-            className={searched ? "none" : "block"}
             keyword={keyword}
             searched={searched}
             trailData={trailData}
