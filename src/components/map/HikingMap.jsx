@@ -169,7 +169,7 @@ function HikingMap(props) {
       selectedPolyline.current = new window.kakao.maps.Polyline({
         path: path,
         strokeWeight: 6,
-        strokeColor: "#FF0000",
+        strokeColor: "#2cc532",
         strokeOpacity: 1,
         strokeStyle: "solid",
       });
