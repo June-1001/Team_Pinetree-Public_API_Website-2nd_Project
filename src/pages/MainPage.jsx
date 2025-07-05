@@ -11,6 +11,7 @@ export default function MainPage() {
   const [maxRange, setMaxRange] = useState("");
   const [difficulty, setDifficulty] = useState("");
   const [searched, setSearched] = useState(false);
+  const [showMap, setShowMap] = useState(false);
   const [lat, setLat] = useState(null);
   const [lon, setLon] = useState(null);
   const [selectedTrail, setSelectedTrail] = useState(null);
@@ -62,21 +63,45 @@ export default function MainPage() {
     setSearched(false);
   }, [keyword]);
 
-  function handleSearch() {
-    if (keyword.trim() === "") {
-      return;
+  async function handleSearch() {
+    if (keyword.trim() === "") return;
+
+    const coords = await geocodeKeyword(keyword);
+    if (coords) {
+      setLat(coords.lat);
+      setLon(coords.lon);
+      setShowMap(true);
+      setSearched(true);
+    } else {
+      alert("검색한 지역을 찾을 수 없습니다.");
     }
-    setSearched(true);
   }
+
 
   function clearSelection() {
     setSelectedTrail(null);
     setCollapseAllTrigger((prev) => prev + 1);
   }
 
+async function geocodeKeyword(keyword) {
+  const response = await fetch(
+    `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(keyword)}`
+  );
+  const data = await response.json();
+  if (data.length > 0) {
+    return {
+      lat: parseFloat(data[0].lat),
+      lon: parseFloat(data[0].lon),
+    };
+  }
+  return null;
+}
+
+
+
   return (
     <div className="mainContainer">
-      <h1 className="title">등산로 지역별, 산이름, 위치 데이터를 이용한 날씨 API 데이터 정보</h1>
+      <h1 className="title">About Hiking Trail Data</h1>
       
       <SearchFilterSection
         keyword={keyword}
@@ -98,20 +123,22 @@ export default function MainPage() {
           zoom: zoom,
         }}
       >
-        <HikingMap
-          className={searched ? "none" : "block"}
-          keyword={keyword}
-          searched={searched}
-          trailData={trailData}
-          selectedTrail={selectedTrail}
-          setSelectedTrail={setSelectedTrail}
-          onCenterChanged={(lat, lon) => {
-            setLat(lat);
-            setLon(lon);
-          }}
-          onClearSelection={clearSelection}
-          style={{ width: 600, height: "100%" }}
-        />
+        {showMap && (
+          <HikingMap
+            className={searched ? "none" : "block"}
+            keyword={keyword}
+            searched={searched}
+            trailData={trailData}
+            selectedTrail={selectedTrail}
+            setSelectedTrail={setSelectedTrail}
+            onCenterChanged={(lat, lon) => {
+              setLat(lat);
+              setLon(lon);
+            }}
+            onClearSelection={clearSelection}
+            style={{ width: 600, height: "100%" }}
+          />
+        )}
 
         {!trailsLoading && !trailsError && (
           <TrailList
