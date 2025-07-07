@@ -7,19 +7,17 @@ body,
   margin: 0;
   padding: 0 10px;
   box-sizing: border-box;
-  /* width: 100vw; */
   height: 100vh;
 }
 input {
   padding: 0;
   font-size: 16px;
   border: 2px solid #2cc532;
-  appearance: none; /* 기본 스타일 제거 */
-  -webkit-appearance: none; /* Safari 및 Chrome용 */
-  -moz-appearance: none; /* Firefox용 */
-  border-radius: 0; /* 둥근 테두리 제거 */
-  outline: none; /* 포커스 아웃라인 제거 */
-  /* 필요한 추가 스타일 적용 */
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  border-radius: 0;
+  outline: none;
 }
 input::placeholder {
   color: #757575;
@@ -36,12 +34,11 @@ select {
   border: 2px solid #2cc532;
   color: #757575;
   font-size: 20px;
-  appearance: none; /* 기본 스타일 제거 */
-  -webkit-appearance: none; /* Safari 및 Chrome용 */
-  -moz-appearance: none; /* Firefox용 */
-  border-radius: 0; /* 둥근 테두리 제거 */
-  outline: none; /* 포커스 아웃라인 제거 */
-  /* 필요한 추가 스타일 적용 */
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  border-radius: 0;
+  outline: none;
 }
 select:focus-visible {
   outline-color: #2cc532;
@@ -52,18 +49,17 @@ select:focus-visible {
 .right {
   float: right;
 }
-/* 공통 css */
-#searchResults {
+#search-results {
   display: flex;
 }
-#hikingMap {
+#hiking-map {
   width: 600px;
   height: 600px;
   flex-shrink: 0;
   border: 1px solid #ccc;
   border-radius: 10px;
 }
-.trailList {
+.trail-list {
   flex-grow: 1;
   max-height: 600px;
   overflow-y: auto;
@@ -122,7 +118,7 @@ select:focus-visible {
   font-size: 16px;
   color: #fff;
 }
-.searchBtn {
+.search-btn {
   width: 100px;
   height: 50px;
   padding: 10px 20px;
@@ -164,14 +160,14 @@ select:focus-visible {
   color: #757575;
   font-weight: 400;
 }
-.mapList {
+.map-list {
   margin-top: 20px;
 }
-.listAttribute {
+.list-attribute {
   text-align: right;
   margin-bottom: 20px;
 }
-.listAttribute select {
+.list-attribute select {
   width: 200px;
   height: 46px;
   padding: 0 10px;
@@ -198,7 +194,7 @@ select:focus-visible {
   transform: translate(-50%, 0);
   z-index: 1;
 }
-.mpaListItem {
+.map-list-item {
   padding: 14px 20px;
   font-weight: bold;
   user-select: none;
@@ -206,12 +202,12 @@ select:focus-visible {
   border: 1px solid #d1d1d1;
   cursor: pointer;
 }
-.trailCard {
+.trail-card {
   padding: 20px 10px;
   cursor: pointer;
   border-radius: 10px;
 }
-.trailCard div {
+.trail-card div {
   margin-bottom: 5px;
 }
 @media only screen and (max-width: 1000px) {
