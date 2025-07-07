@@ -7,7 +7,6 @@ body,
   margin: 0;
   padding: 0 10px;
   box-sizing: border-box;
-  /* width: 100vw; */
   height: 100vh;
 }
 input{
@@ -230,7 +229,7 @@ select:focus-visible{
   overflow: hidden;
   top: 10px;
   left: 10px;
-  width: 156px;
+  width: 150px;
   height: 56px;
   z-index: 10;
   border: 1px solid black;
@@ -249,10 +248,11 @@ select:focus-visible{
 .category li {
   list-style: none;
   float: left;
-  width: 50px;
-  height: 45px;
+  width: 51px;
+  height: 54px;
   padding-top: 5px;
   cursor: pointer;
+  margin: 0 -1px;
 }
 .category .ico_comm {
   display: block;
@@ -330,5 +330,8 @@ select:focus-visible{
     width: 100%;
     margin-top: 20px;
     margin-left: 0;
+  }
+  .category {
+    width: 153px;
   }
 }

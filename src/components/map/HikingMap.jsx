@@ -2,8 +2,6 @@ import React, { useEffect, useRef, useState } from "react";
 
 const kakaoApiKey = "5f283b38458e2a36a38d8894a017f5de";
 
-
-
 function HikingMap(props) {
   const mapRef = useRef(null);
   const mapInstance = useRef(null);
@@ -12,9 +10,32 @@ function HikingMap(props) {
   const allOverlays = useRef([]);
   const selectedPolyline = useRef(null);
   const selectedOverlay = useRef(null);
+  const categoryMarkers = useRef({
+    coffee: [],
+    store: [],
+    carpark: [],
+  });
 
   const [mapReady, setMapReady] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState("coffee");
   
+  const createMarkers = (positions, spriteY) => {
+    return positions.map(([lat, lng]) => {
+      const markerImage = new window.kakao.maps.MarkerImage(
+        "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/category.png",
+        new window.kakao.maps.Size(22, 26),
+        {
+          spriteOrigin: new window.kakao.maps.Point(10, spriteY),
+          spriteSize: new window.kakao.maps.Size(36, 98),
+        }
+      );
+      return new window.kakao.maps.Marker({
+        position: new window.kakao.maps.LatLng(lat, lng),
+        image: markerImage,
+      });
+    });
+  };
+
   function extractCoords(geometry) {
     if (!geometry || !geometry.coordinates) {
       return [];
@@ -98,6 +119,7 @@ function HikingMap(props) {
     };
   }, []);
 
+
   useEffect(() => {
     if (!mapReady || !Array.isArray(props.trailData) || !mapInstance.current) {
       return;
@@ -111,6 +133,7 @@ function HikingMap(props) {
     props.trailData.forEach((trail) => {
       const coords = extractCoords(trail.geometry);
       if (!Array.isArray(coords) || coords.length === 0) return;
+
 
       const path = coords.map((pair) => new window.kakao.maps.LatLng(pair[1], pair[0]));
 
@@ -167,9 +190,6 @@ function HikingMap(props) {
   }, [props.trailData, mapReady]);
 
   useEffect(() => {
-    if (!mapReady || !mapInstance.current) {
-      return;
-    }
 
     if (selectedPolyline.current) {
       selectedPolyline.current.setMap(null);
@@ -244,25 +264,72 @@ function HikingMap(props) {
     });
   }, [props.searched, props.keyword, mapReady]);
 
+  const initCategoryMarkers = () => {
+    if (!mapInstance.current) return;
+
+    // 예시 좌표 - 필요에 따라 교체하세요
+    const coffee = [
+      [37.5665, 126.978], 
+      [37.565, 126.977],
+  ];
+    const store = [
+      [37.567, 126.978], 
+      [37.564, 126.976]
+    ];
+    const carpark = [
+      [37.5655, 126.975], 
+      [37.5667, 126.976]
+    ];
+
+    categoryMarkers.current["coffee"] = createMarkers(coffee, 0);
+    categoryMarkers.current["store"] = createMarkers(store, 36);
+    categoryMarkers.current["carpark"] = createMarkers(carpark, 72);
+  };
+
+  const changeMarker = (category) => {
+    setSelectedCategory(category);
+
+    Object.entries(categoryMarkers.current).forEach(([type, markers]) => {
+      markers.forEach((marker) => {
+        marker.setMap(type === category ? mapInstance.current : null);
+      });
+    });
+  };
+
+  useEffect(() => {
+    if (!mapReady) return;
+    initCategoryMarkers();
+    changeMarker(selectedCategory);
+  }, [mapReady]);
+
     return (
     <div id="mapwrap">
       <div id="hikingMap" ref={mapRef}></div>
-        <div className="category">
-          <ul>
-            <li id="coffeeMenu" onclick="changeMarker('coffee')">
-                <span class="ico_comm ico_coffee"></span>
-                커피숍
-            </li>
-            <li id="storeMenu" onclick="changeMarker('store')">
-                <span class="ico_comm ico_store"></span>
-                편의점
-            </li>
-            <li id="carparkMenu" onclick="changeMarker('carpark')">
-                <span class="ico_comm ico_carpark"></span>
-                주차장
-            </li>
-          </ul>
-        </div>      
+      <div class="category">
+        <ul>
+          <li
+            className={selectedCategory === "coffee" ? "menu_selected" : ""}
+            onClick={() => changeMarker("coffee")}
+          >
+            <span className="ico_comm ico_coffee"></span>
+            커피숍
+          </li>
+          <li
+            className={selectedCategory === "store" ? "menu_selected" : ""}
+            onClick={() => changeMarker("store")}
+          >
+            <span className="ico_comm ico_store"></span>
+            편의점
+          </li>
+          <li
+            className={selectedCategory === "carpark" ? "menu_selected" : ""}
+            onClick={() => changeMarker("carpark")}
+          >
+            <span className="ico_comm ico_carpark"></span>
+            주차장
+          </li>
+        </ul>
+      </div>    
     </div>
   );
 }
