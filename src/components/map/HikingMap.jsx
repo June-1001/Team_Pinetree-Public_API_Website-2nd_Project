@@ -128,7 +128,6 @@ function HikingMap(props) {
         }
       });
 
-
       const content = `<div class="trail-overlay">${trail.properties.mntn_nm} / ${trail.properties.sec_len}m / ${trail.properties.cat_nam}</div>`;
 
       const overlay = new window.kakao.maps.CustomOverlay({
@@ -148,11 +147,7 @@ function HikingMap(props) {
           props.setSelectedTrail(trail);
         });
       }
-
       overlay.setContent(div);
-
-
-
 
       window.kakao.maps.event.addListener(polyline, "mouseover", () => {
         if (selectedOverlay.current) {

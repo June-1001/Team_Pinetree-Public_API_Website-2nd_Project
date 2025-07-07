@@ -1,7 +1,7 @@
 // 등산로 카드
+import React from "react";
 
-function TrailCard(props) {
-  const cardRef = props.cardRef;
+const TrailCard = React.forwardRef((props, ref) => {
   // 클릭 시 이벤트
   function handleClick() {
     if (props.selectedTrail && props.selectedTrail.id === props.trail.id) {
@@ -17,7 +17,7 @@ function TrailCard(props) {
   // 카드 생성
   return (
     <div
-      ref={cardRef}
+      ref={ref}
       className="trailCard"
       style={{
         border:
@@ -37,6 +37,6 @@ function TrailCard(props) {
       <div>하행속도(분) : {props.trail.properties.down_min}</div>      
     </div>
   );
-}
+})
 
 export default TrailCard;

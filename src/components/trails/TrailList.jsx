@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import TrailCard from "./TrailCard";
 
 function TrailList(props) {
@@ -16,6 +16,28 @@ function TrailList(props) {
     }
   }, [props.selectedTrail]);
  
+  const cardRefs = useRef({});
+  useEffect(() => {
+    if (props.selectedTrail) {
+      const mountain = props.selectedTrail.properties.mntn_nm;
+      setExpandedMountain(mountain);
+
+      setTimeout(() => {
+        const ref = cardRefs.current[props.selectedTrail.id];
+        if (ref && ref.current) {
+          ref.current.scrollIntoView({
+            behavior: "smooth",
+            block: "center"
+          });
+        }
+      }, 100); // 렌더링 후 DOM이 보장될 수 있도록 약간 딜레이
+    }
+  }, [props.selectedTrail]);
+
+
+  
+    
+  
   if (!Array.isArray(props.trailData)) {
     return null;
   }
@@ -111,12 +133,16 @@ function TrailList(props) {
                   }}
                 >
                   {trails.map((trail) => {
+                    if (!cardRefs.current[trail.id]) {
+                      cardRefs.current[trail.id] = React.createRef();
+                    }
                     return (
                       <TrailCard
                         key={trail.id}
                         trail={trail}
                         selectedTrail={props.selectedTrail}
                         setSelectedTrail={props.setSelectedTrail}
+                        ref={cardRefs.current[trail.id]}
                       />
                     );
                   })}
