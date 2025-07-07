@@ -15,11 +15,6 @@ input{
   font-size: 16px;
   border: 2px solid #2cc532;
 }
-select{
-  width: 120px;
-  padding: 5px;
-  border: 2px solid #2cc532;
-}
 .hidden {
   display: none;
 }
@@ -142,6 +137,13 @@ select{
   text-align: right;
   margin-bottom: 20px;
 }
+.listAttribute select{
+  width: 200px;
+  height: 46px;
+  padding: 0 10px;
+  border: 2px solid #2cc532;
+  font-size: 22px;
+}
 .trail-overlay{
   padding: 20px;
   background: #fff;
@@ -177,4 +179,60 @@ select{
 }
 .trailCard div{
   margin-bottom: 5px;
+}
+@media only screen and (max-width:1000px){
+  #root{
+    overflow-y: hidden;
+  }
+  .search-section{
+    padding: 20px;
+  }
+  .search-bar span,
+  .range-section span, 
+  .difficulty-section span{
+    font-size: 14px;
+    width: 64px;
+  }
+  .search-bar input{
+    width: calc(100% - 154px) !important;
+    height: auto !important;    
+    font-size: 1rem;
+    padding: 4px;
+    margin: 0 10px;
+  }
+  .search-bar button{
+    width: 70px;
+    padding: 2px 0;
+    font-size: 1rem;
+  }
+  .range-section input{
+    width: calc(100% - 186px) !important;
+    height: auto !important;    
+    font-size: 1rem;
+    padding: 4px;
+    margin: 0 10px;
+  }
+  .difficulty-section select{
+    width: calc(100% - 74px);
+    height: auto !important;
+    font-size: 1rem;
+    padding: 4px;
+    margin-left: 10px;
+  }
+  #searchResults{
+    display: block !important;
+  }
+  #hikingMap{
+    width: 100%;
+  }
+  #hikingMap::after{
+    content: '';
+    clear: both;
+    display: block;
+  }
+  .trailList{
+    width: 100%;
+    margin-top: 20px;
+    margin-left: 0;
+  }
 }
