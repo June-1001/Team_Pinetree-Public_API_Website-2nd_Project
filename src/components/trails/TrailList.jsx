@@ -9,6 +9,13 @@ function TrailList(props) {
     setExpandedMountain(null);
   }, [props.collapseAllTrigger]);
 
+  useEffect(() => {
+    if (props.selectedTrail) {
+      const mountain = props.selectedTrail.properties.mntn_nm;
+      setExpandedMountain(mountain);
+    }
+  }, [props.selectedTrail]);
+ 
   if (!Array.isArray(props.trailData)) {
     return null;
   }

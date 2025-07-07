@@ -1,6 +1,7 @@
 // 등산로 카드
 
 function TrailCard(props) {
+  const cardRef = props.cardRef;
   // 클릭 시 이벤트
   function handleClick() {
     if (props.selectedTrail && props.selectedTrail.id === props.trail.id) {
@@ -16,12 +17,16 @@ function TrailCard(props) {
   // 카드 생성
   return (
     <div
+      ref={cardRef}
       className="trailCard"
       style={{
         border:
           props.selectedTrail && props.selectedTrail.id === props.trail.id
             ? "2px solid red"
             : "1px solid gray",
+        padding: "8px",
+        marginBottom: "8px",
+        cursor: "pointer",
       }}
       onClick={handleClick}
     >
@@ -29,7 +34,7 @@ function TrailCard(props) {
       <div>길이 : {props.trail.properties.sec_len}m</div>
       <div>난이도 : {props.trail.properties.cat_nam}</div>
       <div>상행속도(분) : {props.trail.properties.up_min}</div>
-      <div>하행속도(분) : {props.trail.properties.down_min}</div>
+      <div>하행속도(분) : {props.trail.properties.down_min}</div>      
     </div>
   );
 }

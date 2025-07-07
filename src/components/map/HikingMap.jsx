@@ -12,7 +12,7 @@ function HikingMap(props) {
   const selectedOverlay = useRef(null);
 
   const [mapReady, setMapReady] = useState(false);
-
+  
   function extractCoords(geometry) {
     if (!geometry || !geometry.coordinates) {
       return [];
@@ -122,6 +122,13 @@ function HikingMap(props) {
 
       polyline.setMap(mapInstance.current);
 
+      window.kakao.maps.event.addListener(polyline, "click", () => {
+        if (props.setSelectedTrail) {
+          props.setSelectedTrail(trail);
+        }
+      });
+
+
       const content = `<div class="trail-overlay">${trail.properties.mntn_nm} / ${trail.properties.sec_len}m / ${trail.properties.cat_nam}</div>`;
 
       const overlay = new window.kakao.maps.CustomOverlay({
@@ -130,6 +137,22 @@ function HikingMap(props) {
         yAnchor: 1,
         zIndex: 3,
       });
+
+      // trail-overlay 내부에 클릭 이벤트 바인딩
+      const div = document.createElement("div");
+      div.innerHTML = content;
+
+      const overlayElement = div.querySelector(".trail-overlay");
+      if (overlayElement && props.setSelectedTrail) {
+        overlayElement.addEventListener("click", () => {
+          props.setSelectedTrail(trail);
+        });
+      }
+
+      overlay.setContent(div);
+
+
+
 
       window.kakao.maps.event.addListener(polyline, "mouseover", () => {
         if (selectedOverlay.current) {
@@ -185,10 +208,10 @@ function HikingMap(props) {
       });
 
       selectedOverlay.current = new window.kakao.maps.CustomOverlay({
-        position: midPoint,
+        position: path[Math.floor(path.length / 2)],
         content: content,
         yAnchor: 1,
-        zIndex: 4,
+        zIndex: 5,
       });
 
       selectedOverlay.current.setMap(mapInstance.current);
