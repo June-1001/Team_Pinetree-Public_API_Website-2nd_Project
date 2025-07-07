@@ -2,6 +2,8 @@ import React, { useEffect, useRef, useState } from "react";
 
 const kakaoApiKey = "5f283b38458e2a36a38d8894a017f5de";
 
+
+
 function HikingMap(props) {
   const mapRef = useRef(null);
   const mapInstance = useRef(null);
@@ -242,7 +244,27 @@ function HikingMap(props) {
     });
   }, [props.searched, props.keyword, mapReady]);
 
-  return <div id="hikingMap" ref={mapRef}></div>;
+    return (
+    <div id="mapwrap">
+      <div id="hikingMap" ref={mapRef}></div>
+        <div className="category">
+          <ul>
+            <li id="coffeeMenu" onclick="changeMarker('coffee')">
+                <span class="ico_comm ico_coffee"></span>
+                커피숍
+            </li>
+            <li id="storeMenu" onclick="changeMarker('store')">
+                <span class="ico_comm ico_store"></span>
+                편의점
+            </li>
+            <li id="carparkMenu" onclick="changeMarker('carpark')">
+                <span class="ico_comm ico_carpark"></span>
+                주차장
+            </li>
+          </ul>
+        </div>      
+    </div>
+  );
 }
 
 export default HikingMap;
