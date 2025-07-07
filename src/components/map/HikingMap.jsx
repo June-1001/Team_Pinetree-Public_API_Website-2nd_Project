@@ -158,18 +158,6 @@ function HikingMap(props) {
       }
       overlay.setContent(div);
 
-      // trail-overlay 내부에 클릭 이벤트 바인딩
-      const div = document.createElement("div");
-      div.innerHTML = content;
-
-      const overlayElement = div.querySelector(".trail-overlay");
-      if (overlayElement && props.setSelectedTrail) {
-        overlayElement.addEventListener("click", () => {
-          props.setSelectedTrail(trail);
-        });
-      }
-      overlay.setContent(div);
-
       // 폴리라인 위에 마우스 올렸을 때 오버레이 표시
       window.kakao.maps.event.addListener(polyline, "mouseover", () => {
         if (selectedOverlay.current) {
