@@ -77,17 +77,6 @@ export function useTrailData(lat, lon, minRange, maxRange, difficulty) {
 
       try {
         const allFeatures = await fetchAllTrailData(lat, lon, minRange, maxRange, difficulty);
-
-        const sortedFeatures = allFeatures
-          // 위경도 좌표로 현재 위치와의 거리 계산해서 거리 순으로 정렬
-          .map((trail) => {
-            const [lon_, lat_] = trail.geometry?.coordinates?.[0]?.[0] || [0, 0];
-            const distance = getDistanceByLatlon(lat, lon, lat_, lon_);
-            return { ...trail, distance };
-          })
-          .sort((a, b) => a.distance - b.distance);
-
-        setTrailData(sortedFeatures);
       } catch (err) {
         setError(err);
         setTrailData([]);
