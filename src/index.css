@@ -229,7 +229,7 @@ select:focus-visible{
   overflow: hidden;
   top: 10px;
   left: 10px;
-  width: 150px;
+  width: auto;
   height: 56px;
   z-index: 10;
   border: 1px solid black;
@@ -330,8 +330,5 @@ select:focus-visible{
     width: 100%;
     margin-top: 20px;
     margin-left: 0;
-  }
-  .category {
-    width: 153px;
   }
 }
