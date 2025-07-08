@@ -15,7 +15,9 @@ function HikingMap(props) {
 
   const [mapReady, setMapReady] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("");
-  
+  const myLocationMarker = useRef(null);
+  const [isSearching, setIsSearching] = useState(false);
+
   const createMarkers = (positions, spriteY) => {
     return positions.map(([lat, lng]) => {
       const markerImage = new window.kakao.maps.MarkerImage(
@@ -116,7 +118,6 @@ function HikingMap(props) {
     };
   }, []);
 
-
   useEffect(() => {
     if (!mapReady || !Array.isArray(props.trailData) || !mapInstance.current) {
       return;
@@ -131,9 +132,7 @@ function HikingMap(props) {
       const coords = extractCoords(trail.geometry);
       if (!Array.isArray(coords) || coords.length === 0) return;
 
-
       const path = coords.map((pair) => new window.kakao.maps.LatLng(pair[1], pair[0]));
-
       const polyline = new window.kakao.maps.Polyline({
         path: path,
         strokeWeight: 2,
@@ -141,7 +140,6 @@ function HikingMap(props) {
         strokeOpacity: 0.7,
         strokeStyle: "solid",
       });
-
       polyline.setMap(mapInstance.current);
 
       window.kakao.maps.event.addListener(polyline, "click", () => {
@@ -151,7 +149,6 @@ function HikingMap(props) {
       });
 
       const content = `<div class="trail-overlay">${trail.properties.mntn_nm} / ${trail.properties.sec_len}m / ${trail.properties.cat_nam}</div>`;
-
       const overlay = new window.kakao.maps.CustomOverlay({
         position: path[Math.floor(path.length / 2)],
         content: content,
@@ -187,7 +184,6 @@ function HikingMap(props) {
   }, [props.trailData, mapReady]);
 
   useEffect(() => {
-
     if (selectedPolyline.current) {
       selectedPolyline.current.setMap(null);
       selectedPolyline.current = null;
@@ -196,13 +192,11 @@ function HikingMap(props) {
       selectedOverlay.current.setMap(null);
       selectedOverlay.current = null;
     }
-
     if (props.selectedTrail) {
       const coords = extractCoords(props.selectedTrail.geometry);
       if (coords.length === 0) return;
 
       const path = coords.map((pair) => new window.kakao.maps.LatLng(pair[1], pair[0]));
-
       selectedPolyline.current = new window.kakao.maps.Polyline({
         path: path,
         strokeWeight: 6,
@@ -210,11 +204,9 @@ function HikingMap(props) {
         strokeOpacity: 1,
         strokeStyle: "solid",
       });
-
       selectedPolyline.current.setMap(mapInstance.current);
 
       const midPoint = path[Math.floor(path.length / 2)];
-
       const content = `<div class="trail-overlay selected">${props.selectedTrail.properties.mntn_nm} / ${props.selectedTrail.properties.sec_len}m / ${props.selectedTrail.properties.cat_nam}</div>`;
 
       allOverlays.current.forEach((ov) => {
@@ -261,113 +253,125 @@ function HikingMap(props) {
     });
   }, [props.searched, props.keyword, mapReady]);
 
-  const initCategoryMarkers = () => {
-    if (!mapInstance.current) return;
-
-    // 예시 좌표 - 필요에 따라 교체하세요
-    const coffee = [
-      [37.5665, 126.978], 
-      [37.565, 126.977]
-  ];
-    const store = [
-      [37.567, 126.978], 
-      [37.564, 126.976]
-    ];
-    const carpark = [
-      [37.5655, 126.975], 
-      [37.5667, 126.976]
-    ];
-
-    categoryMarkers.current["coffee"] = createMarkers(coffee, 0);
-    categoryMarkers.current["store"] = createMarkers(store, 36);
-    categoryMarkers.current["carpark"] = createMarkers(carpark, 72);
-  };
-
-  const changeMarker = (category) => {
-    setSelectedCategory(category);
-
-    Object.entries(categoryMarkers.current).forEach(([type, markers]) => {
-      markers.forEach((marker) => {
-        marker.setMap(type === category ? mapInstance.current : null);
-      });
-    });
-  };
-
-  useEffect(() => {
-    if (!mapReady) return;
-    initCategoryMarkers();
-    changeMarker(selectedCategory);
-  }, [mapReady]);
-
   const handleCategoryChange = (categoryId) => {
     setSelectedCategory(categoryId);
+    setIsSearching(true); // 검색 시작 시 버튼 비활성화
 
-    if (!mapInstance.current || !window.kakao) return;
+    // 모든 카테고리 버튼에서 'on' 클래스 제거
+    document.querySelectorAll("#category li.on").forEach((el) => {
+      el.classList.remove("on");
+    });
+    
+    if (!mapInstance.current || !window.kakao || !categoryId) {
+      setIsSearching(false);
+      return;
+    }
 
     const ps = new window.kakao.maps.services.Places(mapInstance.current);
-
-    // 마커 초기화
-    categoryMarkers.current.forEach((m) => m.setMap(null));
+    categoryMarkers.current.forEach(m => m.setMap(null));
     categoryMarkers.current = [];
 
-    if (!categoryId) return;
+    ps.categorySearch(
+      categoryId,
+      (data, status) => {
+        if (status === window.kakao.maps.services.Status.OK) {
+          const order = parseInt(document.querySelector(`#${categoryId}`)?.dataset?.order || 0);
 
-    ps.categorySearch(categoryId, (data, status) => {
-      if (status === window.kakao.maps.services.Status.OK) {
-        const order = parseInt(
-          document.querySelector(`#${categoryId}`)?.dataset?.order || 0
-        );
+          data.forEach((place) => {
+            const markerImage = new window.kakao.maps.MarkerImage(
+              "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/places_category.png",
+              new window.kakao.maps.Size(27, 28),
+              {
+                spriteSize: new window.kakao.maps.Size(72, 208),
+                spriteOrigin: new window.kakao.maps.Point(46, order * 36),
+                offset: new window.kakao.maps.Point(11, 28),
+              }
+            );
 
-        data.forEach((place) => {
-          const markerImage = new window.kakao.maps.MarkerImage(
-            "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/places_category.png",
-            new window.kakao.maps.Size(27, 28),
-            {
-              spriteSize: new window.kakao.maps.Size(72, 208),
-              spriteOrigin: new window.kakao.maps.Point(46, order * 36),
-              offset: new window.kakao.maps.Point(11, 28),
-            }
-          );
+            const marker = new window.kakao.maps.Marker({
+              map: mapInstance.current,
+              position: new window.kakao.maps.LatLng(place.y, place.x),
+              image: markerImage,
+            });
 
-          const marker = new window.kakao.maps.Marker({
-            map: mapInstance.current,
-            position: new window.kakao.maps.LatLng(place.y, place.x),
-            image: markerImage,
+            const content = document.createElement("div");
+            content.className = "placeinfo_wrap";
+            content.innerHTML = `
+              <div class="placeinfo">
+                <a class="title" href="${place.place_url}" target="_blank">${place.place_name}</a>
+                <span>${place.road_address_name || place.address_name}</span>
+                <span class="tel">${place.phone || ""}</span>
+              </div>
+              <div class="after"></div>
+            `;
+
+            const overlay = new window.kakao.maps.CustomOverlay({
+              content,
+              position: new window.kakao.maps.LatLng(place.y, place.x),
+              yAnchor: 1,
+              zIndex: 3,
+            });
+
+            window.kakao.maps.event.addListener(marker, "click", () => {
+              overlay.setMap(mapInstance.current);
+            });
+
+            categoryMarkers.current.push(marker);
           });
-
-          // 클릭 시 오버레이 표시
-          const content = document.createElement("div");
-          content.className = "placeinfo_wrap";
-          content.innerHTML = `
-            <div class="placeinfo">
-              <a class="title" href="${place.place_url}" target="_blank">${place.place_name}</a>
-              <span>${place.road_address_name || place.address_name}</span>
-              <span class="tel">${place.phone || ""}</span>
-            </div>
-            <div class="after"></div>
-          `;
-
-          const overlay = new window.kakao.maps.CustomOverlay({
-            content,
-            position: new window.kakao.maps.LatLng(place.y, place.x),
-            yAnchor: 1,
-            zIndex: 3,
-          });
-
-          window.kakao.maps.event.addListener(marker, "click", () => {
-            overlay.setMap(mapInstance.current);
-          });
-
-          categoryMarkers.current.push(marker);
-        });
-      }
-    }, { useMapBounds: true });
+        }
+        setIsSearching(false); // 검색 완료 후 버튼 다시 활성화
+      },
+      { useMapBounds: true }
+    );
   };
 
-    return (
+  const handleMyLocation = () => {
+    if (!navigator.geolocation) {
+      alert("이 브라우저에서는 위치 정보가 지원되지 않습니다.");
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition((position) => {
+      const lat = position.coords.latitude;
+      const lng = position.coords.longitude;
+      const loc = new window.kakao.maps.LatLng(lat, lng);
+
+      // 기존 마커 제거
+      if (myLocationMarker.current) {
+        myLocationMarker.current.setMap(null);
+      }
+
+      // 새 마커 생성
+      myLocationMarker.current = new window.kakao.maps.Marker({
+        map: mapInstance.current,
+        position: loc,
+        title: "현 위치",
+      });
+
+      // 지도 중심 이동
+      mapInstance.current.setCenter(loc);
+    },
+      (error) => {
+        alert("현위치 정보를 가져올 수 없습니다.");
+        console.error(error);
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 10000,
+        maximumAge: 0,
+      }
+    );
+  };
+
+  return (
     <div id="mapwrap">
       <div id="hikingMap" ref={mapRef}></div>
-      <CategorySelector selected={selectedCategory} onSelect={handleCategoryChange} />   
+      <button onClick={handleMyLocation} className="accessLocation" title="현 위치">현 위치</button>
+      <CategorySelector 
+        selected={selectedCategory} 
+        onSelect={handleCategoryChange}
+        disabled={isSearching}
+      />
     </div>
   );
 }

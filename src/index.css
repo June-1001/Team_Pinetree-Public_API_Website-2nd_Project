@@ -103,6 +103,7 @@ select:focus-visible{
   display: inline-block;
   width: calc(100% - 220px);
   height: 46px;
+  line-height: 46px;
   font-size: 22px;
   padding: 0 10px;
   margin-left: 20px;

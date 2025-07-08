@@ -11,7 +11,6 @@ export default function MainPage() {
   const [maxRange, setMaxRange] = useState("");
   const [difficulty, setDifficulty] = useState("");
   const [searched, setSearched] = useState(false);
-  //const [showMap, setShowMap] = useState(false);
   const [lat, setLat] = useState(null);
   const [lon, setLon] = useState(null);
   const [selectedTrail, setSelectedTrail] = useState(null);
