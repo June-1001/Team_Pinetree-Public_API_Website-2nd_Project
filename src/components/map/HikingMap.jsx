@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import CategorySelector from "../../api/categoryselector";
 
 const kakaoApiKey = "5f283b38458e2a36a38d8894a017f5de";
 
@@ -10,14 +11,10 @@ function HikingMap(props) {
   const allOverlays = useRef([]);
   const selectedPolyline = useRef(null);
   const selectedOverlay = useRef(null);
-  const categoryMarkers = useRef({
-    coffee: [],
-    store: [],
-    carpark: [],
-  });
+  const categoryMarkers = useRef([]);
 
   const [mapReady, setMapReady] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState("coffee");
+  const [selectedCategory, setSelectedCategory] = useState("");
   
   const createMarkers = (positions, spriteY) => {
     return positions.map(([lat, lng]) => {
@@ -302,34 +299,75 @@ function HikingMap(props) {
     changeMarker(selectedCategory);
   }, [mapReady]);
 
+  const handleCategoryChange = (categoryId) => {
+    setSelectedCategory(categoryId);
+
+    if (!mapInstance.current || !window.kakao) return;
+
+    const ps = new window.kakao.maps.services.Places(mapInstance.current);
+
+    // 마커 초기화
+    categoryMarkers.current.forEach((m) => m.setMap(null));
+    categoryMarkers.current = [];
+
+    if (!categoryId) return;
+
+    ps.categorySearch(categoryId, (data, status) => {
+      if (status === window.kakao.maps.services.Status.OK) {
+        const order = parseInt(
+          document.querySelector(`#${categoryId}`)?.dataset?.order || 0
+        );
+
+        data.forEach((place) => {
+          const markerImage = new window.kakao.maps.MarkerImage(
+            "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/places_category.png",
+            new window.kakao.maps.Size(27, 28),
+            {
+              spriteSize: new window.kakao.maps.Size(72, 208),
+              spriteOrigin: new window.kakao.maps.Point(46, order * 36),
+              offset: new window.kakao.maps.Point(11, 28),
+            }
+          );
+
+          const marker = new window.kakao.maps.Marker({
+            map: mapInstance.current,
+            position: new window.kakao.maps.LatLng(place.y, place.x),
+            image: markerImage,
+          });
+
+          // 클릭 시 오버레이 표시
+          const content = document.createElement("div");
+          content.className = "placeinfo_wrap";
+          content.innerHTML = `
+            <div class="placeinfo">
+              <a class="title" href="${place.place_url}" target="_blank">${place.place_name}</a>
+              <span>${place.road_address_name || place.address_name}</span>
+              <span class="tel">${place.phone || ""}</span>
+            </div>
+            <div class="after"></div>
+          `;
+
+          const overlay = new window.kakao.maps.CustomOverlay({
+            content,
+            position: new window.kakao.maps.LatLng(place.y, place.x),
+            yAnchor: 1,
+            zIndex: 3,
+          });
+
+          window.kakao.maps.event.addListener(marker, "click", () => {
+            overlay.setMap(mapInstance.current);
+          });
+
+          categoryMarkers.current.push(marker);
+        });
+      }
+    }, { useMapBounds: true });
+  };
+
     return (
     <div id="mapwrap">
       <div id="hikingMap" ref={mapRef}></div>
-      <div class="category">
-        <ul>
-          <li
-            className={selectedCategory === "coffee" ? "menu_selected" : ""}
-            onClick={() => changeMarker("coffee")}
-          >
-            <span className="ico_comm ico_coffee"></span>
-            커피숍
-          </li>
-          <li
-            className={selectedCategory === "store" ? "menu_selected" : ""}
-            onClick={() => changeMarker("store")}
-          >
-            <span className="ico_comm ico_store"></span>
-            편의점
-          </li>
-          <li
-            className={selectedCategory === "carpark" ? "menu_selected" : ""}
-            onClick={() => changeMarker("carpark")}
-          >
-            <span className="ico_comm ico_carpark"></span>
-            주차장
-          </li>
-        </ul>
-      </div>    
+      <CategorySelector selected={selectedCategory} onSelect={handleCategoryChange} />   
     </div>
   );
 }
