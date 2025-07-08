@@ -56,9 +56,10 @@ function HikingMap(props) {
     script.onload = () => {
       window.kakao.maps.load(() => {
         const center = new window.kakao.maps.LatLng(37.5665, 126.978);
+        const isMobile = window.innerWidth <= 768;
         const options = {
           center: center,
-          level: 5,
+          level: isMobile ? 3 : 5,
         };
         mapInstance.current = new window.kakao.maps.Map(mapRef.current, options);
 
