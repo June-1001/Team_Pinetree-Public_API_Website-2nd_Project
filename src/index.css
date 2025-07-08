@@ -190,6 +190,7 @@ select:focus-visible{
   position: relative;
   margin-bottom: 10px;
   box-shadow: 5px 5px 10px 0px #6b6b6b;
+  transform: translateY(-15px);
 }
 .trail-overlay::after{
   content: '▼';

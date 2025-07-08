@@ -55,7 +55,7 @@ function HikingMap(props) {
         const isMobile = window.innerWidth <= 768;
         const options = {
           center,
-          level: isMobile ? 3 : 5,
+          level: isMobile ? 3 : 6,
         };
         mapInstance.current = new window.kakao.maps.Map(mapRef.current, options);
 
@@ -203,6 +203,8 @@ function HikingMap(props) {
 
       selectedOverlay.current.setMap(mapInstance.current);
 
+      mapInstance.current.setLevel(3);
+
       const startPoint = path[0];
       mapInstance.current.panTo(startPoint);
     }
@@ -268,6 +270,9 @@ function HikingMap(props) {
       setIsSearching(false);
       return;
     }
+
+    // 카테고리 선택 시 지도 확대 (더 넓게 보기)
+    mapInstance.current.setLevel(5);
 
     const ps = new window.kakao.maps.services.Places(mapInstance.current);
     categoryMarkers.current.forEach(m => m.setMap(null));
