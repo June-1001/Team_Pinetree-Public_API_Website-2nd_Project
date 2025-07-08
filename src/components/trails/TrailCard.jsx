@@ -22,7 +22,7 @@ const TrailCard = React.forwardRef((props, ref) => {
       style={{
         border:
           props.selectedTrail && props.selectedTrail.id === props.trail.id
-            ? "2px solid red"
+            ? "4px solid #2cc532"
             : "1px solid gray",
         padding: "8px",
         marginBottom: "8px",
