@@ -127,6 +127,11 @@ function HikingMap(props) {
         if (props.setSelectedTrail) {
           props.setSelectedTrail(trail);
         }
+        // trail-overlay 클릭 시 카테고리 초기화
+        setSelectedCategory("");
+        document.querySelectorAll("#category li.on").forEach((el) => {
+          el.classList.remove("on");
+        });
       });
 
       const content = `<div class="trail-overlay">${trail.properties.mntn_nm} / ${trail.properties.sec_len}m / ${trail.properties.cat_nam}</div>`;
@@ -145,6 +150,11 @@ function HikingMap(props) {
       if (overlayElement && props.setSelectedTrail) {
         overlayElement.addEventListener("click", () => {
           props.setSelectedTrail(trail);
+          // trail-overlay 클릭 시 카테고리 초기화
+          setSelectedCategory("");
+          document.querySelectorAll("#category li.on").forEach((el) => {
+            el.classList.remove("on");
+          });
         });
       }
       overlay.setContent(div);
@@ -164,7 +174,28 @@ function HikingMap(props) {
     });
   }, [props.trailData, mapReady]);
 
+  // TrailCard 선택 시 카테고리 초기화
   useEffect(() => {
+    if (!mapReady) return;
+    if (props.selectedTrail) {
+      setSelectedCategory("");
+      document.querySelectorAll("#category li.on").forEach((el) => {
+        el.classList.remove("on");
+      });
+    }
+  }, [props.selectedTrail, mapReady]);
+
+  useEffect(() => {
+    // TrailCard 선택 시 카테고리 초기화 및 마커 제거
+    if (props.selectedTrail) {
+      setSelectedCategory("");
+      document.querySelectorAll("#category li.on").forEach((el) => {
+        el.classList.remove("on");
+      });
+      // 카테고리 마커도 초기화
+      categoryMarkers.current.forEach(m => m.setMap(null));
+      categoryMarkers.current = [];
+    }
     if (selectedPolyline.current) {
       selectedPolyline.current.setMap(null);
       selectedPolyline.current = null;
@@ -188,7 +219,7 @@ function HikingMap(props) {
       selectedPolyline.current.setMap(mapInstance.current);
 
       const midPoint = path[Math.floor(path.length / 2)];
-      const content = `<div class="trail-overlay selected">${props.selectedTrail.properties.mntn_nm} / ${props.selectedTrail.properties.sec_len}m / ${props.selectedTrail.properties.cat_nam}</div>`;
+      const content = `<div class=\"trail-overlay selected\">${props.selectedTrail.properties.mntn_nm} / ${props.selectedTrail.properties.sec_len}m / ${props.selectedTrail.properties.cat_nam}</div>`;
 
       allOverlays.current.forEach((ov) => {
         ov.setMap(null);
@@ -215,11 +246,14 @@ function HikingMap(props) {
       return;
     }
 
-    // 지역(키워드) 검색 시 카테고리 선택 초기화
+    // 지역(키워드) 검색 시 카테고리 선택 및 마커 초기화
     setSelectedCategory("");
     document.querySelectorAll("#category li.on").forEach((el) => {
       el.classList.remove("on");
     });
+    // 카테고리 마커도 초기화
+    categoryMarkers.current.forEach(m => m.setMap(null));
+    categoryMarkers.current = [];
 
     const ps = new window.kakao.maps.services.Places();
     ps.keywordSearch(props.keyword, (result, status) => {

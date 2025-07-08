@@ -4,6 +4,13 @@ import React from "react";
 const TrailCard = React.forwardRef((props, ref) => {
   // 클릭 시 이벤트
   function handleClick() {
+    // trailCard 클릭 시 카테고리 초기화
+    if (typeof window.setSelectedCategory === 'function') {
+      window.setSelectedCategory("");
+      document.querySelectorAll("#category li.on").forEach((el) => {
+        el.classList.remove("on");
+      });
+    }
     if (props.selectedTrail && props.selectedTrail.id === props.trail.id) {
       props.setSelectedTrail(null);
       setTimeout(() => {
