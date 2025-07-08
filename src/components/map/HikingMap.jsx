@@ -202,7 +202,7 @@ function HikingMap(props) {
         strokeWeight: 6,
         strokeColor: "#2cc532",
         strokeOpacity: 1,
-        strokeStyle: "solid",
+        strokeStyle: "solid",       
       });
       selectedPolyline.current.setMap(mapInstance.current);
 

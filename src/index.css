@@ -235,6 +235,7 @@ select:focus-visible{
   }
   .search-bar button{
     width: 70px;
+    height: auto;
     padding: 2px 0;
     line-height: 24px;
     font-size: 1rem;
