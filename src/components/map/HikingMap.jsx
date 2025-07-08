@@ -233,6 +233,11 @@ function HikingMap(props) {
       return;
     }
 
+    // 지역(키워드) 검색 시 카테고리 li의 on 클래스 제거
+    document.querySelectorAll("#category li.on").forEach((el) => {
+      el.classList.remove("on");
+    });
+
     const ps = new window.kakao.maps.services.Places();
     ps.keywordSearch(props.keyword, (result, status) => {
       if (status === window.kakao.maps.services.Status.OK && result.length > 0) {

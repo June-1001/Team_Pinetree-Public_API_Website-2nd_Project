@@ -29,14 +29,18 @@ input:focus-visible{
   outline-color: #2cc532;
 }
 select{
-  padding: 0;
   border: 2px solid #2cc532;
   color: #757575;
   font-size: 20px;  
   border-radius: 0; /* 둥근 테두리 제거 */
   outline: none; /* 포커스 아웃라인 제거 */
-  /* 필요한 추가 스타일 적용 */  
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background: url('./img/arrow-down-icon.png') no-repeat 99% center;
+  background-size: 20px; /* 원하는 크기로 설정 */
 }
+
 select:focus-visible{
   outline-color: #2cc532;
 }
@@ -171,9 +175,12 @@ select:focus-visible{
 .listAttribute select{
   width: 200px;
   height: 46px;
-  padding: 0 10px;
+  padding: 0 7px;
   border: 2px solid #2cc532;
-  font-size: 22px;
+  font-size: 20px;
+  color: #757575;
+  font-weight: 400;
+  background-position: 90% center;
 }
 .trail-overlay{
   padding: 16px !important;
