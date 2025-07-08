@@ -20,7 +20,7 @@ const CategorySelector = ({ selected, onSelect }) => {
           id={cat.id}
           data-order={index}
           className={selected === cat.id ? "on" : ""}
-          onClick={() => onSelect(cat.id === selected ? "" : cat.id)}
+          onClick={() => onSelect(selected === cat.id ? cat.id : cat.id)}
         >
           <span className={`category_bg ${cat.icon}`}></span>
           {cat.label}

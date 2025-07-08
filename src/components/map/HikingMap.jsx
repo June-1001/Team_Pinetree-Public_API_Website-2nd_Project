@@ -4,6 +4,7 @@ import CategorySelector from "../../api/categoryselector";
 const kakaoApiKey = "5f283b38458e2a36a38d8894a017f5de";
 
 function HikingMap(props) {
+  // refs
   const mapRef = useRef(null);
   const mapInstance = useRef(null);
   const markerRef = useRef(null);
@@ -12,14 +13,16 @@ function HikingMap(props) {
   const selectedPolyline = useRef(null);
   const selectedOverlay = useRef(null);
   const categoryMarkers = useRef([]);
+  const myLocationMarker = useRef(null);
 
+  // state
   const [mapReady, setMapReady] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("");
-  const myLocationMarker = useRef(null);
   const [isSearching, setIsSearching] = useState(false);
 
-  const createMarkers = (positions, spriteY) => {
-    return positions.map(([lat, lng]) => {
+  // 마커 생성 함수
+  const createMarkers = (positions, spriteY) =>
+    positions.map(([lat, lng]) => {
       const markerImage = new window.kakao.maps.MarkerImage(
         "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/category.png",
         new window.kakao.maps.Size(22, 26),
@@ -33,45 +36,36 @@ function HikingMap(props) {
         image: markerImage,
       });
     });
-  };
 
+  // geometry에서 좌표 추출
   function extractCoords(geometry) {
-    if (!geometry || !geometry.coordinates) {
-      return [];
-    }
-    if (typeof geometry.coordinates[0][0] === "number") {
-      return geometry.coordinates;
-    } else {
-      return geometry.coordinates[0];
-    }
+    if (!geometry || !geometry.coordinates) return [];
+    if (typeof geometry.coordinates[0][0] === "number") return geometry.coordinates;
+    return geometry.coordinates[0];
   }
 
+  // 카카오맵 스크립트 로드 및 초기화
   useEffect(() => {
     const script = document.createElement("script");
-    script.src =
-      "//dapi.kakao.com/v2/maps/sdk.js?appkey=" +
-      kakaoApiKey +
-      "&libraries=services&autoload=false";
+    script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${kakaoApiKey}&libraries=services&autoload=false`;
     script.async = true;
     script.onload = () => {
       window.kakao.maps.load(() => {
         const center = new window.kakao.maps.LatLng(37.5665, 126.978);
         const isMobile = window.innerWidth <= 768;
         const options = {
-          center: center,
+          center,
           level: isMobile ? 3 : 5,
         };
         mapInstance.current = new window.kakao.maps.Map(mapRef.current, options);
 
+        // 지도 우클릭 이벤트
         window.kakao.maps.event.addListener(mapInstance.current, "rightclick", (mouseEvent) => {
           const lat = mouseEvent.latLng.getLat();
           const lon = mouseEvent.latLng.getLng();
           props.onCenterChanged(lat, lon);
 
-          if (markerRef.current) {
-            markerRef.current.setMap(null);
-            markerRef.current = null;
-          }
+          if (markerRef.current) markerRef.current.setMap(null);
           markerRef.current = new window.kakao.maps.Marker({
             map: mapInstance.current,
             position: mouseEvent.latLng,
@@ -79,18 +73,12 @@ function HikingMap(props) {
 
           allPolylines.current.forEach((poly) => poly.setMap(null));
           allPolylines.current = [];
-          if (selectedPolyline.current) {
-            selectedPolyline.current.setMap(null);
-            selectedPolyline.current = null;
-          }
-          if (selectedOverlay.current) {
-            selectedOverlay.current.setMap(null);
-            selectedOverlay.current = null;
-          }
+          if (selectedPolyline.current) selectedPolyline.current.setMap(null);
+          selectedPolyline.current = null;
+          if (selectedOverlay.current) selectedOverlay.current.setMap(null);
+          selectedOverlay.current = null;
 
-          if (props.onClearSelection) {
-            props.onClearSelection();
-          }
+          if (props.onClearSelection) props.onClearSelection();
         });
 
         setMapReady(true);
@@ -99,23 +87,15 @@ function HikingMap(props) {
     document.head.appendChild(script);
 
     return () => {
-      if (script.parentNode) {
-        script.parentNode.removeChild(script);
-      }
-      if (markerRef.current) {
-        markerRef.current.setMap(null);
-        markerRef.current = null;
-      }
+      if (script.parentNode) script.parentNode.removeChild(script);
+      if (markerRef.current) markerRef.current.setMap(null);
+      markerRef.current = null;
       allPolylines.current.forEach((poly) => poly.setMap(null));
       allPolylines.current = [];
-      if (selectedPolyline.current) {
-        selectedPolyline.current.setMap(null);
-        selectedPolyline.current = null;
-      }
-      if (selectedOverlay.current) {
-        selectedOverlay.current.setMap(null);
-        selectedOverlay.current = null;
-      }
+      if (selectedPolyline.current) selectedPolyline.current.setMap(null);
+      selectedPolyline.current = null;
+      if (selectedOverlay.current) selectedOverlay.current.setMap(null);
+      selectedOverlay.current = null;
     };
   }, []);
 
@@ -233,7 +213,8 @@ function HikingMap(props) {
       return;
     }
 
-    // 지역(키워드) 검색 시 카테고리 li의 on 클래스 제거
+    // 지역(키워드) 검색 시 카테고리 선택 초기화
+    setSelectedCategory("");
     document.querySelectorAll("#category li.on").forEach((el) => {
       el.classList.remove("on");
     });
@@ -260,14 +241,29 @@ function HikingMap(props) {
   }, [props.searched, props.keyword, mapReady]);
 
   const handleCategoryChange = (categoryId) => {
+    // 이미 선택된 카테고리를 다시 클릭하면 선택 해제 및 마크업 제거
+    if (selectedCategory === categoryId) {
+      setSelectedCategory("");
+      // 'on' 클래스 제거
+      document.querySelectorAll("#category li.on").forEach((el) => {
+        el.classList.remove("on");
+      });
+      // 마커 제거
+      categoryMarkers.current.forEach(m => m.setMap(null));
+      categoryMarkers.current = [];
+      return;
+    }
+
     setSelectedCategory(categoryId);
     setIsSearching(true); // 검색 시작 시 버튼 비활성화
 
-    // 모든 카테고리 버튼에서 'on' 클래스 제거
-    document.querySelectorAll("#category li.on").forEach((el) => {
-      el.classList.remove("on");
-    });
-    
+
+    // 클릭한 카테고리 li에 'on' 클래스 추가
+    const clickedLi = document.querySelector(`#category li[id='${categoryId}']`);
+    if (clickedLi) {
+      clickedLi.classList.add("on");
+    }
+
     if (!mapInstance.current || !window.kakao || !categoryId) {
       setIsSearching(false);
       return;
