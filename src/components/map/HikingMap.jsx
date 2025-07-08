@@ -255,6 +255,16 @@ function HikingMap(props) {
     categoryMarkers.current.forEach(m => m.setMap(null));
     categoryMarkers.current = [];
 
+    // 지역 검색 시 선택된 등산로(선, 오버레이) 초기화
+    if (selectedPolyline.current) {
+      selectedPolyline.current.setMap(null);
+      selectedPolyline.current = null;
+    }
+    if (selectedOverlay.current) {
+      selectedOverlay.current.setMap(null);
+      selectedOverlay.current = null;
+    }
+
     const ps = new window.kakao.maps.services.Places();
     ps.keywordSearch(props.keyword, (result, status) => {
       if (status === window.kakao.maps.services.Status.OK && result.length > 0) {
