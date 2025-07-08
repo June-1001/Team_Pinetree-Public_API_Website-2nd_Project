@@ -173,7 +173,7 @@ select:focus-visible{
   font-size: 22px;
 }
 .trail-overlay{
-  padding: 20px;
+  padding: 16px !important;
   background: #fff;
   border: 1px solid #d1d1d1;
   border-radius: 5px;
@@ -183,14 +183,15 @@ select:focus-visible{
 }
 .trail-overlay::after{
   content: '▼';
-  display: block;
+  display: inline-block;
   margin: 10px 0;
   color: #fff;
   position: absolute;
   left: 50%;
-  top: 46px;
+  top: 26px;
   transform: translate(-50%, 0);
   z-index: 1;
+  font-size: 24px;
 }
 .mpaListItem{            
   padding: 14px 20px;
