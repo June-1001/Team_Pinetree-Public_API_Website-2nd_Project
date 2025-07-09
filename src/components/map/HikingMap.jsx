@@ -193,7 +193,7 @@ function HikingMap(props) {
         el.classList.remove("on");
       });
       // 카테고리 마커도 초기화
-      categoryMarkers.current.forEach(m => m.setMap(null));
+      categoryMarkers.current.forEach((m) => m.setMap(null));
       categoryMarkers.current = [];
     }
     if (selectedPolyline.current) {
@@ -240,7 +240,7 @@ function HikingMap(props) {
           ${props.selectedTrail.properties.cat_nam}
         </div>
       `;
-      
+
       allOverlays.current.forEach((ov) => {
         ov.setMap(null);
       });
@@ -272,7 +272,7 @@ function HikingMap(props) {
       el.classList.remove("on");
     });
     // 카테고리 마커도 초기화
-    categoryMarkers.current.forEach(m => m.setMap(null));
+    categoryMarkers.current.forEach((m) => m.setMap(null));
     categoryMarkers.current = [];
 
     // 지역 검색 시 선택된 등산로(선, 오버레이) 초기화
@@ -315,14 +315,13 @@ function HikingMap(props) {
         el.classList.remove("on");
       });
       // 마커 제거
-      categoryMarkers.current.forEach(m => m.setMap(null));
+      categoryMarkers.current.forEach((m) => m.setMap(null));
       categoryMarkers.current = [];
       return;
     }
 
     setSelectedCategory(categoryId);
     setIsSearching(true); // 검색 시작 시 버튼 비활성화
-
 
     // 클릭한 카테고리 li에 'on' 클래스 추가
     const clickedLi = document.querySelector(`#category li[id='${categoryId}']`);
@@ -339,7 +338,7 @@ function HikingMap(props) {
     mapInstance.current.setLevel(5);
 
     const ps = new window.kakao.maps.services.Places(mapInstance.current);
-    categoryMarkers.current.forEach(m => m.setMap(null));
+    categoryMarkers.current.forEach((m) => m.setMap(null));
     categoryMarkers.current = [];
 
     ps.categorySearch(
@@ -402,26 +401,27 @@ function HikingMap(props) {
       return;
     }
 
-    navigator.geolocation.getCurrentPosition((position) => {
-      const lat = position.coords.latitude;
-      const lng = position.coords.longitude;
-      const loc = new window.kakao.maps.LatLng(lat, lng);
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const lat = position.coords.latitude;
+        const lng = position.coords.longitude;
+        const loc = new window.kakao.maps.LatLng(lat, lng);
 
-      // 기존 마커 제거
-      if (myLocationMarker.current) {
-        myLocationMarker.current.setMap(null);
-      }
+        // 기존 마커 제거
+        if (myLocationMarker.current) {
+          myLocationMarker.current.setMap(null);
+        }
 
-      // 새 마커 생성
-      myLocationMarker.current = new window.kakao.maps.Marker({
-        map: mapInstance.current,
-        position: loc,
-        title: "현 위치",
-      });
+        // 새 마커 생성
+        myLocationMarker.current = new window.kakao.maps.Marker({
+          map: mapInstance.current,
+          position: loc,
+          title: "현 위치",
+        });
 
-      // 지도 중심 이동
-      mapInstance.current.setCenter(loc);
-    },
+        // 지도 중심 이동
+        mapInstance.current.setCenter(loc);
+      },
       (error) => {
         alert("현위치 정보를 가져올 수 없습니다.");
         console.error(error);
@@ -436,8 +436,10 @@ function HikingMap(props) {
 
   return (
     <div id="mapwrap">
-      <div id="hikingMap" ref={mapRef}></div>
-      <button onClick={handleMyLocation} className="accessLocation" title="현 위치">현 위치</button>
+      <div id="hiking-map" ref={mapRef}></div>
+      <button onClick={handleMyLocation} className="access-location" title="현 위치">
+        현 위치
+      </button>
       <CategorySelector
         selected={selectedCategory}
         onSelect={handleCategoryChange}

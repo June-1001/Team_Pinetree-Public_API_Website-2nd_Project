@@ -15,6 +15,7 @@ export default function MainPage() {
   const [lon, setLon] = useState(null);
   const [selectedTrail, setSelectedTrail] = useState(null);
   const [collapseAllTrigger, setCollapseAllTrigger] = useState(0);
+  const [showMap, setShowMap] = useState(false);
 
   const weatherData = useWeatherData(lat, lon);
 
@@ -33,6 +34,7 @@ export default function MainPage() {
     if (keyword.trim() === "") {
       return;
     }
+    setShowMap(true);
     setSearched(true);
   }
 
@@ -43,43 +45,46 @@ export default function MainPage() {
 
   return (
     <div className="main-container">
-      <div>
+      <div className={`search-wrapper ${searched ? "searched" : ""}`}>
         <h1 className="title">About Hiking Trail Data</h1>
-        <div className={`search-wrapper ${searched ? "searched" : ""}`}>
-          <SearchFilterSection
-            keyword={keyword}
-            setKeyword={setKeyword}
-            handleSearch={handleSearch}
-            minRange={minRange}
-            setMinRange={setMinRange}
-            maxRange={maxRange}
-            setMaxRange={setMaxRange}
-            difficulty={difficulty}
-            setDifficulty={setDifficulty}
-          />
-        </div>
+        <SearchFilterSection
+          keyword={keyword}
+          setKeyword={setKeyword}
+          handleSearch={handleSearch}
+          minRange={minRange}
+          setMinRange={setMinRange}
+          maxRange={maxRange}
+          setMaxRange={setMaxRange}
+          difficulty={difficulty}
+          setDifficulty={setDifficulty}
+        />
       </div>
       <div
         id="search-results"
         style={{
-          visibility: searched ? "visible" : "hidden",
+          display: searched ? "flex" : "hidden",
           opacity: searched ? 1 : 0,
           transition: "opacity 0.5s ease",
+          display: "flex",
+          flexDirection: "row",
+          gap: "20px",
           alignItems: "stretch",
         }}
       >
-        <HikingMap
-          keyword={keyword}
-          searched={searched}
-          trailData={trailData}
-          selectedTrail={selectedTrail}
-          setSelectedTrail={setSelectedTrail}
-          onCenterChanged={(lat, lon) => {
-            setLat(lat);
-            setLon(lon);
-          }}
-          onClearSelection={clearSelection}
-        />
+        {showMap && (
+          <HikingMap
+            keyword={keyword}
+            searched={searched}
+            trailData={trailData}
+            selectedTrail={selectedTrail}
+            setSelectedTrail={setSelectedTrail}
+            onCenterChanged={(lat, lon) => {
+              setLat(lat);
+              setLon(lon);
+            }}
+            onClearSelection={clearSelection}
+          />
+        )}
 
         {!trailsLoading && !trailsError && (
           <TrailList

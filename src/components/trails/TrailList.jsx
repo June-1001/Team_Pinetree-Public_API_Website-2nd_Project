@@ -4,7 +4,7 @@ import TrailCard from "./TrailCard";
 // 정렬 옵션 선택 컴포넌트
 function SortOptionSelector({ value, onChange }) {
   return (
-    <div className="listAttribute">
+    <div className="list-attribute">
       <span>정렬순 : </span>
       <select value={value} onChange={onChange}>
         <option value="전체">전체</option>
@@ -30,7 +30,7 @@ function TrailList(props) {
       setExpandedMountain(mountain);
     }
   }, [props.selectedTrail]);
- 
+
   const cardRefs = useRef({});
   useEffect(() => {
     if (props.selectedTrail) {
@@ -42,7 +42,7 @@ function TrailList(props) {
         if (ref && ref.current) {
           ref.current.scrollIntoView({
             behavior: "smooth",
-            block: "center"
+            block: "center",
           });
         }
       }, 100); // 렌더링 후 DOM이 보장될 수 있도록 약간 딜레이
@@ -75,7 +75,7 @@ function TrailList(props) {
     });
   }
 
-  function handleSortChange(e){
+  function handleSortChange(e) {
     setSortOption(e.target.value);
   }
 
@@ -85,14 +85,26 @@ function TrailList(props) {
     sortedMountainNames.sort((a, b) => a.localeCompare(b));
   } else if (sortOption === "낮은거리순") {
     sortedMountainNames.sort((a, b) => {
-      const totalA = groupedByMountain[a].reduce((sum, trail) => sum + Number(trail.properties.sec_len.length || 0), 0);
-      const totalB = groupedByMountain[b].reduce((sum, trail) => sum + Number(trail.properties.sec_len.length || 0), 0);
+      const totalA = groupedByMountain[a].reduce(
+        (sum, trail) => sum + Number(trail.properties.sec_len.length || 0),
+        0
+      );
+      const totalB = groupedByMountain[b].reduce(
+        (sum, trail) => sum + Number(trail.properties.sec_len.length || 0),
+        0
+      );
       return totalA - totalB;
     });
   } else if (sortOption === "높은거리순") {
     sortedMountainNames.sort((a, b) => {
-      const totalA = groupedByMountain[a].reduce((sum, trail) => sum + Number(trail.properties.sec_len.length || 0), 0);
-      const totalB = groupedByMountain[b].reduce((sum, trail) => sum + Number(trail.properties.sec_len.length || 0), 0);
+      const totalA = groupedByMountain[a].reduce(
+        (sum, trail) => sum + Number(trail.properties.sec_len.length || 0),
+        0
+      );
+      const totalB = groupedByMountain[b].reduce(
+        (sum, trail) => sum + Number(trail.properties.sec_len.length || 0),
+        0
+      );
       return totalB - totalA;
     });
   }
@@ -107,59 +119,56 @@ function TrailList(props) {
   }
 
   return (
-    <div className="trailList">
+    <div className="trail-list">
       {sortedMountainNames.length > 0 && (
-      <>
-        <SortOptionSelector value={sortOption} onChange={handleSortChange} />
-        {sortedMountainNames.map((name) => {
-          const trails = groupedByMountain[name];
-          if (!trails) {
-            return null;
-          }
-          const isExpanded = expandedMountain === name;
-          return (
-            <div key={name} style={{ marginBottom: "12px" }}>
-              <div 
-                className="mpaListItem"
-                onClick={() => toggleMountain(name)}
-              >
-                {name} (총 거리 : {getTotalDistance(trails)} Km) {isExpanded ? (
-                  <div className="right up">▲</div>
-                ) : (
-                  <div className="right down">▼</div>
+        <>
+          <SortOptionSelector value={sortOption} onChange={handleSortChange} />
+          {sortedMountainNames.map((name) => {
+            const trails = groupedByMountain[name];
+            if (!trails) {
+              return null;
+            }
+            const isExpanded = expandedMountain === name;
+            return (
+              <div key={name} style={{ marginBottom: "12px" }}>
+                <div className="map-list-item" onClick={() => toggleMountain(name)}>
+                  {name} (총 거리 : {getTotalDistance(trails)} Km){" "}
+                  {isExpanded ? (
+                    <div className="right up">▲</div>
+                  ) : (
+                    <div className="right down">▼</div>
+                  )}
+                </div>
+                {isExpanded && (
+                  <div
+                    style={{
+                      marginTop: "20px",
+                      display: "grid",
+                      gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))",
+                      gap: "20px",
+                    }}
+                  >
+                    {trails.map((trail) => {
+                      if (!cardRefs.current[trail.id]) {
+                        cardRefs.current[trail.id] = React.createRef();
+                      }
+                      return (
+                        <TrailCard
+                          key={trail.id}
+                          trail={trail}
+                          selectedTrail={props.selectedTrail}
+                          setSelectedTrail={props.setSelectedTrail}
+                          ref={cardRefs.current[trail.id]}
+                        />
+                      );
+                    })}
+                  </div>
                 )}
               </div>
-              {isExpanded && (
-                <div
-                  style={{
-                    marginTop: "20px",
-                    display: "grid",
-                    gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))",
-                    gap: "20px",
-                  }}
-                >
-                  {trails.map((trail) => {
-                    if (!cardRefs.current[trail.id]) {
-                      cardRefs.current[trail.id] = React.createRef();
-                    }
-                    return (
-                      <TrailCard
-                        key={trail.id}
-                        trail={trail}
-                        selectedTrail={props.selectedTrail}
-                        setSelectedTrail={props.setSelectedTrail}
-                        ref={cardRefs.current[trail.id]}
-                      />
-                    );
-                  })}
-                </div>
-              )}
-            </div>
-          );
-        })}        
-      </>
+            );
+          })}
+        </>
       )}
-
     </div>
   );
 }
