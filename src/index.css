@@ -37,7 +37,7 @@ select{
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
-  background: url('./img/arrow-down-icon.png') no-repeat 99% center;
+  background: url('./img/arrow-down-icon.png') no-repeat 98% center;
   background-size: 20px; /* 원하는 크기로 설정 */
 }
 
@@ -134,12 +134,11 @@ select:focus-visible{
 }
 .filter-section{
   display: flex;
-  flex-direction: column;
-  gap: 10px;
+  gap: 20px;
 }
 .range-section{
   display: inline-block;
-  width: 100%;
+  width: 60%;
 }
 .range-section input{
   display: inline-block;
@@ -154,7 +153,7 @@ select:focus-visible{
 }
 .difficulty-section{
   display: inline-block;
-  width: 100%;
+  width: 40%;
 }
 .difficulty-section select{
   width: calc(100% - 148px);
@@ -234,6 +233,13 @@ select:focus-visible{
     color: #757575; 
     font-size: 1rem;
   }  
+  .filter-section  {
+    flex-direction: column;
+    gap: 10px;
+  }
+  .range-section{
+    width: 100%;
+  }
   .range-section input{
     display: inline-block;
     width: calc(100% / 2 - 58px);
@@ -241,6 +247,9 @@ select:focus-visible{
     font-size: 1rem;
     padding: 4px 10px;
     margin-left:10px;
+  }
+  .difficulty-section{
+    width: 100%;
   }
   .difficulty-section select{
     width: calc(100% - 106px);
