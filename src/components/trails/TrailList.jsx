@@ -128,10 +128,14 @@ function TrailList(props) {
         <SortOptionSelector value={sortOption} onChange={handleSortChange} />
         {sortedMountainNames.map((name) => {
           const trails = groupedByMountain[name];
-          if (!trails) {
-            return null;
-          }
+          if (!trails) return null;
           const isExpanded = expandedMountain === name;
+          // sec_len 기준 오름차순 정렬
+          const sortedTrails = [...trails].sort((a, b) => {
+            const lenA = parseFloat(a.properties.sec_len) || 0;
+            const lenB = parseFloat(b.properties.sec_len) || 0;
+            return lenA - lenB;
+          });
           return (
             <div key={name} style={{ marginBottom: "12px" }}>
               <div 
@@ -153,7 +157,7 @@ function TrailList(props) {
                     gap: "20px",
                   }}
                 >
-                  {trails.map((trail) => {
+                  {sortedTrails.map((trail) => {
                     if (!cardRefs.current[trail.id]) {
                       cardRefs.current[trail.id] = React.createRef();
                     }
