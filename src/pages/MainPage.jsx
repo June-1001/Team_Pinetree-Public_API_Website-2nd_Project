@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import HikingMap from "../components/map/HikingMap";
 import TrailList from "../components/trails/TrailList";
 import SearchFilterSection from "../components/search/SearchFilterSection";
@@ -11,11 +11,14 @@ export default function MainPage() {
   const [maxRange, setMaxRange] = useState("");
   const [difficulty, setDifficulty] = useState("");
   const [searched, setSearched] = useState(false);
+  const [showResults, setShowResults] = useState(false);
   const [lat, setLat] = useState(null);
   const [lon, setLon] = useState(null);
   const [selectedTrail, setSelectedTrail] = useState(null);
   const [collapseAllTrigger, setCollapseAllTrigger] = useState(0);
   const [showMap, setShowMap] = useState(false);
+
+  const lastSearchedKeyword = useRef("");
 
   const weatherData = useWeatherData(lat, lon);
 
@@ -25,17 +28,14 @@ export default function MainPage() {
     error: trailsError,
   } = useTrailData(lat, lon, minRange, maxRange, difficulty, searched);
 
-  // 키워드 입력 시 검색 초기화
-  useEffect(() => {
-    setSearched(false);
-  }, [keyword]);
-
   function handleSearch() {
     if (keyword.trim() === "") {
       return;
     }
+    lastSearchedKeyword.current = keyword;
+    setShowResults(true);
     setShowMap(true);
-    setSearched(true);
+    setSearched((prev) => !prev);
   }
 
   function clearSelection() {
@@ -45,7 +45,7 @@ export default function MainPage() {
 
   return (
     <div className="main-container">
-      <div className={`search-wrapper ${searched ? "searched" : ""}`}>
+      <div className={`search-wrapper ${showResults ? "searched" : ""}`}>
         <h1 className="title">우리 동네 등산로 검색 서비스</h1>
         <SearchFilterSection
           keyword={keyword}
@@ -61,19 +61,11 @@ export default function MainPage() {
       </div>
       <div
         id="search-results"
-        style={{
-          display: searched ? "flex" : "none",
-          opacity: searched ? 1 : 0,
-          transition: "opacity 0.5s ease 0.3s",
-          display: "flex",
-          flexDirection: "row",
-          gap: "20px",
-          alignItems: "stretch",
-        }}
+        className={`search-results-container ${showResults ? "visible" : ""}`}
       >
         {showMap && (
           <HikingMap
-            keyword={keyword}
+            keyword={lastSearchedKeyword.current}
             searched={searched}
             trailData={trailData}
             selectedTrail={selectedTrail}
@@ -86,7 +78,7 @@ export default function MainPage() {
           />
         )}
 
-        {!trailsLoading && !trailsError && (
+        {!trailsLoading && !trailsError && showResults && (
           <TrailList
             trailData={trailData}
             selectedTrail={selectedTrail}

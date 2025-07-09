@@ -48,10 +48,21 @@ select:focus-visible {
 .right {
   float: right;
 }
-#search-results {
+.search-results-container {
+  opacity: 0;
+  transition: opacity 0.2s ease 0.3s;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  gap: 20px;
+  align-items: stretch;
+  pointer-events: none;
 }
+
+.search-results-container.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
 #hiking-map {
   width: 600px;
   height: 600px;
@@ -84,7 +95,7 @@ select:focus-visible {
   flex-direction: column;
   align-items: center;
   transform: translateY(30vh);
-  transition: transform 0.3s ease;
+  transition: 0.3s ease;
   z-index: 10;
 }
 
