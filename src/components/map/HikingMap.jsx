@@ -295,8 +295,6 @@ function HikingMap(props) {
 
       selectedOverlay.current.setMap(mapInstance.current);
 
-      mapInstance.current.setLevel(5);
-
       const startPoint = path[0];
       mapInstance.current.panTo(startPoint);
     }
