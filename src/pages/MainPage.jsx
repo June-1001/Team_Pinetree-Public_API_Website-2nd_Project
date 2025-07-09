@@ -62,9 +62,9 @@ export default function MainPage() {
       <div
         id="search-results"
         style={{
-          display: searched ? "flex" : "hidden",
+          display: searched ? "flex" : "none",
           opacity: searched ? 1 : 0,
-          transition: "opacity 0.5s ease",
+          transition: "opacity 0.5s ease 0.3s",
           display: "flex",
           flexDirection: "row",
           gap: "20px",
