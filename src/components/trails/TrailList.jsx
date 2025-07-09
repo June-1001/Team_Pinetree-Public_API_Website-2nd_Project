@@ -1,6 +1,21 @@
 import React, { useState, useEffect, useRef } from "react";
 import TrailCard from "./TrailCard";
 
+// 정렬 옵션 선택 컴포넌트
+function SortOptionSelector({ value, onChange }) {
+  return (
+    <div className="listAttribute">
+      <span>정렬순 : </span>
+      <select value={value} onChange={onChange}>
+        <option value="전체">전체</option>
+        <option value="가나다순">가나다순</option>
+        <option value="낮은거리순">총 낮은거리순</option>
+        <option value="높은거리순">총 높은거리순</option>
+      </select>
+    </div>
+  );
+}
+
 function TrailList(props) {
   const [expandedMountain, setExpandedMountain] = useState(null);
   const [sortOption, setSortOption] = useState("전체");
@@ -34,10 +49,6 @@ function TrailList(props) {
     }
   }, [props.selectedTrail]);
 
-
-  
-    
-  
   if (!Array.isArray(props.trailData)) {
     return null;
   }
@@ -99,15 +110,7 @@ function TrailList(props) {
     <div className="trailList">
       {sortedMountainNames.length > 0 && (
       <>
-        <div className="listAttribute">
-          <span>정렬순 : </span>
-          <select value={sortOption} onChange={handleSortChange}>
-            <option value="전체">전체</option>
-            <option value="가나다순">가나다순</option>
-            <option value="낮은거리순">총 낮은거리순</option>
-            <option value="높은거리순">총 높은거리순</option>
-          </select>
-        </div>      
+        <SortOptionSelector value={sortOption} onChange={handleSortChange} />
         {sortedMountainNames.map((name) => {
           const trails = groupedByMountain[name];
           if (!trails) {
