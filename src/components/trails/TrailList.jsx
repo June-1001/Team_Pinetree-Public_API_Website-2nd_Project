@@ -7,10 +7,10 @@ function SortOptionSelector({ value, onChange }) {
     <div className="list-attribute">
       <span>정렬순 : </span>
       <select value={value} onChange={onChange}>
-        <option value="1">거리순</option>
-        <option value="2">가나다순</option>
-        <option value="3">짧은 등산로순</option>
-        <option value="4">긴 등산로순</option>
+        <option value="0">거리순</option>
+        <option value="1">가나다순</option>
+        <option value="2">짧은 등산로순</option>
+        <option value="3">긴 등산로순</option>
       </select>
     </div>
   );
@@ -81,9 +81,9 @@ function TrailList(props) {
 
   let sortedMountainNames = [...mountainNames];
 
-  if (sortOption === "2") {
+  if (sortOption === "1") {
     sortedMountainNames.sort((a, b) => a.localeCompare(b));
-  } else if (sortOption === "3") {
+  } else if (sortOption === "2") {
     sortedMountainNames.sort((a, b) => {
       const totalA = groupedByMountain[a].reduce(
         (sum, trail) => sum + Number(trail.properties.sec_len.length || 0),
@@ -95,7 +95,7 @@ function TrailList(props) {
       );
       return totalA - totalB;
     });
-  } else if (sortOption === "4") {
+  } else if (sortOption === "3") {
     sortedMountainNames.sort((a, b) => {
       const totalA = groupedByMountain[a].reduce(
         (sum, trail) => sum + Number(trail.properties.sec_len.length || 0),
