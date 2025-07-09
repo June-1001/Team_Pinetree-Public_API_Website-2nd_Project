@@ -113,7 +113,7 @@ function HikingMap(props) {
 
       const path = coords.map((pair) => new window.kakao.maps.LatLng(pair[1], pair[0]));
       const polyline = new window.kakao.maps.Polyline({
-        path: path,
+        path,
         strokeWeight: 2,
         strokeColor: "#FF0000",
         strokeOpacity: 0.7,
@@ -121,29 +121,27 @@ function HikingMap(props) {
       });
       polyline.setMap(mapInstance.current);
 
+      // Polyline 클릭 시 트레일 선택 및 카테고리 초기화
       window.kakao.maps.event.addListener(polyline, "click", () => {
-        if (props.setSelectedTrail) {
-          props.setSelectedTrail(trail);
-        }
-        // trail-overlay 클릭 시 카테고리 초기화
+        if (props.setSelectedTrail) props.setSelectedTrail(trail);
         setSelectedCategory("");
-        document.querySelectorAll("#category li.on").forEach((el) => {
-          el.classList.remove("on");
-        });
+        document.querySelectorAll("#category li.on").forEach((el) => el.classList.remove("on"));
       });
 
-      // Create a fully custom overlay element (not using trail-overlay class)
+      // 커스텀 오버레이 생성
       const customOverlayDiv = document.createElement("div");
-      customOverlayDiv.style.background = "rgba(255,255,255,0.95)";
-      customOverlayDiv.style.border = "2px solid #2cc532";
-      customOverlayDiv.style.borderRadius = "8px";
-      customOverlayDiv.style.padding = "2px 6px";
-      customOverlayDiv.style.boxShadow = "0 2px 8px rgba(0,0,0,0.15)";
-      customOverlayDiv.style.fontWeight = "bold";
-      customOverlayDiv.style.fontSize = "15px";
-      customOverlayDiv.style.color = "#222";
-      customOverlayDiv.style.cursor = "pointer";
-      customOverlayDiv.style.display = "inline-block";
+      Object.assign(customOverlayDiv.style, {
+        background: "rgba(255,255,255,0.95)",
+        border: "2px solid #2cc532",
+        borderRadius: "8px",
+        padding: "2px 6px",
+        boxShadow: "0 2px 8px rgba(0,0,0,0.15)",
+        fontWeight: "bold",
+        fontSize: "15px",
+        color: "#222",
+        cursor: "pointer",
+        display: "inline-block",
+      });
       customOverlayDiv.innerHTML = `
         <div style="margin-bottom:2px;font-size:13px;font-weight:normal;">
           ${trail.properties.mntn_nm} / 
@@ -152,13 +150,9 @@ function HikingMap(props) {
         </div>
       `;
       customOverlayDiv.onclick = () => {
-        if (props.setSelectedTrail) {
-          props.setSelectedTrail(trail);
-        }
+        if (props.setSelectedTrail) props.setSelectedTrail(trail);
         setSelectedCategory("");
-        document.querySelectorAll("#category li.on").forEach((el) => {
-          el.classList.remove("on");
-        });
+        document.querySelectorAll("#category li.on").forEach((el) => el.classList.remove("on"));
       };
 
       const overlay = new window.kakao.maps.CustomOverlay({
@@ -168,13 +162,10 @@ function HikingMap(props) {
         zIndex: 3,
       });
 
+      // 마우스오버 시 오버레이 표시
       window.kakao.maps.event.addListener(polyline, "mouseover", () => {
-        if (selectedOverlay.current) {
-          selectedOverlay.current.setMap(null);
-        }
-        allOverlays.current.forEach((ov) => {
-          ov.setMap(null);
-        });
+        if (selectedOverlay.current) selectedOverlay.current.setMap(null);
+        allOverlays.current.forEach((ov) => ov.setMap(null));
         overlay.setMap(mapInstance.current);
       });
 
@@ -228,18 +219,20 @@ function HikingMap(props) {
       selectedPolyline.current.setMap(mapInstance.current);
 
       const midPoint = path[Math.floor(path.length / 2)];
-      // Custom overlay for selected trail (no trail-overlay class)
+      // Custom overlay for selected trail
       const selectedOverlayDiv = document.createElement("div");
-      selectedOverlayDiv.style.background = "#2cc532";
-      selectedOverlayDiv.style.border = "2px solid #1a8c2c";
-      selectedOverlayDiv.style.borderRadius = "10px";
-      selectedOverlayDiv.style.padding = "2px 8px";
-      selectedOverlayDiv.style.boxShadow = "0 2px 12px rgba(44,197,50,0.18)";
-      selectedOverlayDiv.style.fontWeight = "bold";
-      selectedOverlayDiv.style.fontSize = "17px";
-      selectedOverlayDiv.style.color = "#fff";
-      selectedOverlayDiv.style.cursor = "pointer";
-      selectedOverlayDiv.style.display = "inline-block";
+      Object.assign(selectedOverlayDiv.style, {
+        background: "#2cc532",
+        border: "2px solid #1a8c2c",
+        borderRadius: "10px",
+        padding: "2px 8px",
+        boxShadow: "0 2px 12px rgba(44,197,50,0.18)",
+        fontWeight: "bold",
+        fontSize: "17px",
+        color: "#fff",
+        cursor: "pointer",
+        display: "inline-block",
+      });
       selectedOverlayDiv.innerHTML = `
         <div style="margin-bottom:2px;font-size:14px;font-weight:normal;">
           ${props.selectedTrail.properties.mntn_nm} / 
@@ -247,10 +240,7 @@ function HikingMap(props) {
           ${props.selectedTrail.properties.cat_nam}
         </div>
       `;
-      selectedOverlayDiv.onclick = () => {
-        // Optionally, do nothing or close overlay
-      };
-
+      
       allOverlays.current.forEach((ov) => {
         ov.setMap(null);
       });
