@@ -224,18 +224,22 @@ select:focus-visible{
   #root{
     overflow-y: hidden;
   }
+  select{
+    background-size: 18px;
+    background-position: 97%;
+  }
   .search-section{
     padding: 20px;
   }
   .search-bar span,
   .range-section span, 
   .difficulty-section span{
-    width: 70px;
+    width: 80px;
     font-size: 1rem;    
   }
   .search-bar input{
-    width: calc(100% - 150px) !important;
-    height: auto !important;
+    width: calc(100% - 160px) !important;
+    height: 33px !important;
     line-height: 18px;   
     font-size: 1rem;
     padding: 4px 10px;
@@ -243,7 +247,7 @@ select:focus-visible{
   }
   .search-bar button{
     width: 70px;
-    height: auto;
+    height: 33px;
     padding: 2px 0;
     line-height: 24px;
     font-size: 1rem;
@@ -254,14 +258,14 @@ select:focus-visible{
   }  
   .range-section input{
     display: inline-block;
-    width: calc(100% / 2 - 45px);
+    width: calc(100% / 2 - 50px);
     height: auto !important;
     font-size: 1rem;
     padding: 4px 10px;
     margin-left:10px;
   }
   .difficulty-section select{
-    width: calc(100% - 80px);
+    width: calc(100% - 90px);
     height: auto !important;
     font-size: 1rem;
     padding: 4px 6px;
