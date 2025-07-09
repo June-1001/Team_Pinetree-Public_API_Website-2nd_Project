@@ -330,18 +330,13 @@ function HikingMap(props) {
       el.classList.remove("on");
     });
 
-    // 키워드 검색 시 기존 마커 제거
     resetMarker();
-
-    // 키워드 검색 시 카테고리 마커 및 오버레이 초기화
     resetCategory();
-
-    // 키워드 검색 시 모든 폴리라인 및 오버레이 초기화
     resetPolylinesAndOverlays();
 
-    const ps = new window.kakao.maps.services.Places();
+    const geocoder = new window.kakao.maps.services.Geocoder();
 
-    ps.keywordSearch(props.keyword, (result, status) => {
+    geocoder.addressSearch(props.keyword, (result, status) => {
       if (status === window.kakao.maps.services.Status.OK && result.length > 0) {
         const first = result[0];
         const lat = parseFloat(first.y);
@@ -355,9 +350,26 @@ function HikingMap(props) {
         });
 
         props.onCenterChanged(lat, lon);
-
-        // 키워드 검색 시 내 위치 마커 및 오버레이 초기화
         resetMyLocation();
+      } else {
+        const ps = new window.kakao.maps.services.Places();
+        ps.keywordSearch(props.keyword, (result2, status2) => {
+          if (status2 === window.kakao.maps.services.Status.OK && result2.length > 0) {
+            const first2 = result2[0];
+            const lat2 = parseFloat(first2.y);
+            const lon2 = parseFloat(first2.x);
+            const position2 = new window.kakao.maps.LatLng(lat2, lon2);
+            mapInstance.current.setCenter(position2);
+
+            markerRef.current = new window.kakao.maps.Marker({
+              map: mapInstance.current,
+              position: position2,
+            });
+
+            props.onCenterChanged(lat2, lon2);
+            resetMyLocation();
+          }
+        });
       }
     });
   }, [props.searched, props.keyword, mapReady]);
