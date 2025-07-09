@@ -40,8 +40,8 @@ const TrailCard = React.forwardRef((props, ref) => {
       <div>산명칭 : {props.trail.properties.mntn_nm}</div>
       <div>길이 : {props.trail.properties.sec_len}m</div>
       <div>난이도 : {props.trail.properties.cat_nam}</div>
-      <div>상행속도(분) : {props.trail.properties.up_min}</div>
-      <div>하행속도(분) : {props.trail.properties.down_min}</div>      
+      <div>상행속도 : {props.trail.properties.up_min}분</div>
+      <div>하행속도 : {props.trail.properties.down_min}분</div>      
     </div>
   );
 })
