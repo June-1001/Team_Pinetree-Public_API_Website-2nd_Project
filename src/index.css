@@ -37,10 +37,11 @@ select{
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
-  background: url('./img/arrow-down-icon.png') no-repeat 98% center;
-  background-size: 20px; /* 원하는 크기로 설정 */
+  background-image: url('./img/arrow-down-icon.png');
+  background-repeat: no-repeat;
+  background-position: calc(100% - 10px) center;
+  background-size: 20px;
 }
-
 select:focus-visible{
   outline-color: #2cc532;
 }
@@ -160,8 +161,6 @@ select:focus-visible{
   height: 46px;
   padding: 0 7px;
   margin-left: 20px;
-  font-size: 20px;
-  color: #757575;
   font-weight: 400;
 }
 .mapList{
@@ -175,11 +174,10 @@ select:focus-visible{
   width: 200px;
   height: 46px;
   padding: 0 7px;
-  border: 2px solid #2cc532;
+  margin-left: 10px;
   font-size: 20px;
   color: #757575;
   font-weight: 400;
-  background-position: 90% center;
 }
 .mpaListItem{            
   padding: 14px 20px;
@@ -203,7 +201,7 @@ select:focus-visible{
   }
   select{
     background-size: 18px;
-    background-position: 97%;
+    background-position: 97%;    
   }
   .search-section{
     padding: 20px;
