@@ -43,19 +43,21 @@ export default function MainPage() {
 
   return (
     <div className="main-container">
-      <h1 className="title">About Hiking Trail Data</h1>
-      <div className={`search-wrapper ${searched ? "searched" : ""}`}>
-        <SearchFilterSection
-          keyword={keyword}
-          setKeyword={setKeyword}
-          handleSearch={handleSearch}
-          minRange={minRange}
-          setMinRange={setMinRange}
-          maxRange={maxRange}
-          setMaxRange={setMaxRange}
-          difficulty={difficulty}
-          setDifficulty={setDifficulty}
-        />
+      <div>
+        <h1 className="title">About Hiking Trail Data</h1>
+        <div className={`search-wrapper ${searched ? "searched" : ""}`}>
+          <SearchFilterSection
+            keyword={keyword}
+            setKeyword={setKeyword}
+            handleSearch={handleSearch}
+            minRange={minRange}
+            setMinRange={setMinRange}
+            maxRange={maxRange}
+            setMaxRange={setMaxRange}
+            difficulty={difficulty}
+            setDifficulty={setDifficulty}
+          />
+        </div>
       </div>
       <div
         id="search-results"
