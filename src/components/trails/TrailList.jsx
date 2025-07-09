@@ -1,16 +1,16 @@
 import React, { useState, useEffect, useRef } from "react";
 import TrailCard from "./TrailCard";
 
-// 정렬 옵션 선택 컴포넌트
+// 정렬 옵션 선택 컴포넌트 (거리 순 / 가나다 순 / 등산로 짧은 순 / 등산로 긴 순)
 function SortOptionSelector({ value, onChange }) {
   return (
     <div className="listAttribute">
       <span>정렬순 : </span>
       <select value={value} onChange={onChange}>
-        <option value="전체">전체</option>
-        <option value="가나다순">가나다순</option>
-        <option value="낮은거리순">총 낮은거리순</option>
-        <option value="높은거리순">총 높은거리순</option>
+        <option value="거리순">거리 순</option>
+        <option value="가나다순">가나다 순</option>
+        <option value="등산로짧은순">등산로 짧은 순</option>
+        <option value="등산로긴순">등산로 긴 순</option>
       </select>
     </div>
   );
@@ -18,7 +18,7 @@ function SortOptionSelector({ value, onChange }) {
 
 function TrailList(props) {
   const [expandedMountain, setExpandedMountain] = useState(null);
-  const [sortOption, setSortOption] = useState("전체");
+  const [sortOption, setSortOption] = useState("거리순");
 
   useEffect(() => {
     setExpandedMountain(null);
@@ -83,17 +83,32 @@ function TrailList(props) {
 
   if (sortOption === "가나다순") {
     sortedMountainNames.sort((a, b) => a.localeCompare(b));
-  } else if (sortOption === "낮은거리순") {
+  } else if (sortOption === "거리순") {
+    // 총 거리 오름차순
     sortedMountainNames.sort((a, b) => {
-      const totalA = groupedByMountain[a].reduce((sum, trail) => sum + Number(trail.properties.sec_len.length || 0), 0);
-      const totalB = groupedByMountain[b].reduce((sum, trail) => sum + Number(trail.properties.sec_len.length || 0), 0);
+      const totalA = groupedByMountain[a].reduce((sum, trail) => {
+        const len = parseFloat(trail.properties.sec_len);
+        return sum + (isNaN(len) ? 0 : len);
+      }, 0);
+      const totalB = groupedByMountain[b].reduce((sum, trail) => {
+        const len = parseFloat(trail.properties.sec_len);
+        return sum + (isNaN(len) ? 0 : len);
+      }, 0);
       return totalA - totalB;
     });
-  } else if (sortOption === "높은거리순") {
+  } else if (sortOption === "등산로짧은순") {
+    // 등산로 중 가장 짧은 거리 기준 오름차순
     sortedMountainNames.sort((a, b) => {
-      const totalA = groupedByMountain[a].reduce((sum, trail) => sum + Number(trail.properties.sec_len.length || 0), 0);
-      const totalB = groupedByMountain[b].reduce((sum, trail) => sum + Number(trail.properties.sec_len.length || 0), 0);
-      return totalB - totalA;
+      const minA = Math.min(...groupedByMountain[a].map(trail => parseFloat(trail.properties.sec_len) || Infinity));
+      const minB = Math.min(...groupedByMountain[b].map(trail => parseFloat(trail.properties.sec_len) || Infinity));
+      return minA - minB;
+    });
+  } else if (sortOption === "등산로긴순") {
+    // 등산로 중 가장 긴 거리 기준 내림차순
+    sortedMountainNames.sort((a, b) => {
+      const maxA = Math.max(...groupedByMountain[a].map(trail => parseFloat(trail.properties.sec_len) || 0));
+      const maxB = Math.max(...groupedByMountain[b].map(trail => parseFloat(trail.properties.sec_len) || 0));
+      return maxB - maxA;
     });
   }
 
