@@ -87,10 +87,12 @@ function TrailList(props) {
   }
 
   function getTotalDistance(trails) {
-    return trails.reduce((sum, trail) => {
+    // sec_len이 m(미터) 단위이므로 km로 변환
+    const totalMeter = trails.reduce((sum, trail) => {
       const len = parseFloat(trail.properties.sec_len);
       return sum + (isNaN(len) ? 0 : len);
-    }, 0).toFixed(2); // 소수점 2자리
+    }, 0);
+    return (totalMeter / 1000).toFixed(2); // km 단위, 소수점 2자리
   }
 
   return (
