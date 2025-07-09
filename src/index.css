@@ -73,17 +73,19 @@ select:focus-visible {
 }
 .search-section {
   background: #fbfbfb;
-  padding: 50px;
+  padding: 20px;
   border: 1px solid #d1d1d1;
   border-radius: 10px;
   margin: 20px 0;
 }
 .search-wrapper {
   display: flex;
+  flex-grow: 1;
   flex-direction: column;
   align-items: center;
   transform: translateY(30vh);
   transition: transform 0.3s ease;
+  z-index: 10;
 }
 
 .search-wrapper.searched {
@@ -207,7 +209,7 @@ select:focus-visible {
 .trail-card div {
   margin-bottom: 5px;
 }
-@media only screen and (max-width: 768px) {
+@media only screen and (max-width: 1024px) {
   #root {
     overflow-y: hidden;
   }

@@ -62,7 +62,7 @@ export function getHikingUrl(lat, lon, min, max, diff, page = 1) {
   let attrFilter = null;
 
   if (lat !== null && lon !== null) {
-    geomFilter = setGeomFilter({ x: lon, y: lat }, 3);
+    geomFilter = setGeomFilter({ x: lon, y: lat }, 5);
     params.push("geomFilter=" + geomFilter);
   }
 

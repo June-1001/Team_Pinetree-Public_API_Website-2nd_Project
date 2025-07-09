@@ -46,7 +46,7 @@ export default function MainPage() {
   return (
     <div className="main-container">
       <div className={`search-wrapper ${searched ? "searched" : ""}`}>
-        <h1 className="title">About Hiking Trail Data</h1>
+        <h1 className="title">우리 동네 등산로 검색 서비스</h1>
         <SearchFilterSection
           keyword={keyword}
           setKeyword={setKeyword}

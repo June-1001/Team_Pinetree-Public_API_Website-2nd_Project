@@ -13,10 +13,28 @@ function HikingMap(props) {
   const selectedOverlay = useRef(null);
   const categoryMarkers = useRef([]);
   const myLocationMarker = useRef(null);
+  const myLocationOverlay = useRef(null);
 
   const [mapReady, setMapReady] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [isSearching, setIsSearching] = useState(false);
+
+  // 지도 크기 조정
+  useEffect(() => {
+    function updateMapHeight() {
+      if (mapRef.current) {
+        const width = mapRef.current.offsetWidth;
+        mapRef.current.style.height = width + "px";
+      }
+    }
+
+    updateMapHeight();
+    window.addEventListener("resize", updateMapHeight);
+
+    return () => {
+      window.removeEventListener("resize", updateMapHeight);
+    };
+  }, []);
 
   // 마커 생성 함수
   const createMarkers = (positions, spriteY) =>
@@ -63,7 +81,13 @@ function HikingMap(props) {
           const lon = mouseEvent.latLng.getLng();
           props.onCenterChanged(lat, lon);
 
-          if (markerRef.current) markerRef.current.setMap(null);
+          if (markerRef.current) {
+            markerRef.current.setMap(null);
+          }
+          if (myLocationMarker.current) {
+            myLocationMarker.current.setMap(null);
+            myLocationMarker.current = null;
+          }
           markerRef.current = new window.kakao.maps.Marker({
             map: mapInstance.current,
             position: mouseEvent.latLng,
@@ -75,6 +99,16 @@ function HikingMap(props) {
           selectedPolyline.current = null;
           if (selectedOverlay.current) selectedOverlay.current.setMap(null);
           selectedOverlay.current = null;
+
+          // Remove current location marker and overlay on map right-click
+          if (myLocationMarker.current) {
+            myLocationMarker.current.setMap(null);
+            myLocationMarker.current = null;
+          }
+          if (myLocationOverlay.current) {
+            myLocationOverlay.current.setMap(null);
+            myLocationOverlay.current = null;
+          }
 
           if (props.onClearSelection) props.onClearSelection();
         });
@@ -94,6 +128,14 @@ function HikingMap(props) {
       selectedPolyline.current = null;
       if (selectedOverlay.current) selectedOverlay.current.setMap(null);
       selectedOverlay.current = null;
+      if (myLocationMarker.current) {
+        myLocationMarker.current.setMap(null);
+        myLocationMarker.current = null;
+      }
+      if (myLocationOverlay.current) {
+        myLocationOverlay.current.setMap(null);
+        myLocationOverlay.current = null;
+      }
     };
   }, []);
 
@@ -145,8 +187,7 @@ function HikingMap(props) {
       customOverlayDiv.innerHTML = `
         <div style="margin-bottom:2px;font-size:13px;font-weight:normal;">
           ${trail.properties.mntn_nm} / 
-          ${parseFloat(trail.properties.sec_len)}m / 
-          ${trail.properties.cat_nam}
+          ${parseFloat(trail.properties.sec_len)}m
         </div>
       `;
       customOverlayDiv.onclick = () => {
@@ -254,7 +295,7 @@ function HikingMap(props) {
 
       selectedOverlay.current.setMap(mapInstance.current);
 
-      mapInstance.current.setLevel(3);
+      mapInstance.current.setLevel(5);
 
       const startPoint = path[0];
       mapInstance.current.panTo(startPoint);
@@ -286,6 +327,7 @@ function HikingMap(props) {
     }
 
     const ps = new window.kakao.maps.services.Places();
+
     ps.keywordSearch(props.keyword, (result, status) => {
       if (status === window.kakao.maps.services.Status.OK && result.length > 0) {
         const first = result[0];
@@ -297,11 +339,25 @@ function HikingMap(props) {
         if (markerRef.current) {
           markerRef.current.setMap(null);
         }
+        if (myLocationMarker.current) {
+          myLocationMarker.current.setMap(null);
+          myLocationMarker.current = null;
+        }
         markerRef.current = new window.kakao.maps.Marker({
           map: mapInstance.current,
           position: position,
         });
+
         props.onCenterChanged(lat, lon);
+
+        if (myLocationMarker.current) {
+          myLocationMarker.current.setMap(null);
+          myLocationMarker.current = null;
+        }
+        if (myLocationOverlay.current) {
+          myLocationOverlay.current.setMap(null);
+          myLocationOverlay.current = null;
+        }
       }
     });
   }, [props.searched, props.keyword, mapReady]);
@@ -396,6 +452,11 @@ function HikingMap(props) {
   };
 
   const handleMyLocation = () => {
+    if (markerRef.current) {
+      markerRef.current.setMap(null);
+      markerRef.current = null;
+    }
+
     if (!navigator.geolocation) {
       alert("이 브라우저에서는 위치 정보가 지원되지 않습니다.");
       return;
@@ -407,20 +468,53 @@ function HikingMap(props) {
         const lng = position.coords.longitude;
         const loc = new window.kakao.maps.LatLng(lat, lng);
 
-        // 기존 마커 제거
         if (myLocationMarker.current) {
           myLocationMarker.current.setMap(null);
+          myLocationMarker.current = null;
+        }
+        if (myLocationOverlay.current) {
+          myLocationOverlay.current.setMap(null);
+          myLocationOverlay.current = null;
         }
 
-        // 새 마커 생성
+        const redMarkerImage = new window.kakao.maps.MarkerImage(
+          "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_red.png",
+          new window.kakao.maps.Size(24, 35)
+        );
+
         myLocationMarker.current = new window.kakao.maps.Marker({
           map: mapInstance.current,
           position: loc,
+          image: redMarkerImage,
           title: "현 위치",
         });
 
-        // 지도 중심 이동
+        const overlayDiv = document.createElement("div");
+        Object.assign(overlayDiv.style, {
+          background: "white",
+          border: "2px solid red",
+          borderRadius: "6px",
+          padding: "2px 6px",
+          color: "black",
+          fontWeight: "bold",
+          fontSize: "13px",
+          boxShadow: "0 2px 6px rgba(0,0,0,0.3)",
+          whiteSpace: "nowrap",
+          userSelect: "none",
+        });
+        overlayDiv.textContent = "현 위치";
+
+        myLocationOverlay.current = new window.kakao.maps.CustomOverlay({
+          content: overlayDiv,
+          position: loc,
+          yAnchor: 1.8,
+          zIndex: 4,
+          clickable: false,
+        });
+
+        myLocationOverlay.current.setMap(mapInstance.current);
         mapInstance.current.setCenter(loc);
+        props.onCenterChanged(lat, lng);
       },
       (error) => {
         alert("현위치 정보를 가져올 수 없습니다.");
