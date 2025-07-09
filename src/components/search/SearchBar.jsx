@@ -12,7 +12,7 @@ const SearchBar = ({ keyword, setKeyword, onSearch }) => {
 
   return (
     <div className="search-bar">
-      <span>지역검색</span>
+      <span>지역/명칭</span>
       <input
         type="text"
         value={keyword}
@@ -20,7 +20,7 @@ const SearchBar = ({ keyword, setKeyword, onSearch }) => {
           setKeyword(e.target.value);
         }}
         onKeyDown={handleKeyDown}
-        placeholder="검색어를 입력하세요"
+        placeholder="지역검색 및 산명칭 검색"
       />
       <button onClick={onSearch}>검색</button>
     </div>
