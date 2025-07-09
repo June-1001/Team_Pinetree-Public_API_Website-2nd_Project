@@ -145,7 +145,11 @@ function HikingMap(props) {
       customOverlayDiv.style.cursor = "pointer";
       customOverlayDiv.style.display = "inline-block";
       customOverlayDiv.innerHTML = `
-        <div style="margin-bottom:2px;font-size:13px;font-weight:normal;">${trail.properties.mntn_nm} / ${parseFloat(trail.properties.sec_len)}m / ${trail.properties.cat_nam}</div>
+        <div style="margin-bottom:2px;font-size:13px;font-weight:normal;">
+          ${trail.properties.mntn_nm} / 
+          ${parseFloat(trail.properties.sec_len)}m / 
+          ${trail.properties.cat_nam}
+        </div>
       `;
       customOverlayDiv.onclick = () => {
         if (props.setSelectedTrail) {
@@ -219,7 +223,7 @@ function HikingMap(props) {
         strokeWeight: 6,
         strokeColor: "#2cc532",
         strokeOpacity: 1,
-        strokeStyle: "solid",       
+        strokeStyle: "solid",
       });
       selectedPolyline.current.setMap(mapInstance.current);
 
@@ -237,7 +241,11 @@ function HikingMap(props) {
       selectedOverlayDiv.style.cursor = "pointer";
       selectedOverlayDiv.style.display = "inline-block";
       selectedOverlayDiv.innerHTML = `
-        <div style="margin-bottom:2px;font-size:14px;font-weight:normal;">${props.selectedTrail.properties.mntn_nm} / ${parseFloat(props.selectedTrail.properties.sec_len)}m / ${props.selectedTrail.properties.cat_nam}</div>
+        <div style="margin-bottom:2px;font-size:14px;font-weight:normal;">
+          ${props.selectedTrail.properties.mntn_nm} / 
+          ${parseFloat(props.selectedTrail.properties.sec_len)}m / 
+          ${props.selectedTrail.properties.cat_nam}
+        </div>
       `;
       selectedOverlayDiv.onclick = () => {
         // Optionally, do nothing or close overlay
@@ -440,8 +448,8 @@ function HikingMap(props) {
     <div id="mapwrap">
       <div id="hikingMap" ref={mapRef}></div>
       <button onClick={handleMyLocation} className="accessLocation" title="현 위치">현 위치</button>
-      <CategorySelector 
-        selected={selectedCategory} 
+      <CategorySelector
+        selected={selectedCategory}
         onSelect={handleCategoryChange}
         disabled={isSearching}
       />
