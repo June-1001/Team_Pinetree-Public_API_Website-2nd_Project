@@ -182,28 +182,6 @@ select:focus-visible{
   font-weight: 400;
   background-position: 90% center;
 }
-.trail-overlay{
-  padding: 16px !important;
-  background: #fff;
-  border: 1px solid #d1d1d1;
-  border-radius: 5px;
-  position: relative;
-  margin-bottom: 10px;
-  box-shadow: 5px 5px 10px 0px #6b6b6b;
-  transform: translateY(-15px);
-}
-.trail-overlay::after{
-  content: '▼';
-  display: inline-block;
-  margin: 10px 0;
-  color: #fff;
-  position: absolute;
-  left: 50%;
-  top: 22px;
-  transform: translate(-50%, 0);
-  z-index: 1;
-  font-size: 24px;
-}
 .mpaListItem{            
   padding: 14px 20px;
   font-weight: bold;
