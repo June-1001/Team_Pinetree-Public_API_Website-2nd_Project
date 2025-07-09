@@ -100,6 +100,7 @@ function TrailList(props) {
       {sortedMountainNames.length > 0 && (
       <>
         <div className="listAttribute">
+          <span>정렬순 : </span>
           <select value={sortOption} onChange={handleSortChange}>
             <option value="전체">전체</option>
             <option value="가나다순">가나다순</option>
