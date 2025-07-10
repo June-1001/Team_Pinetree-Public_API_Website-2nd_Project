@@ -15,6 +15,7 @@ function HikingMap(props) {
   const myLocationMarker = useRef(null);
   const myLocationOverlay = useRef(null);
   const currentInfoOverlay = useRef(null);
+  const geomBoxOverlay = useRef(null);
 
   const [mapReady, setMapReady] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("");
@@ -115,6 +116,30 @@ function HikingMap(props) {
     return geometry.coordinates[0];
   }
 
+  // 등산로 받아오는 필터 박스 표시하기
+  const drawGeomBox = (point, bufferKm = 5) => {
+    const bufferLat = bufferKm / 111;
+    const bufferLon = bufferKm / (111 * Math.cos((point.getLat() * Math.PI) / 180));
+
+    const sw = new window.kakao.maps.LatLng(point.getLat() - bufferLat, point.getLng() - bufferLon);
+    const ne = new window.kakao.maps.LatLng(point.getLat() + bufferLat, point.getLng() + bufferLon);
+
+    if (geomBoxOverlay.current) {
+      geomBoxOverlay.current.setMap(null);
+    }
+
+    geomBoxOverlay.current = new window.kakao.maps.Rectangle({
+      map: mapInstance.current,
+      bounds: new window.kakao.maps.LatLngBounds(sw, ne),
+      strokeWeight: 2,
+      strokeColor: "#2cc532",
+      strokeOpacity: 0.9,
+      strokeStyle: "dash",
+      fillColor: "#2cc532",
+      fillOpacity: 0.1,
+    });
+  };
+
   useEffect(() => {
     const script = document.createElement("script");
     script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${kakaoApiKey}&libraries=services&autoload=false`;
@@ -133,7 +158,10 @@ function HikingMap(props) {
         window.kakao.maps.event.addListener(mapInstance.current, "rightclick", (mouseEvent) => {
           const lat = mouseEvent.latLng.getLat();
           const lon = mouseEvent.latLng.getLng();
+          const position = mouseEvent.latLng;
+
           props.onCenterChanged(lat, lon);
+          drawGeomBox(position, 5);
 
           // 우클릭 시 기존 일반 마커 제거
           resetMarker();
@@ -519,6 +547,7 @@ function HikingMap(props) {
 
         myLocationOverlay.current.setMap(mapInstance.current);
         mapInstance.current.setCenter(loc);
+        drawGeomBox(loc, 5);
         props.onCenterChanged(lat, lng);
       },
       (error) => {
