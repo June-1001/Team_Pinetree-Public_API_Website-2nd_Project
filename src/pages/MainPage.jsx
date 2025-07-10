@@ -45,42 +45,38 @@ export default function MainPage() {
 
   return (
     <div className="main-container">
-      <div className="top-overflow">
-        <div className={`search-wrapper ${showResults ? "searched" : ""}`}>
-          <h1 className="title">우리 동네 등산로 검색 서비스</h1>
-          <SearchFilterSection
-            keyword={keyword}
-            setKeyword={setKeyword}
-            handleSearch={handleSearch}
-            minRange={minRange}
-            setMinRange={setMinRange}
-            maxRange={maxRange}
-            setMaxRange={setMaxRange}
-            difficulty={difficulty}
-            setDifficulty={setDifficulty}
-          />
-        </div>
-        <div
-          id="search-results"
-          className={`search-results-container ${showResults ? "visible" : ""}`}
-        >
-          {showMap && (
-            <HikingMap
-              keyword={lastSearchedKeyword.current}
-              searched={searched}
-              trailData={trailData}
-              selectedTrail={selectedTrail}
-              setSelectedTrail={setSelectedTrail}
-              onCenterChanged={(lat, lon) => {
-                setLat(lat);
-                setLon(lon);
-              }}
-              onClearSelection={clearSelection}
-            />
-          )}
-        </div>
+      <div className={`search-wrapper ${showResults ? "searched" : ""}`}>
+        <h1 className="title">우리 동네 등산로 검색 서비스</h1>
+        <SearchFilterSection
+          keyword={keyword}
+          setKeyword={setKeyword}
+          handleSearch={handleSearch}
+          minRange={minRange}
+          setMinRange={setMinRange}
+          maxRange={maxRange}
+          setMaxRange={setMaxRange}
+          difficulty={difficulty}
+          setDifficulty={setDifficulty}
+        />
       </div>
-      <div>
+      <div
+        id="search-results"
+        className={`search-results-container ${showResults ? "visible" : ""}`}
+      >
+        {showMap && (
+          <HikingMap
+            keyword={lastSearchedKeyword.current}
+            searched={searched}
+            trailData={trailData}
+            selectedTrail={selectedTrail}
+            setSelectedTrail={setSelectedTrail}
+            onCenterChanged={(lat, lon) => {
+              setLat(lat);
+              setLon(lon);
+            }}
+            onClearSelection={clearSelection}
+          />
+        )}
         {!trailsLoading && !trailsError && showResults && (
           <TrailList
             trailData={trailData}
