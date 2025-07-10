@@ -87,7 +87,10 @@ export default function MainPage() {
     const sameSearch =
       keyword === lastSearch.current.keyword &&
       lat === lastSearch.current.lat &&
-      lon === lastSearch.current.lon;
+      lon === lastSearch.current.lon &&
+      minRange === lastSearch.current.minRange &&
+      maxRange === lastSearch.current.maxRange &&
+      difficulty === lastSearch.current.difficulty;
 
     if (sameSearch) {
       setShowResults(true);

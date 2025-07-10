@@ -62,6 +62,10 @@ select:focus-visible {
   opacity: 1;
   pointer-events: auto;
 }
+.trail-results {
+  display: flex;
+}
+
 #hiking-map {
   width: 600px;
   height: 600px;
@@ -217,11 +221,11 @@ select:focus-visible {
 .trail-card div:last-child {
   margin-bottom: 0;
 }
-.access-location{
+.access-location {
   display: block;
   position: absolute;
   right: 10px;
-  top: 10px;;
+  top: 10px;
   width: 34px;
   height: 36px;
   padding: 1px 3px 5px;
@@ -231,7 +235,7 @@ select:focus-visible {
   z-index: 10;
   cursor: pointer;
 }
-.access-location:hover{
+.access-location:hover {
   background-position: -154px -350px;
 }
 
@@ -246,7 +250,7 @@ select:focus-visible {
     background-size: 18px;
     background-position: 97%;
   }
-  .main-container{
+  .main-container {
     margin: 10px;
   }
   .search-section {
@@ -313,12 +317,12 @@ select:focus-visible {
     clear: both;
     display: block;
   }
-  .list-attribute select{
-  width: calc(100% - 200px);
-  height: auto !important;
-  font-size: 1rem;
-  padding: 4px 6px;
-  margin-left: 10px;    
+  .list-attribute select {
+    width: calc(100% - 200px);
+    height: auto !important;
+    font-size: 1rem;
+    padding: 4px 6px;
+    margin-left: 10px;
   }
   .trail-list {
     width: 100%;
