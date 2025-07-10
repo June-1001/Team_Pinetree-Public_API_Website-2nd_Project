@@ -24,8 +24,7 @@ const TrailCard = React.forwardRef((props, ref) => {
   // 카드 생성
   return (
     <div
-      ref={ref}
-      className="trailCard"
+      className="trail-card"
       style={{
         border:
           props.selectedTrail && props.selectedTrail.id === props.trail.id
@@ -44,6 +43,6 @@ const TrailCard = React.forwardRef((props, ref) => {
       <div>하행속도 : {props.trail.properties.down_min}분</div>      
     </div>
   );
-})
+});
 
 export default TrailCard;

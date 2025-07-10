@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 import $ from "jquery";
 import { getHikingUrl } from "../api/hikingTrails";
+import { getDistanceByLatlon } from "../utils/getDistanceByLatlon";
 
 async function fetchTrailDataPage(lat, lon, min, max, diff, page = 1) {
   const url = getHikingUrl(lat, lon, min, max, diff, page);
-  console.log(`▶ Fetching trails page ${page}:`, url);
 
   return new Promise((resolve, reject) => {
     $.ajax({
@@ -16,7 +16,6 @@ async function fetchTrailDataPage(lat, lon, min, max, diff, page = 1) {
           return;
         }
 
-        // Extract features based on different possible structures
         const fc = data.response.result?.featureCollection;
         let features = [];
 
@@ -40,34 +39,25 @@ async function fetchTrailDataPage(lat, lon, min, max, diff, page = 1) {
   });
 }
 
+// 페이지가 1페이지 이상이면 모든 페이지에서 데이터 받아오기
 async function fetchAllTrailData(lat, lon, min, max, diff) {
-  try {
-    // First fetch to get total pages
-    const firstPage = await fetchTrailDataPage(lat, lon, min, max, diff, 1);
-    const totalPages = firstPage.totalPages;
+  const firstPage = await fetchTrailDataPage(lat, lon, min, max, diff, 1);
+  const totalPages = firstPage.totalPages;
 
-    // If only one page, return immediately
-    if (totalPages <= 1) {
-      return firstPage.features;
-    }
-
-    // Fetch remaining pages in parallel
-    const pagePromises = [];
-    for (let page = 2; page <= totalPages; page++) {
-      pagePromises.push(fetchTrailDataPage(lat, lon, min, max, diff, page));
-    }
-
-    const remainingPages = await Promise.all(pagePromises);
-
-    // Combine all features
-    const allFeatures = firstPage.features.concat(...remainingPages.map((page) => page.features));
-
-    console.log(`✅ Fetched all ${allFeatures.length} records across ${totalPages} pages`);
-    return allFeatures;
-  } catch (err) {
-    console.error("Error fetching trail data:", err);
-    throw err;
+  if (totalPages <= 1) {
+    return firstPage.features;
   }
+
+  const pagePromises = [];
+  for (let page = 2; page <= totalPages; page++) {
+    pagePromises.push(fetchTrailDataPage(lat, lon, min, max, diff, page));
+  }
+
+  const remainingPages = await Promise.all(pagePromises);
+
+  const allFeatures = firstPage.features.concat(...remainingPages.map((page) => page.features));
+
+  return allFeatures;
 }
 
 export function useTrailData(lat, lon, minRange, maxRange, difficulty) {
@@ -87,7 +77,17 @@ export function useTrailData(lat, lon, minRange, maxRange, difficulty) {
 
       try {
         const allFeatures = await fetchAllTrailData(lat, lon, minRange, maxRange, difficulty);
-        setTrailData(allFeatures);
+
+        const sortedFeatures = allFeatures
+          // 위경도 좌표로 현재 위치와의 거리 계산해서 거리 순으로 정렬
+          .map((trail) => {
+            const [lon_, lat_] = trail.geometry?.coordinates?.[0]?.[0] || [0, 0];
+            const distance = getDistanceByLatlon(lat, lon, lat_, lon_);
+            return { ...trail, distance };
+          })
+          .sort((a, b) => a.distance - b.distance);
+
+        setTrailData(sortedFeatures);
       } catch (err) {
         setError(err);
         setTrailData([]);

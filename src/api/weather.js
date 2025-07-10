@@ -1,3 +1,5 @@
+// 날씨 API 불러올 URL 생성
+
 import { latlonToGrid } from "../utils/latlonToGrid";
 
 const publicDataApiKey = `ErCuM5KvYasv6PiohNILSbv%2BloBCCBgMSv2rgzbrGMxQpVDNjuLn%2B3yhaGiW3ftEEcm58h0r%2BIUpyn8bJi4lLQ%3D%3D`;

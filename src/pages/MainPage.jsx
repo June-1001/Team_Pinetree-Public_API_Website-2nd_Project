@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import HikingMap from "../components/map/HikingMap";
 import TrailList from "../components/trails/TrailList";
 import SearchFilterSection from "../components/search/SearchFilterSection";
@@ -11,13 +11,14 @@ export default function MainPage() {
   const [maxRange, setMaxRange] = useState("");
   const [difficulty, setDifficulty] = useState("");
   const [searched, setSearched] = useState(false);
+  const [showResults, setShowResults] = useState(false);
   const [lat, setLat] = useState(null);
   const [lon, setLon] = useState(null);
   const [selectedTrail, setSelectedTrail] = useState(null);
   const [collapseAllTrigger, setCollapseAllTrigger] = useState(0);
+  const [showMap, setShowMap] = useState(false);
 
-  const [zoom, setZoom] = useState(1);
-  const [containerHeight, setContainerHeight] = useState(800);
+  const lastSearchedKeyword = useRef("");
 
   const weatherData = useWeatherData(lat, lon);
 
@@ -27,47 +28,15 @@ export default function MainPage() {
     error: trailsError,
   } = useTrailData(lat, lon, minRange, maxRange, difficulty, searched);
 
-  // 창 크기에 따라서 검색 결과 div zoom 컨트롤
-  useEffect(() => {
-    const baseWidth = 1280;
-    const baseHeight = 800;
-    const maxHeight = 800;
-
-    function handleResize() {
-      const scale = window.innerWidth / baseWidth;
-      const scaledHeight = baseHeight * scale;
-
-      if (scaledHeight > maxHeight) {
-        setZoom(maxHeight / baseHeight);
-        setContainerHeight(maxHeight);
-      } else {
-        setZoom(scale);
-        setContainerHeight(scaledHeight);
-      }
-    }
-
-    handleResize();
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
-  useEffect(() => {
-    if (trailsLoading === false && searched === true) {
-      setSearched(false);
-    }
-  }, [trailsLoading, searched]);
-
-  // 키워드 입력 시 검색 초기화
-  useEffect(() => {
-    setSearched(false);
-  }, [keyword]);
-
   function handleSearch() {
     if (keyword.trim() === "") {
       return;
     }
-    setSearched(true);
-    }
+    lastSearchedKeyword.current = keyword;
+    setShowResults(true);
+    setShowMap(true);
+    setSearched((prev) => !prev);
+  }
 
   function clearSelection() {
     setSelectedTrail(null);
@@ -75,45 +44,41 @@ export default function MainPage() {
   }
 
   return (
-    <div className="mainContainer">
-      <h1 className="title">About Hiking Trail Data</h1>
-      
-      <SearchFilterSection
-        keyword={keyword}
-        setKeyword={setKeyword}
-        handleSearch={handleSearch}
-        minRange={minRange}
-        setMinRange={setMinRange}
-        maxRange={maxRange}
-        setMaxRange={setMaxRange}
-        difficulty={difficulty}
-        setDifficulty={setDifficulty}
-      />
-      <div
-        id="searchResults"
-        style={{
-          display: "flex",
-          height: containerHeight,
-          alignItems: "stretch",
-          zoom: zoom,
-        }}
-      >
-        <HikingMap
+    <div className="main-container">
+      <div className={`search-wrapper ${showResults ? "searched" : ""}`}>
+        <h1 className="title">우리 동네 등산로 검색 서비스</h1>
+        <SearchFilterSection
           keyword={keyword}
-          searched={searched}
-          trailData={trailData}
-          selectedTrail={selectedTrail}
-          setSelectedTrail={setSelectedTrail}
-          onCenterChanged={(lat, lon) => {
-            setLat(lat);
-            setLon(lon);
-          }}
-          onClearSelection={clearSelection}
-          style={{ width: 600, height: "100%" }}
+          setKeyword={setKeyword}
+          handleSearch={handleSearch}
+          minRange={minRange}
+          setMinRange={setMinRange}
+          maxRange={maxRange}
+          setMaxRange={setMaxRange}
+          difficulty={difficulty}
+          setDifficulty={setDifficulty}
         />
-   
+      </div>
+      <div
+        id="search-results"
+        className={`search-results-container ${showResults ? "visible" : ""}`}
+      >
+        {showMap && (
+          <HikingMap
+            keyword={lastSearchedKeyword.current}
+            searched={searched}
+            trailData={trailData}
+            selectedTrail={selectedTrail}
+            setSelectedTrail={setSelectedTrail}
+            onCenterChanged={(lat, lon) => {
+              setLat(lat);
+              setLon(lon);
+            }}
+            onClearSelection={clearSelection}
+          />
+        )}
 
-        {!trailsLoading && !trailsError && (
+        {!trailsLoading && !trailsError && showResults && (
           <TrailList
             trailData={trailData}
             selectedTrail={selectedTrail}

@@ -1,3 +1,5 @@
+// 등산로 API 불러올 URL 생성
+
 const vworldApiKey = `31198BF5-179E-3380-947F-F97448ED7D34`;
 
 const hiking = {
@@ -8,7 +10,6 @@ const hiking = {
   format: "json",
   data: "LT_L_FRSTCLIMB",
   size: 1000,
-  page: 1,
 };
 
 function round(num) {
@@ -45,7 +46,7 @@ function setAttrFilter(min, max, diff) {
   return filters.join("|");
 }
 
-export function getHikingUrl(lat, lon, min, max, diff) {
+export function getHikingUrl(lat, lon, min, max, diff, page = 1) {
   const params = [];
 
   params.push("key=" + vworldApiKey);
@@ -54,13 +55,14 @@ export function getHikingUrl(lat, lon, min, max, diff) {
   params.push("format=" + hiking.format);
   params.push("data=" + hiking.data);
   params.push("size=" + hiking.size);
+  params.push("page=" + page);
   params.push("domain=" + hiking.domain);
 
   let geomFilter = null;
   let attrFilter = null;
 
   if (lat !== null && lon !== null) {
-    geomFilter = setGeomFilter({ x: lon, y: lat }, 3);
+    geomFilter = setGeomFilter({ x: lon, y: lat }, 5);
     params.push("geomFilter=" + geomFilter);
   }
 
