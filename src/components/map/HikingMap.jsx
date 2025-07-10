@@ -134,9 +134,9 @@ function HikingMap(props) {
       strokeWeight: 2,
       strokeColor: "#2cc532",
       strokeOpacity: 0.9,
-      strokeStyle: "dash",
+      strokeStyle: "solid",
       fillColor: "#2cc532",
-      fillOpacity: 0.1,
+      fillOpacity: 0.03,
     });
   };
 
