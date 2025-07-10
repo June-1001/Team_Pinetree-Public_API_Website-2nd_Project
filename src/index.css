@@ -181,8 +181,6 @@ select:focus-visible {
   height: 46px;
   padding: 0 7px;
   margin-left: 20px;
-  font-size: 20px;
-  color: #757575;
   font-weight: 400;
 }
 .map-list {
@@ -196,9 +194,6 @@ select:focus-visible {
   width: 200px;
   height: 46px;
   padding: 0 7px;
-  border: 2px solid #2cc532;
-  font-size: 20px;
-  color: #757575;
   font-weight: 400;
   background-position: 90% center;
 }
