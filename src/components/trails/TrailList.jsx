@@ -18,7 +18,7 @@ function SortOptionSelector({ value, onChange }) {
 
 function TrailList(props) {
   const [expandedMountain, setExpandedMountain] = useState(null);
-  const [sortOption, setSortOption] = useState("전체");
+  const [sortOption, setSortOption] = useState("0");
 
   useEffect(() => {
     setExpandedMountain(null);
@@ -81,31 +81,29 @@ function TrailList(props) {
 
   let sortedMountainNames = [...mountainNames];
 
-  if (sortOption === "1") {
-    sortedMountainNames.sort((a, b) => a.localeCompare(b));
-  } else if (sortOption === "2") {
+  if (sortOption === "0") {
+    // 거리순: 각 산의 모든 등산로 거리 합계 기준 오름차순(낮은 순)
     sortedMountainNames.sort((a, b) => {
-      const totalA = groupedByMountain[a].reduce(
-        (sum, trail) => sum + Number(trail.properties.sec_len.length || 0),
-        0
-      );
-      const totalB = groupedByMountain[b].reduce(
-        (sum, trail) => sum + Number(trail.properties.sec_len.length || 0),
-        0
-      );
+      const totalA = groupedByMountain[a].reduce((sum, trail) => sum + parseFloat(trail.properties.sec_len || 0), 0);
+      const totalB = groupedByMountain[b].reduce((sum, trail) => sum + parseFloat(trail.properties.sec_len || 0), 0);
       return totalA - totalB;
     });
-  } else if (sortOption === "3") {
+  } else if (sortOption === "1") {
+    // 가나다순: 산 이름 오름차순
+    sortedMountainNames.sort((a, b) => a.localeCompare(b));
+  } else if (sortOption === "2") {
+    // 짧은 등산로순: 각 산의 등산로 중 가장 짧은 거리 기준 오름차순
     sortedMountainNames.sort((a, b) => {
-      const totalA = groupedByMountain[a].reduce(
-        (sum, trail) => sum + Number(trail.properties.sec_len.length || 0),
-        0
-      );
-      const totalB = groupedByMountain[b].reduce(
-        (sum, trail) => sum + Number(trail.properties.sec_len.length || 0),
-        0
-      );
-      return totalB - totalA;
+      const minA = Math.min(...groupedByMountain[a].map(trail => parseFloat(trail.properties.sec_len || 0)));
+      const minB = Math.min(...groupedByMountain[b].map(trail => parseFloat(trail.properties.sec_len || 0)));
+      return minA - minB;
+    });
+  } else if (sortOption === "3") {
+    // 긴 등산로순: 각 산의 등산로 중 가장 긴 거리 기준 내림차순
+    sortedMountainNames.sort((a, b) => {
+      const maxA = Math.max(...groupedByMountain[a].map(trail => parseFloat(trail.properties.sec_len || 0)));
+      const maxB = Math.max(...groupedByMountain[b].map(trail => parseFloat(trail.properties.sec_len || 0)));
+      return maxB - maxA;
     });
   }
 
@@ -148,20 +146,23 @@ function TrailList(props) {
                       gap: "20px",
                     }}
                   >
-                    {trails.map((trail) => {
-                      if (!cardRefs.current[trail.id]) {
-                        cardRefs.current[trail.id] = React.createRef();
-                      }
-                      return (
-                        <TrailCard
-                          key={trail.id}
-                          trail={trail}
-                          selectedTrail={props.selectedTrail}
-                          setSelectedTrail={props.setSelectedTrail}
-                          ref={cardRefs.current[trail.id]}
-                        />
-                      );
-                    })}
+                    {trails
+                      .slice()
+                      .sort((a, b) => parseFloat(a.properties.sec_len || 0) - parseFloat(b.properties.sec_len || 0))
+                      .map((trail) => {
+                        if (!cardRefs.current[trail.id]) {
+                          cardRefs.current[trail.id] = React.createRef();
+                        }
+                        return (
+                          <TrailCard
+                            key={trail.id}
+                            trail={trail}
+                            selectedTrail={props.selectedTrail}
+                            setSelectedTrail={props.setSelectedTrail}
+                            ref={cardRefs.current[trail.id]}
+                          />
+                        );
+                      })}
                   </div>
                 )}
               </div>
