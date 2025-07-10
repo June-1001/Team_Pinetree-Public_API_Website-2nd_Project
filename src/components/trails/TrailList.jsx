@@ -84,8 +84,14 @@ function TrailList(props) {
   if (sortOption === "0") {
     // 거리순: 각 산의 모든 등산로 거리 합계 기준 오름차순(낮은 순)
     sortedMountainNames.sort((a, b) => {
-      const totalA = groupedByMountain[a].reduce((sum, trail) => sum + parseFloat(trail.properties.sec_len || 0), 0);
-      const totalB = groupedByMountain[b].reduce((sum, trail) => sum + parseFloat(trail.properties.sec_len || 0), 0);
+      const totalA = groupedByMountain[a].reduce(
+        (sum, trail) => sum + parseFloat(trail.properties.sec_len || 0),
+        0
+      );
+      const totalB = groupedByMountain[b].reduce(
+        (sum, trail) => sum + parseFloat(trail.properties.sec_len || 0),
+        0
+      );
       return totalA - totalB;
     });
   } else if (sortOption === "1") {
@@ -94,15 +100,23 @@ function TrailList(props) {
   } else if (sortOption === "2") {
     // 짧은 등산로순: 각 산의 등산로 중 가장 짧은 거리 기준 오름차순
     sortedMountainNames.sort((a, b) => {
-      const minA = Math.min(...groupedByMountain[a].map(trail => parseFloat(trail.properties.sec_len || 0)));
-      const minB = Math.min(...groupedByMountain[b].map(trail => parseFloat(trail.properties.sec_len || 0)));
+      const minA = Math.min(
+        ...groupedByMountain[a].map((trail) => parseFloat(trail.properties.sec_len || 0))
+      );
+      const minB = Math.min(
+        ...groupedByMountain[b].map((trail) => parseFloat(trail.properties.sec_len || 0))
+      );
       return minA - minB;
     });
   } else if (sortOption === "3") {
     // 긴 등산로순: 각 산의 등산로 중 가장 긴 거리 기준 내림차순
     sortedMountainNames.sort((a, b) => {
-      const maxA = Math.max(...groupedByMountain[a].map(trail => parseFloat(trail.properties.sec_len || 0)));
-      const maxB = Math.max(...groupedByMountain[b].map(trail => parseFloat(trail.properties.sec_len || 0)));
+      const maxA = Math.max(
+        ...groupedByMountain[a].map((trail) => parseFloat(trail.properties.sec_len || 0))
+      );
+      const maxB = Math.max(
+        ...groupedByMountain[b].map((trail) => parseFloat(trail.properties.sec_len || 0))
+      );
       return maxB - maxA;
     });
   }
@@ -138,31 +152,21 @@ function TrailList(props) {
                   )}
                 </div>
                 {isExpanded && (
-                  <div
-                    style={{
-                      marginTop: "20px",
-                      display: "grid",
-                      gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))",
-                      gap: "10px",
-                    }}
-                  >
-                    {trails
-                      .slice()
-                      .sort((a, b) => parseFloat(a.properties.sec_len || 0) - parseFloat(b.properties.sec_len || 0))
-                      .map((trail) => {
-                        if (!cardRefs.current[trail.id]) {
-                          cardRefs.current[trail.id] = React.createRef();
-                        }
-                        return (
-                          <TrailCard
-                            key={trail.id}
-                            trail={trail}
-                            selectedTrail={props.selectedTrail}
-                            setSelectedTrail={props.setSelectedTrail}
-                            ref={cardRefs.current[trail.id]}
-                          />
-                        );
-                      })}
+                  <div className="trail-card-list">
+                    {trails.map((trail) => {
+                      if (!cardRefs.current[trail.id]) {
+                        cardRefs.current[trail.id] = React.createRef();
+                      }
+                      return (
+                        <TrailCard
+                          key={trail.id}
+                          trail={trail}
+                          selectedTrail={props.selectedTrail}
+                          setSelectedTrail={props.setSelectedTrail}
+                          ref={cardRefs.current[trail.id]}
+                        />
+                      );
+                    })}
                   </div>
                 )}
               </div>

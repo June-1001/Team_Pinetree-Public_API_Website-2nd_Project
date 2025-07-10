@@ -21,16 +21,15 @@ const SearchFilterSection = ({
   return (
     <div className="search-section">
       <SearchBar keyword={keyword} setKeyword={setKeyword} onSearch={handleSearch} />
-      <div className="filter-section">
-        <div className="range-section">
-          <span>등산로 길이</span>
-          <RangeInput value={minRange} setValue={setMinRange} placeholder="최소" />
-          <RangeInput value={maxRange} setValue={setMaxRange} placeholder="최대" />
-        </div>
-        <div className="difficulty-section">
-          <span>난이도</span>
-          <DifficultyDropdown value={difficulty} setValue={setDifficulty} />
-        </div>
+
+      <div className="range-section">
+        <span>등산로 길이</span>
+        <RangeInput value={minRange} setValue={setMinRange} placeholder="최소" />
+        <RangeInput value={maxRange} setValue={setMaxRange} placeholder="최대" />
+      </div>
+      <div className="difficulty-section">
+        <span>난이도</span>
+        <DifficultyDropdown value={difficulty} setValue={setDifficulty} />
       </div>
     </div>
   );

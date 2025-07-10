@@ -11,6 +11,35 @@ body,
   height: 100vh;
   overflow: auto;
 }
+
+/* 드롭다운 */
+select {
+  border: 2px solid #2cc532;
+  color: #757575;
+  font-size: 20px;
+  border-radius: 0;
+  outline: none;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background: url("./img/arrow-down-icon.png") no-repeat 98% center;
+  background-size: 20px;
+}
+select:focus-visible {
+  outline-color: #2cc532;
+}
+
+/* 전체 컨테이너 */
+.main-container {
+  margin: 10px 20px;
+}
+
+/* 제목 */
+.title {
+  text-align: center;
+}
+
+/* 검색창 */
 input {
   padding: 0;
   font-size: 16px;
@@ -28,63 +57,12 @@ input:focus {
 input:focus-visible {
   outline-color: #2cc532;
 }
-select {
-  border: 2px solid #2cc532;
-  color: #757575;
-  font-size: 20px;
-  border-radius: 0;
-  outline: none;
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  background: url("./img/arrow-down-icon.png") no-repeat 98% center;
-  background-size: 20px;
-}
-select:focus-visible {
-  outline-color: #2cc532;
-}
-.hidden {
-  display: none;
-}
-.right {
-  float: right;
-}
-.search-results {
-  opacity: 0;
-  transition: opacity 0.2s ease 0.3s;
-  display: flex;
-  flex-direction: row;
-  gap: 20px;
-  align-items: stretch;
-  pointer-events: none;
-}
 
-.visible {
-  opacity: 1;
-  pointer-events: auto;
-}
-#hiking-map {
-  width: 600px;
-  height: 600px;
-  flex-shrink: 0;
-  border: 1px solid #ccc;
-  border-radius: 10px;
-}
-.trail-list {
-  flex-grow: 1;
-  max-height: 600px;
-  overflow-y: auto;
-  margin-left: 20px;
-}
-.title {
-  text-align: center;
-}
-.main-container {
-  margin: 10px 20px;
-}
 .search-section {
+  display: flex;
   background: #fbfbfb;
   padding: 20px;
+  gap: 20px;
   border: 1px solid #d1d1d1;
   border-radius: 10px;
   margin: 20px 0;
@@ -152,10 +130,7 @@ select:focus-visible {
   border: 1px solid #237447;
   border-radius: 5px;
 }
-.filter-section {
-  display: flex;
-  gap: 20px;
-}
+
 .range-section {
   display: inline-block;
   width: 60%;
@@ -182,6 +157,51 @@ select:focus-visible {
   margin-left: 20px;
   font-weight: 400;
 }
+
+/* 검색 결과창 전체 */
+.search-results {
+  display: flex;
+  opacity: 0;
+  transition: opacity 0.2s ease 0.3s;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: stretch;
+  pointer-events: none;
+}
+
+/* 지도 및 등산로 결과창 */
+.trail-results {
+  display: flex;
+  flex-direction: row;
+}
+
+/* 날씨 결과창 */
+.weather-results {
+  display: inline-block;
+}
+
+.weather-summary-row {
+  display: flex;
+  flex-direction: row;
+}
+
+/* 카카오 맵 */
+#hiking-map {
+  width: 600px;
+  height: 600px;
+  flex-shrink: 0;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+}
+
+/* 등산로 리스트 */
+.trail-list {
+  flex-grow: 1;
+  max-height: 600px;
+  overflow-y: auto;
+  margin-left: 20px;
+}
 .map-list {
   margin-top: 20px;
 }
@@ -207,7 +227,16 @@ select:focus-visible {
   border: 1px solid #d1d1d1;
   cursor: pointer;
 }
+
+.trail-card-list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(min-content, max-content));
+  justify-content: start;
+  column-gap: 10px;
+}
+/* 등산로 카드 */
 .trail-card {
+  width: fit-content;
   padding: 20px 10px;
   cursor: pointer;
   border-radius: 10px;
@@ -218,11 +247,12 @@ select:focus-visible {
 .trail-card div:last-child {
   margin-bottom: 0;
 }
-.access-location{
+
+.access-location {
   display: block;
   position: absolute;
   right: 10px;
-  top: 10px;;
+  top: 10px;
   width: 34px;
   height: 36px;
   padding: 1px 3px 5px;
@@ -232,7 +262,7 @@ select:focus-visible {
   z-index: 10;
   cursor: pointer;
 }
-.access-location:hover{
+.access-location:hover {
   background-position: -154px -350px;
 }
 
@@ -247,7 +277,7 @@ select:focus-visible {
     background-size: 18px;
     background-position: 97%;
   }
-  .main-container{
+  .main-container {
     margin: 10px;
   }
   .search-section {
@@ -303,27 +333,43 @@ select:focus-visible {
     padding: 4px 6px;
     margin-left: 10px;
   }
-  #search-results {
+
+  .search-results {
     display: block !important;
   }
+
   #hiking-map {
-    width: 100%;
+    width: 600px;
+    height: 600px;
   }
   #hiking-map::after {
     content: "";
     clear: both;
     display: block;
   }
-  .list-attribute select{
-  width: calc(100% - 200px);
-  height: auto !important;
-  font-size: 1rem;
-  padding: 4px 6px;
-  margin-left: 10px;    
+  .list-attribute select {
+    width: calc(100% - 200px);
+    height: auto !important;
+    font-size: 1rem;
+    padding: 4px 6px;
+    margin-left: 10px;
   }
   .trail-list {
     width: 100%;
     margin-top: 20px;
     margin-left: 0;
   }
+}
+
+/* 추가 태그 */
+.hidden {
+  display: none;
+}
+.right {
+  float: right;
+}
+
+.visible {
+  opacity: 1;
+  pointer-events: auto;
 }

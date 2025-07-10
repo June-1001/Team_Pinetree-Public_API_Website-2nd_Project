@@ -86,10 +86,7 @@ export default function MainPage() {
     const sameSearch =
       keyword === lastSearch.current.keyword &&
       lat === lastSearch.current.lat &&
-      lon === lastSearch.current.lon &&
-      minRange === lastSearch.current.minRange &&
-      maxRange === lastSearch.current.maxRange &&
-      difficulty === lastSearch.current.difficulty;
+      lon === lastSearch.current.lon;
 
     if (sameSearch) {
       setShowResults(true);
@@ -101,18 +98,12 @@ export default function MainPage() {
       keyword,
       lat,
       lon,
-      minRange,
-      maxRange,
-      difficulty,
     };
 
     setSearchParams({
       keyword,
       lat,
       lon,
-      minRange,
-      maxRange,
-      difficulty,
     });
 
     setShowResults(true);
@@ -141,7 +132,7 @@ export default function MainPage() {
         />
       </div>
       <div className={`search-results ${showResults ? "visible" : ""}`}>
-        <div>
+        <div className="trail-results">
           {showMap && (
             <HikingMap
               keyword={searchParams.keyword}
@@ -172,18 +163,20 @@ export default function MainPage() {
           )}
         </div>
 
-        <div
-          className={`weather-results ${showResults ? "visible" : ""}`}
-          style={{ marginTop: 24 }}
-        >
+        <div className="weather-results">
           <h3 style={{ marginBottom: 8 }}>선택 지역 현재 날씨</h3>
 
-          <div style={{ display: "flex", gap: 40 }}>
-            <WeatherSummary weatherData={weatherData} />
-            <SunriseSunset lat={lat} lon={lon} />
-            <WeatherAlertBox alerts={alerts} />
+          <div className="weather-summary-row">
+            <div>
+              <WeatherSummary weatherData={weatherData} />
+            </div>
+            <div>
+              <SunriseSunset lat={lat} lon={lon} />
+            </div>
+            <div>
+              <WeatherAlertBox alerts={alerts} />
+            </div>
           </div>
-
           {dailyForecast && (
             <DailyForecastList
               dailyForecast={dailyForecast}
@@ -191,7 +184,6 @@ export default function MainPage() {
               setSelectedForecastDate={setSelectedForecastDate}
             />
           )}
-
           {filteredForecast && filteredForecast.length > 0 && (
             <HourlyForecastList
               selectedForecastDate={selectedForecastDate}

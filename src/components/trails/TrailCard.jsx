@@ -5,7 +5,7 @@ const TrailCard = React.forwardRef((props, ref) => {
   // 클릭 시 이벤트
   function handleClick() {
     // trailCard 클릭 시 카테고리 초기화
-    if (typeof window.setSelectedCategory === 'function') {
+    if (typeof window.setSelectedCategory === "function") {
       window.setSelectedCategory("");
       document.querySelectorAll("#category li.on").forEach((el) => {
         el.classList.remove("on");
@@ -41,7 +41,7 @@ const TrailCard = React.forwardRef((props, ref) => {
       <div>길이 : {props.trail.properties.sec_len}m</div>
       <div>난이도 : {props.trail.properties.cat_nam}</div>
       <div>상행속도 : {props.trail.properties.up_min}분</div>
-      <div>하행속도 : {props.trail.properties.down_min}분</div>      
+      <div>하행속도 : {props.trail.properties.down_min}분</div>
     </div>
   );
 });
