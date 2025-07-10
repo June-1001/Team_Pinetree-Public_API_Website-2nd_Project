@@ -376,7 +376,7 @@ function HikingMap(props) {
           map: mapInstance.current,
           position: position,
         });
-
+        drawGeomBox(position, 5);
         props.onCenterChanged(lat, lon);
         resetMyLocation();
       } else {
@@ -393,7 +393,7 @@ function HikingMap(props) {
               map: mapInstance.current,
               position: position2,
             });
-
+            drawGeomBox(position2, 5);
             props.onCenterChanged(lat2, lon2);
             resetMyLocation();
           }
