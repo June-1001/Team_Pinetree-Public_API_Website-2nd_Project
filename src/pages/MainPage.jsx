@@ -51,7 +51,7 @@ export default function MainPage() {
   const selectedDateTime = selectedForecastDate ? selectedForecastDate + "1500" : null;
   const currentCategories = selectedDateTime && forecast?.[selectedDateTime]?.categories;
 
-  const alerts = useWeatherAlert(currentCategories); // 자외선 제거로 uvNow 빠짐
+  const alerts = useWeatherAlert(currentCategories);
 
   const filteredForecast = useMemo(() => {
     if (!forecast || !selectedForecastDate) return null;
@@ -140,63 +140,65 @@ export default function MainPage() {
           setDifficulty={setDifficulty}
         />
       </div>
-      <div
-        id="search-results"
-        className={`search-results-container ${showResults ? "visible" : ""}`}
-      >
-        {showMap && (
-          <HikingMap
-            keyword={searchParams.keyword}
-            searched={true}
-            trailData={trailData}
-            selectedTrail={selectedTrail}
-            setSelectedTrail={setSelectedTrail}
-            onCenterChanged={(newLat, newLon) => {
-              setLat(newLat);
-              setLon(newLon);
-              setSearchParams((prev) => ({
-                ...prev,
-                lat: newLat,
-                lon: newLon,
-              }));
-            }}
-            onClearSelection={clearSelection}
-          />
-        )}
+      <div className={`search-results ${showResults ? "visible" : ""}`}>
+        <div>
+          {showMap && (
+            <HikingMap
+              keyword={searchParams.keyword}
+              searched={true}
+              trailData={trailData}
+              selectedTrail={selectedTrail}
+              setSelectedTrail={setSelectedTrail}
+              onCenterChanged={(newLat, newLon) => {
+                setLat(newLat);
+                setLon(newLon);
+                setSearchParams((prev) => ({
+                  ...prev,
+                  lat: newLat,
+                  lon: newLon,
+                }));
+              }}
+              onClearSelection={clearSelection}
+            />
+          )}
 
-        {!trailsLoading && !trailsError && showResults && (
-          <TrailList
-            trailData={trailData}
-            selectedTrail={selectedTrail}
-            setSelectedTrail={setSelectedTrail}
-            collapseAllTrigger={collapseAllTrigger}
-          />
-        )}
-      </div>
-
-      <div style={{ marginTop: 24 }}>
-        <h3 style={{ marginBottom: 8 }}>선택 지역 현재 날씨</h3>
-
-        <div style={{ display: "flex", gap: 40 }}>
-          <WeatherSummary weatherData={weatherData} />
-          <SunriseSunset lat={lat} lon={lon} />
-          <WeatherAlertBox alerts={alerts} />
+          {!trailsLoading && !trailsError && showResults && (
+            <TrailList
+              trailData={trailData}
+              selectedTrail={selectedTrail}
+              setSelectedTrail={setSelectedTrail}
+              collapseAllTrigger={collapseAllTrigger}
+            />
+          )}
         </div>
 
-        {dailyForecast && (
-          <DailyForecastList
-            dailyForecast={dailyForecast}
-            selectedForecastDate={selectedForecastDate}
-            setSelectedForecastDate={setSelectedForecastDate}
-          />
-        )}
+        <div
+          className={`weather-results ${showResults ? "visible" : ""}`}
+          style={{ marginTop: 24 }}
+        >
+          <h3 style={{ marginBottom: 8 }}>선택 지역 현재 날씨</h3>
 
-        {filteredForecast && filteredForecast.length > 0 && (
-          <HourlyForecastList
-            selectedForecastDate={selectedForecastDate}
-            filteredForecast={filteredForecast}
-          />
-        )}
+          <div style={{ display: "flex", gap: 40 }}>
+            <WeatherSummary weatherData={weatherData} />
+            <SunriseSunset lat={lat} lon={lon} />
+            <WeatherAlertBox alerts={alerts} />
+          </div>
+
+          {dailyForecast && (
+            <DailyForecastList
+              dailyForecast={dailyForecast}
+              selectedForecastDate={selectedForecastDate}
+              setSelectedForecastDate={setSelectedForecastDate}
+            />
+          )}
+
+          {filteredForecast && filteredForecast.length > 0 && (
+            <HourlyForecastList
+              selectedForecastDate={selectedForecastDate}
+              filteredForecast={filteredForecast}
+            />
+          )}
+        </div>
       </div>
     </div>
   );

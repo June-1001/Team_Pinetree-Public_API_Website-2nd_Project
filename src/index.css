@@ -48,7 +48,7 @@ select:focus-visible {
 .right {
   float: right;
 }
-.search-results-container {
+.search-results {
   opacity: 0;
   transition: opacity 0.2s ease 0.3s;
   display: flex;
@@ -58,7 +58,7 @@ select:focus-visible {
   pointer-events: none;
 }
 
-.search-results-container.visible {
+.visible {
   opacity: 1;
   pointer-events: auto;
 }
@@ -219,6 +219,7 @@ select:focus-visible {
 .trail-card div {
   margin-bottom: 5px;
 }
+
 @media only screen and (max-width: 768px) {
   #root {
     overflow-y: hidden;
