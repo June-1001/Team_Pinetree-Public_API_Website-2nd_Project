@@ -9,6 +9,7 @@ body,
   padding: 0 10px;
   box-sizing: border-box;
   height: 100vh;
+  overflow: auto;
 }
 input {
   padding: 0;
@@ -195,6 +196,9 @@ select:focus-visible {
   background-position: 90% center;
 }
 .map-list-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   padding: 14px 20px;
   font-weight: bold;
   user-select: none;
