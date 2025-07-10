@@ -213,6 +213,27 @@ select:focus-visible {
 .trail-card div {
   margin-bottom: 5px;
 }
+.access-location{
+  display: block;
+  position: absolute;
+  right: 10px;
+  top: 10px;;
+  width: 34px;
+  height: 36px;
+  padding: 1px 3px 5px;
+  background: url(//t1.daumcdn.net/localimg/localimages/07/2018/pc/common/img_search.png) no-repeat -154px -450px;
+  text-indent: -999px;
+  border: none;
+  z-index: 10;
+  cursor: pointer;
+}
+.access-location:hover{
+  background-position: -154px -350px;
+}
+
+
+
+
 @media only screen and (max-width: 768px) {
   #root {
     overflow-y: hidden;
