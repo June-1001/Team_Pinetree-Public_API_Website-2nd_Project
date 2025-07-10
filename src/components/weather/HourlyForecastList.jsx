@@ -31,11 +31,10 @@ export default function HourlyForecastList({ selectedForecastDate, filteredForec
             }}
           >
             <div>{item.fcstTime.slice(0, 2)}시</div>
-            <div>🌡️ 온도: {item.categories.TMP}℃</div>
-            <div>☔ 강수확률: {item.categories.POP || "0" }%</div>
+            <div>🌡️온도: {item.categories.TMP}℃</div>
+            <div>☔강수확률: {item.categories.POP || "0"}%</div>
             <div>{getSkyLabel(item.categories.SKY)}</div>
             <div>🌧️ 강수: {getPtyLabel(item.categories.PTY)}</div>
-   
           </div>
         ))}
       </div>

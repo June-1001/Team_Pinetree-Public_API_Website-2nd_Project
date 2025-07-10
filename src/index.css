@@ -49,16 +49,16 @@ select:focus-visible {
 .right {
   float: right;
 }
-.search-results-container {
+.search-results {
   opacity: 0;
   transition: opacity 0.2s ease 0.3s;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   gap: 20px;
   align-items: stretch;
   pointer-events: none;
 }
-.search-results-container.visible {
+.search-results.visible {
   opacity: 1;
   pointer-events: auto;
 }

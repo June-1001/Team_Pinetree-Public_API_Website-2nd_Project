@@ -4,10 +4,8 @@ export default function DailyForecastList({
   dailyForecast,
   selectedForecastDate,
   setSelectedForecastDate,
-  
 }) {
   if (!dailyForecast) return null;
-
 
   return (
     <div style={{ marginTop: 30 }}>
@@ -33,14 +31,10 @@ export default function DailyForecastList({
                 style={{
                   minWidth: 120,
                   padding: 12,
-                  border:
-                    selectedForecastDate === date
-                      ? "2px solid #007bff"
-                      : "1px solid #ccc",
+                  border: selectedForecastDate === date ? "2px solid #007bff" : "1px solid #ccc",
                   borderRadius: 6,
                   cursor: "pointer",
-                  backgroundColor:
-                    selectedForecastDate === date ? "#e6f0ff" : "transparent",
+                  backgroundColor: selectedForecastDate === date ? "#e6f0ff" : "transparent",
                 }}
               >
                 <strong>
@@ -48,8 +42,9 @@ export default function DailyForecastList({
                 </strong>
                 <div>아침 기온: {tempAM}℃</div>
                 <div>낮 기온: {tempPM}℃</div>
-                <div>강수확률: 오전 {popAM}% / 오후 {popPM}%</div>
-      
+                <div>
+                  강수확률: 오전{popAM}% / 오후 {popPM}%
+                </div>
               </div>
             );
           })}
