@@ -24,6 +24,8 @@ const TrailCard = React.forwardRef((props, ref) => {
   // 카드 생성
   return (
     <div
+      ref={ref}
+      id={`trail-card-${props.trail.id}`}
       className="trail-card"
       style={{
         border:
@@ -31,7 +33,6 @@ const TrailCard = React.forwardRef((props, ref) => {
             ? "4px solid #2cc532"
             : "1px solid gray",
         padding: "8px",
-        marginBottom: "8px",
         cursor: "pointer",
       }}
       onClick={handleClick}

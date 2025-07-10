@@ -9,6 +9,7 @@ body,
   padding: 0 10px;
   box-sizing: border-box;
   height: 100vh;
+  overflow: auto;
 }
 input {
   padding: 0;
@@ -62,7 +63,6 @@ select:focus-visible {
   opacity: 1;
   pointer-events: auto;
 }
-
 #hiking-map {
   width: 600px;
   height: 600px;
@@ -97,11 +97,9 @@ select:focus-visible {
   transition: 0.3s ease;
   z-index: 10;
 }
-
 .search-wrapper.searched {
   transform: translateY(0);
 }
-
 .search-design {
   display: inline-block;
 }
@@ -182,8 +180,6 @@ select:focus-visible {
   height: 46px;
   padding: 0 7px;
   margin-left: 20px;
-  font-size: 20px;
-  color: #757575;
   font-weight: 400;
 }
 .map-list {
@@ -197,13 +193,13 @@ select:focus-visible {
   width: 200px;
   height: 46px;
   padding: 0 7px;
-  border: 2px solid #2cc532;
-  font-size: 20px;
-  color: #757575;
   font-weight: 400;
   background-position: 90% center;
 }
 .map-list-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   padding: 14px 20px;
   font-weight: bold;
   user-select: none;
@@ -219,14 +215,40 @@ select:focus-visible {
 .trail-card div {
   margin-bottom: 5px;
 }
+.trail-card div:last-child {
+  margin-bottom: 0;
+}
+.access-location{
+  display: block;
+  position: absolute;
+  right: 10px;
+  top: 10px;;
+  width: 34px;
+  height: 36px;
+  padding: 1px 3px 5px;
+  background: url(//t1.daumcdn.net/localimg/localimages/07/2018/pc/common/img_search.png) no-repeat -154px -450px;
+  text-indent: -9999px;
+  border: none;
+  z-index: 10;
+  cursor: pointer;
+}
+.access-location:hover{
+  background-position: -154px -350px;
+}
 
 @media only screen and (max-width: 768px) {
+  html,
+  body,
   #root {
+    padding: 0;
     overflow-y: hidden;
   }
   select {
     background-size: 18px;
     background-position: 97%;
+  }
+  .main-container{
+    margin: 10px;
   }
   .search-section {
     padding: 20px;
@@ -291,6 +313,13 @@ select:focus-visible {
     content: "";
     clear: both;
     display: block;
+  }
+  .list-attribute select{
+  width: calc(100% - 200px);
+  height: auto !important;
+  font-size: 1rem;
+  padding: 4px 6px;
+  margin-left: 10px;    
   }
   .trail-list {
     width: 100%;
