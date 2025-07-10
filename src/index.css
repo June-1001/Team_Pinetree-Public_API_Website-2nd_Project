@@ -222,7 +222,7 @@ select:focus-visible {
   height: 36px;
   padding: 1px 3px 5px;
   background: url(//t1.daumcdn.net/localimg/localimages/07/2018/pc/common/img_search.png) no-repeat -154px -450px;
-  text-indent: -999px;
+  text-indent: -9999px;
   border: none;
   z-index: 10;
   cursor: pointer;
