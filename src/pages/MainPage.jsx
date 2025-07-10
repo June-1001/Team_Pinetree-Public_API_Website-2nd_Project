@@ -43,6 +43,7 @@ export default function MainPage() {
     maxRange: "",
     difficulty: "",
   });
+
   const [selectedForecastDate, setSelectedForecastDate] = useState(null);
 
   const { weatherData, forecast } = useWeatherData(lat, lon);
@@ -98,12 +99,18 @@ export default function MainPage() {
       keyword,
       lat,
       lon,
+      minRange,
+      maxRange,
+      difficulty,
     };
 
     setSearchParams({
       keyword,
       lat,
       lon,
+      minRange,
+      maxRange,
+      difficulty,
     });
 
     setShowResults(true);
