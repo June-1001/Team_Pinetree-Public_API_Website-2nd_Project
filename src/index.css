@@ -57,12 +57,10 @@ select:focus-visible {
   align-items: stretch;
   pointer-events: none;
 }
-
 .search-results-container.visible {
   opacity: 1;
   pointer-events: auto;
 }
-
 #hiking-map {
   width: 600px;
   height: 600px;
@@ -97,11 +95,9 @@ select:focus-visible {
   transition: 0.3s ease;
   z-index: 10;
 }
-
 .search-wrapper.searched {
   transform: translateY(0);
 }
-
 .search-design {
   display: inline-block;
 }
@@ -214,6 +210,9 @@ select:focus-visible {
 .trail-card div {
   margin-bottom: 5px;
 }
+.trail-card div:last-child {
+  margin-bottom: 0;
+}
 .access-location{
   display: block;
   position: absolute;
@@ -231,9 +230,6 @@ select:focus-visible {
 .access-location:hover{
   background-position: -154px -350px;
 }
-
-
-
 
 @media only screen and (max-width: 768px) {
   #root {
