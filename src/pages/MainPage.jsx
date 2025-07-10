@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useRef } from "react";
 import HikingMap from "../components/map/HikingMap";
 import TrailList from "../components/trails/TrailList";
 import SearchFilterSection from "../components/search/SearchFilterSection";
@@ -10,7 +10,6 @@ export default function MainPage() {
   const [minRange, setMinRange] = useState("");
   const [maxRange, setMaxRange] = useState("");
   const [difficulty, setDifficulty] = useState("");
-  const [searched, setSearched] = useState(false);
   const [showResults, setShowResults] = useState(false);
   const [lat, setLat] = useState(null);
   const [lon, setLon] = useState(null);
@@ -18,7 +17,23 @@ export default function MainPage() {
   const [collapseAllTrigger, setCollapseAllTrigger] = useState(0);
   const [showMap, setShowMap] = useState(false);
 
-  const lastSearch = useRef({ keyword: "", lat: null, lon: null });
+  const lastSearch = useRef({
+    keyword: "",
+    lat: null,
+    lon: null,
+    minRange: "",
+    maxRange: "",
+    difficulty: "",
+  });
+
+  const [searchParams, setSearchParams] = useState({
+    keyword: "",
+    lat: null,
+    lon: null,
+    minRange: "",
+    maxRange: "",
+    difficulty: "",
+  });
 
   const weatherData = useWeatherData(lat, lon);
 
@@ -26,21 +41,31 @@ export default function MainPage() {
     data: trailData,
     isLoading: trailsLoading,
     error: trailsError,
-  } = useTrailData(lat, lon, minRange, maxRange, difficulty, searched);
+  } = useTrailData(
+    searchParams.lat,
+    searchParams.lon,
+    searchParams.minRange,
+    searchParams.maxRange,
+    searchParams.difficulty,
+    searchParams.keyword
+  );
 
   function handleSearch() {
     if (keyword.trim() === "") {
       return;
     }
 
-    const sameKeyword = keyword === lastSearch.current.keyword;
-    const sameLocation =
-      lat !== null &&
-      lon !== null &&
+    const sameSearch =
+      keyword === lastSearch.current.keyword &&
       lat === lastSearch.current.lat &&
-      lon === lastSearch.current.lon;
+      lon === lastSearch.current.lon &&
+      minRange === lastSearch.current.minRange &&
+      maxRange === lastSearch.current.maxRange &&
+      difficulty === lastSearch.current.difficulty;
 
-    if (sameKeyword && sameLocation) {
+    if (sameSearch) {
+      setShowResults(true);
+      setShowMap(true);
       return;
     }
 
@@ -48,11 +73,22 @@ export default function MainPage() {
       keyword,
       lat,
       lon,
+      minRange,
+      maxRange,
+      difficulty,
     };
+
+    setSearchParams({
+      keyword,
+      lat,
+      lon,
+      minRange,
+      maxRange,
+      difficulty,
+    });
 
     setShowResults(true);
     setShowMap(true);
-    setSearched((prev) => !prev);
   }
 
   function clearSelection() {
@@ -82,14 +118,19 @@ export default function MainPage() {
       >
         {showMap && (
           <HikingMap
-            keyword={lastSearch.current.keyword}
-            searched={searched}
+            keyword={searchParams.keyword}
+            searched={true}
             trailData={trailData}
             selectedTrail={selectedTrail}
             setSelectedTrail={setSelectedTrail}
-            onCenterChanged={(lat, lon) => {
-              setLat(lat);
-              setLon(lon);
+            onCenterChanged={(newLat, newLon) => {
+              setLat(newLat);
+              setLon(newLon);
+              setSearchParams((prev) => ({
+                ...prev,
+                lat: newLat,
+                lon: newLon,
+              }));
             }}
             onClearSelection={clearSelection}
           />
