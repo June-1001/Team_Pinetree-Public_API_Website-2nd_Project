@@ -18,7 +18,7 @@ export default function MainPage() {
   const [collapseAllTrigger, setCollapseAllTrigger] = useState(0);
   const [showMap, setShowMap] = useState(false);
 
-  const lastSearchedKeyword = useRef("");
+  const lastSearch = useRef({ keyword: "", lat: null, lon: null });
 
   const weatherData = useWeatherData(lat, lon);
 
@@ -32,7 +32,24 @@ export default function MainPage() {
     if (keyword.trim() === "") {
       return;
     }
-    lastSearchedKeyword.current = keyword;
+
+    const sameKeyword = keyword === lastSearch.current.keyword;
+    const sameLocation =
+      lat !== null &&
+      lon !== null &&
+      lat === lastSearch.current.lat &&
+      lon === lastSearch.current.lon;
+
+    if (sameKeyword && sameLocation) {
+      return;
+    }
+
+    lastSearch.current = {
+      keyword,
+      lat,
+      lon,
+    };
+
     setShowResults(true);
     setShowMap(true);
     setSearched((prev) => !prev);
@@ -65,7 +82,7 @@ export default function MainPage() {
       >
         {showMap && (
           <HikingMap
-            keyword={lastSearchedKeyword.current}
+            keyword={lastSearch.current.keyword}
             searched={searched}
             trailData={trailData}
             selectedTrail={selectedTrail}

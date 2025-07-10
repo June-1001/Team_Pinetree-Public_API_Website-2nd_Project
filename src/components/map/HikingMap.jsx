@@ -360,7 +360,6 @@ function HikingMap(props) {
 
     resetMarker();
     resetCategory();
-    resetPolylinesAndOverlays();
 
     const geocoder = new window.kakao.maps.services.Geocoder();
 
