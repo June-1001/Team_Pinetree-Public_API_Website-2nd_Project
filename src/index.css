@@ -236,12 +236,18 @@ select:focus-visible {
 }
 
 @media only screen and (max-width: 768px) {
+  html,
+  body,
   #root {
+    padding: 0;
     overflow-y: hidden;
   }
   select {
     background-size: 18px;
     background-position: 97%;
+  }
+  .main-container{
+    margin: 10px;
   }
   .search-section {
     padding: 20px;
