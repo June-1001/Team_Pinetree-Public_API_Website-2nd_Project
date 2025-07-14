@@ -47,6 +47,8 @@ export default function MainPage() {
     difficulty: "",
   });
 
+  const [searchTrigger, setSearchTrigger] = useState(Date.now());
+
   const [selectedForecastDate, setSelectedForecastDate] = useState(null);
 
   const { weatherData, forecast } = useWeatherData(lat, lon);
@@ -92,6 +94,7 @@ export default function MainPage() {
     if (inputKeyword.trim() === "") {
       return;
     }
+    setSearchTrigger(Date.now());
 
     const sameSearch =
       inputKeyword === lastSearch.current.keyword &&
@@ -190,6 +193,7 @@ export default function MainPage() {
               onResetKeyword={() => {
                 lastSearch.current.keyword = "";
               }}
+              searchTrigger={searchTrigger}
             />
           )}
 
