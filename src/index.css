@@ -415,9 +415,11 @@ select:focus-visible {
 
   #hiking-map {
     width: 100% !important;
-    height: auto !important;
     aspect-ratio: 5 / 3 !important;
-    touch-action: pan-x pan-y;
+    height: auto !important;
+    max-height: none !important;
+    flex-shrink: 0;
+    touch-action: auto !important;
     -webkit-user-select: none;
     user-select: none;
   }
