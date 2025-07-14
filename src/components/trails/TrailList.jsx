@@ -147,7 +147,7 @@ function TrailList(props) {
             return (
               <div key={name} style={{ marginBottom: "12px" }}>
                 <div className="trail-list-item" onClick={() => toggleMountain(name)}>
-                  {name} (총 거리 : {getTotalDistance(trails)} km){" "}
+                  {name} (총 등산로 길이 : {getTotalDistance(trails)} km){" "}
                   {isExpanded ? (
                     <div className="right up">▲</div>
                   ) : (
