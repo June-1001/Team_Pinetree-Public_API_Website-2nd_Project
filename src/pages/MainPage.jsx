@@ -15,6 +15,7 @@ import SunriseSunset from "../components/weather/SunriseSunset";
 import WeatherAlertBox from "../components/weather/WeatherAlertBox";
 
 export default function MainPage() {
+  const [inputKeyword, setInputKeyword] = useState("");
   const [keyword, setKeyword] = useState("");
   const [minRange, setMinRange] = useState("");
   const [maxRange, setMaxRange] = useState("");
@@ -80,12 +81,12 @@ export default function MainPage() {
   );
 
   function handleSearch() {
-    if (keyword.trim() === "") {
+    if (inputKeyword.trim() === "") {
       return;
     }
 
     const sameSearch =
-      keyword === lastSearch.current.keyword &&
+      inputKeyword === lastSearch.current.keyword &&
       lat === lastSearch.current.lat &&
       lon === lastSearch.current.lon &&
       minRange === lastSearch.current.minRange &&
@@ -99,7 +100,7 @@ export default function MainPage() {
     }
 
     lastSearch.current = {
-      keyword,
+      keyword: inputKeyword,
       lat,
       lon,
       minRange,
@@ -107,8 +108,9 @@ export default function MainPage() {
       difficulty,
     };
 
+    setKeyword(inputKeyword);
     setSearchParams({
-      keyword,
+      keyword: inputKeyword,
       lat,
       lon,
       minRange,
@@ -130,8 +132,8 @@ export default function MainPage() {
       <div className={`search-wrapper ${showResults ? "searched" : ""}`}>
         <h1 className="title">우리 동네 등산로 검색 서비스</h1>
         <SearchFilterSection
-          keyword={keyword}
-          setKeyword={setKeyword}
+          keyword={inputKeyword}
+          setKeyword={setInputKeyword}
           handleSearch={handleSearch}
           minRange={minRange}
           setMinRange={setMinRange}
@@ -145,7 +147,7 @@ export default function MainPage() {
         <div className="trail-results">
           {showMap && (
             <HikingMap
-              keyword={searchParams.keyword}
+              keyword={keyword}
               searched={true}
               trailData={trailData}
               selectedTrail={selectedTrail}
@@ -165,26 +167,24 @@ export default function MainPage() {
 
           {!trailsLoading && !trailsError && showResults && (
             <TrailList
-              trailData={trailData}
+              trailData={trailData.filter((trail) => {
+                const len = parseFloat(trail.properties.sec_len);
+                const matchMin = minRange === "" || len >= parseFloat(minRange);
+                const matchMax = maxRange === "" || len <= parseFloat(maxRange);
+                const matchDiff =
+                  difficulty === "전체" ||
+                  difficulty === "" ||
+                  trail.properties.cat_nam === difficulty;
+                return matchMin && matchMax && matchDiff;
+              })}
               selectedTrail={selectedTrail}
               setSelectedTrail={setSelectedTrail}
               collapseAllTrigger={collapseAllTrigger}
             />
           )}
         </div>
-
+        <h3 style={{ marginBottom: 8 }}>선택 지역 현재 날씨</h3>
         <div className="weather-results">
-          <h3 style={{ marginBottom: 8 }}>선택 지역 현재 날씨</h3>
-
-          <div className="weather-summary-row">
-            <div>
-              <WeatherSummary weatherData={weatherData} />
-
-              <SunriseSunset lat={lat} lon={lon} />
-
-              <WeatherAlertBox alerts={alerts} />
-            </div>
-          </div>
           <div className="forecasts">
             {dailyForecast && (
               <DailyForecastList
@@ -199,6 +199,11 @@ export default function MainPage() {
                 filteredForecast={filteredForecast}
               />
             )}
+          </div>
+          <div>
+            <WeatherSummary weatherData={weatherData} />
+            <SunriseSunset lat={lat} lon={lon} />
+            <WeatherAlertBox alerts={alerts} />
           </div>
         </div>
       </div>
