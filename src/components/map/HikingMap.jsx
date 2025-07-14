@@ -151,40 +151,77 @@ function HikingMap(props) {
         const options = {
           center,
           level: isMobile ? 3 : 6,
+          draggable: true,
+          pinchZoom: true,
         };
+
         mapInstance.current = new window.kakao.maps.Map(mapRef.current, options);
 
-        // 지도 우클릭 이벤트 처리
-        window.kakao.maps.event.addListener(mapInstance.current, "rightclick", (mouseEvent) => {
-          const lat = mouseEvent.latLng.getLat();
-          const lon = mouseEvent.latLng.getLng();
-          const position = mouseEvent.latLng;
+        if (isMobile) {
+          // 모바일에서는 클릭 이벤트를 사용하여 우클릭과 동일한 동작 처리
+          window.kakao.maps.event.addListener(mapInstance.current, "click", (mouseEvent) => {
+            const lat = mouseEvent.latLng.getLat();
+            const lon = mouseEvent.latLng.getLng();
+            const position = mouseEvent.latLng;
 
-          props.onCenterChanged(lat, lon);
-          drawGeomBox(position, 5);
+            props.onCenterChanged(lat, lon);
+            drawGeomBox(position, 5);
 
-          // 우클릭 시 기존 일반 마커 제거
-          resetMarker();
+            // 클릭 시 기존 일반 마커 제거
+            resetMarker();
 
-          // 우클릭 위치에 새 마커 생성
-          markerRef.current = new window.kakao.maps.Marker({
-            map: mapInstance.current,
-            position: mouseEvent.latLng,
+            // 클릭 위치에 새 마커 생성
+            markerRef.current = new window.kakao.maps.Marker({
+              map: mapInstance.current,
+              position: mouseEvent.latLng,
+            });
+
+            // 모든 폴리라인과 오버레이 초기화
+            resetPolylinesAndOverlays();
+
+            // 카테고리 마커 및 오버레이 초기화
+            resetCategory();
+
+            // 내 위치 마커 및 오버레이 초기화
+            resetMyLocation();
+
+            setSelectedCategory("");
+
+            if (props.onClearSelection) props.onClearSelection();
           });
+        } else {
+          // 데스크탑에서는 기존 우클릭 이벤트 유지
+          window.kakao.maps.event.addListener(mapInstance.current, "rightclick", (mouseEvent) => {
+            const lat = mouseEvent.latLng.getLat();
+            const lon = mouseEvent.latLng.getLng();
+            const position = mouseEvent.latLng;
 
-          // 모든 폴리라인과 오버레이 초기화
-          resetPolylinesAndOverlays();
+            props.onCenterChanged(lat, lon);
+            drawGeomBox(position, 5);
 
-          // 카테고리 마커 및 오버레이 초기화
-          resetCategory();
+            // 우클릭 시 기존 일반 마커 제거
+            resetMarker();
 
-          // 내 위치 마커 및 오버레이 초기화
-          resetMyLocation();
+            // 우클릭 위치에 새 마커 생성
+            markerRef.current = new window.kakao.maps.Marker({
+              map: mapInstance.current,
+              position: mouseEvent.latLng,
+            });
 
-          setSelectedCategory("");
+            // 모든 폴리라인과 오버레이 초기화
+            resetPolylinesAndOverlays();
 
-          if (props.onClearSelection) props.onClearSelection();
-        });
+            // 카테고리 마커 및 오버레이 초기화
+            resetCategory();
+
+            // 내 위치 마커 및 오버레이 초기화
+            resetMyLocation();
+
+            setSelectedCategory("");
+
+            if (props.onClearSelection) props.onClearSelection();
+          });
+        }
 
         setMapReady(true);
       });

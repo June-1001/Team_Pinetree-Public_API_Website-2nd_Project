@@ -26,10 +26,10 @@ export default function DailyForecastList({
 
             return (
               <div
+                className="daily-forecasts"
                 key={date}
                 onClick={() => setSelectedForecastDate(date)}
                 style={{
-                  minWidth: 120,
                   padding: 12,
                   border: selectedForecastDate === date ? "2px solid #007bff" : "1px solid #ccc",
                   borderRadius: 6,
@@ -37,13 +37,21 @@ export default function DailyForecastList({
                   backgroundColor: selectedForecastDate === date ? "#e6f0ff" : "transparent",
                 }}
               >
-                <strong>
+                <strong style={{ fontSize: 18 }}>
                   {date.slice(4, 6)}/{date.slice(6)} ({dayName})
                 </strong>
-                <div>아침 기온: {tempAM}℃</div>
-                <div>낮 기온: {tempPM}℃</div>
                 <div>
-                  강수확률: 오전 {popAM}% / 오후 {popPM}%
+                  <b>아침 기온</b>
+                  <br /> {tempAM}℃
+                </div>
+                <div>
+                  <b>낮 기온</b>
+                  <br /> {tempPM}℃
+                </div>
+                <div>
+                  <b>강수확률</b>
+                  <br /> 오전: {popAM}% <br />
+                  오후: {popPM}%
                 </div>
               </div>
             );

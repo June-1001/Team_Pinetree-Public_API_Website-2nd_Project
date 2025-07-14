@@ -135,6 +135,19 @@ export default function MainPage() {
     setCollapseAllTrigger((prev) => prev + 1);
   }
 
+  // 페이지 스케일링
+  function updateViewport() {
+    const meta = document.querySelector("#viewport-meta");
+    if (window.innerWidth <= 768) {
+      meta.setAttribute("content", "width=480, user-scalable=no");
+    } else {
+      meta.setAttribute("content", "width=device-width, initial-scale=1.0");
+    }
+  }
+
+  window.addEventListener("resize", updateViewport);
+  window.addEventListener("DOMContentLoaded", updateViewport);
+
   return (
     <div className="main-container">
       <div className={`search-wrapper ${showResults ? "searched" : ""}`}>

@@ -80,10 +80,10 @@ select:focus-visible {
 #hiking-map {
   width: 600px;
   height: 600px;
+  aspect-ratio: auto;
   flex-shrink: 0;
-  border: 1px solid #ccc;
-  border-radius: 10px;
 }
+
 .trail-list {
   flex-grow: 1;
   max-height: 600px;
@@ -222,15 +222,13 @@ select:focus-visible {
 }
 
 .trail-card-list {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
   gap: 16px;
+  padding-top: 16px;
 }
 
 .trail-card {
-  flex: 1 1 150px;
-  min-width: 150px;
-  max-width: 100%;
   padding: 20px 10px;
   cursor: pointer;
   border-radius: 10px;
@@ -283,26 +281,55 @@ select:focus-visible {
 .weather-results {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  justify-content: center;
+  align-items: center;
 }
 
 .weather-summary-row {
   display: flex;
+  max-width: 700px;
   flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
 }
 
-.weather-summary-row div {
+.weather-summary-row > div {
+  width: 200px;
+  height: 180px;
+  text-align: center;
   border: 2px solid black;
+}
+
+.weather-summary {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.weather-summary ul {
+  list-style: none;
+}
+
+.weather-summary li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .forecasts {
   display: flex;
   flex-direction: column;
 }
+
+.daily-forecasts {
+  width: 100%;
+  text-align: center;
+}
+
 .hourly-forecast {
   display: grid;
-  grid-template-columns: repeat(4, 140px);
-  height: 300px;
+  grid-template-columns: repeat(4, auto);
   gap: 12px;
 }
 
@@ -311,24 +338,28 @@ select:focus-visible {
   body,
   #root {
     padding: 0;
-    overflow-y: hidden;
   }
+
   select {
     background-size: 18px;
     background-position: 97%;
   }
+
   .main-container {
     margin: 10px;
   }
+
   .search-section {
     padding: 20px;
   }
+
   .search-bar span,
   .range-section span,
   .difficulty-section span {
     width: 96px;
     font-size: 1rem;
   }
+
   .search-bar input {
     width: calc(100% - 177px) !important;
     height: 33px !important;
@@ -337,6 +368,7 @@ select:focus-visible {
     padding: 4px 10px;
     margin-left: 10px;
   }
+
   .search-bar button {
     width: 70px;
     height: 33px;
@@ -344,17 +376,21 @@ select:focus-visible {
     line-height: 24px;
     font-size: 1rem;
   }
+
   input::placeholder {
     color: #757575;
     font-size: 1rem;
   }
+
   .filter-section {
     flex-direction: column;
     gap: 10px;
   }
+
   .range-section {
     width: 100%;
   }
+
   .range-section input {
     display: inline-block;
     width: calc(100% / 2 - 58px);
@@ -363,9 +399,11 @@ select:focus-visible {
     padding: 4px 10px;
     margin-left: 10px;
   }
+
   .difficulty-section {
     width: 100%;
   }
+
   .difficulty-section select {
     width: calc(100% - 106px);
     height: auto !important;
@@ -373,21 +411,49 @@ select:focus-visible {
     padding: 4px 6px;
     margin-left: 10px;
   }
+
+  #hiking-map {
+    width: 100% !important;
+    height: auto !important;
+    aspect-ratio: 5 / 3 !important;
+    touch-action: pan-x pan-y;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
   #search-results {
     display: block !important;
   }
 
+  .search-wrapper {
+    transform: translateY(30vh);
+    transition: 0.3s ease;
+    z-index: 10;
+  }
+
+  .search-wrapper.searched {
+    transform: translateY(0);
+  }
+
+  .search-results {
+    flex-direction: column;
+    gap: 16px;
+  }
+
   .trail-results {
-    display: block;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-left: 0;
   }
-  #hiking-map {
+
+  .trail-list {
     width: 100%;
+    max-height: none;
+    overflow-y: visible;
+    margin-left: 0;
   }
-  #hiking-map::after {
-    content: "";
-    clear: both;
-    display: block;
-  }
+
   .list-attribute select {
     width: calc(100% - 200px);
     height: auto !important;
@@ -395,9 +461,43 @@ select:focus-visible {
     padding: 4px 6px;
     margin-left: 10px;
   }
-  .trail-list {
+
+  .trail-card-list {
+    justify-content: center;
+  }
+
+  .trail-card {
+    min-width: 120px;
+    padding: 8px 8px;
+  }
+
+  .weather-results {
     width: 100%;
-    margin-top: 20px;
-    margin-left: 0;
+  }
+
+  .weather-summary-row {
+    flex-direction: row;
+    gap: 12px;
+    width: 100%;
+    height: auto;
+  }
+
+  .forecasts {
+    width: 100%;
+  }
+
+  .hourly-forecast {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+    width: 100%;
+    height: auto;
+  }
+
+  .hourly-forecast > div {
+    min-width: auto;
+    font-size: 0.85rem;
+    padding: 6px;
+    border-radius: 4px;
   }
 }

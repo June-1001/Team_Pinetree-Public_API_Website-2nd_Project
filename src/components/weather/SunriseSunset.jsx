@@ -27,8 +27,8 @@ export default function SunriseSunset({ lat, lon }) {
     <div>
       <h4>일출/일몰 정보</h4>
       <ul>
-        <li>일출 : {formatTime(data.sunrise)}</li>
-        <li>일몰 : {formatTime(data.sunset)}</li>
+        <li>일출 시간 : {formatTime(data.sunrise)}</li>
+        <li>일몰 시간 : {formatTime(data.sunset)}</li>
       </ul>
     </div>
   );

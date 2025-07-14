@@ -32,8 +32,11 @@ function TrailList(props) {
   }, [props.selectedTrail]);
 
   const cardRefs = useRef({});
+  const isMobile = window.innerWidth < 768;
+
+  // 카드 선택 시 해당 위치로 스크롤
   useEffect(() => {
-    if (props.selectedTrail) {
+    if (props.selectedTrail && !isMobile) {
       const mountain = props.selectedTrail.properties.mntn_nm;
       setExpandedMountain(mountain);
 

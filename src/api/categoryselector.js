@@ -1,4 +1,3 @@
-// CategorySelector.js
 import React from "react";
 import "../mapCategory.css";
 
@@ -13,20 +12,22 @@ const categories = [
 
 const CategorySelector = ({ selected, onSelect }) => {
   return (
-    <ul id="category">
-      {categories.map((cat, index) => (
-        <li
-          key={cat.id}
-          id={cat.id}
-          data-order={index}
-          className={selected === cat.id ? "on" : ""}
-          onClick={() => onSelect(selected === cat.id ? cat.id : cat.id)}
-        >
-          <span className={`category_bg ${cat.icon}`}></span>
-          {cat.label}
-        </li>
-      ))}
-    </ul>
+    <div id="category-container">
+      <ul id="category">
+        {categories.map((cat, index) => (
+          <li
+            key={cat.id}
+            id={cat.id}
+            data-order={index}
+            className={selected === cat.id ? "on" : ""}
+            onClick={() => onSelect(selected === cat.id ? cat.id : cat.id)}
+          >
+            <span className={`category_bg ${cat.icon}`}></span>
+            {cat.label}
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 };
 
