@@ -135,6 +135,10 @@ export default function MainPage() {
     setCollapseAllTrigger((prev) => prev + 1);
   }
 
+  useEffect(() => {
+    setShowWeather(false);
+  }, [searchParams]);
+
   // 페이지 스케일링
   function updateViewport() {
     const meta = document.querySelector("#viewport-meta");
