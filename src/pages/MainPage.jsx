@@ -182,6 +182,7 @@ export default function MainPage() {
                 setLon(newLon);
                 setSearchParams((prev) => ({
                   ...prev,
+                  keyword: "",
                   lat: newLat,
                   lon: newLon,
                 }));
