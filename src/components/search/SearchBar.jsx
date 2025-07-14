@@ -9,7 +9,6 @@ const SearchBar = ({ keyword, setKeyword, onSearch }) => {
       onSearch();
     }
   };
-
   return (
     <div className="search-bar">
       <span>지역/명칭</span>

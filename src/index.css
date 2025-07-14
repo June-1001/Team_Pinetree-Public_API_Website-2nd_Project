@@ -199,7 +199,7 @@ select:focus-visible {
   font-weight: 400;
   background-position: 90% center;
 }
-.map-list-item {
+.trail-list-item {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -237,6 +237,21 @@ select:focus-visible {
 }
 .access-location:hover {
   background-position: -154px -350px;
+}
+
+.weather-results {
+  display: flex;
+  flex-direction: column;
+}
+
+.forecasts {
+  display: flex;
+  flex-direction: column;
+}
+.hourly-forecast {
+  display: grid;
+  grid-template-columns: repeat(4, 140px);
+  gap: 12px;
 }
 
 @media only screen and (max-width: 768px) {
@@ -308,6 +323,10 @@ select:focus-visible {
   }
   #search-results {
     display: block !important;
+  }
+
+  .trail-results {
+    display: block;
   }
   #hiking-map {
     width: 100%;

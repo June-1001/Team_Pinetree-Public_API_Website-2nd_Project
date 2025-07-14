@@ -179,27 +179,27 @@ export default function MainPage() {
           <div className="weather-summary-row">
             <div>
               <WeatherSummary weatherData={weatherData} />
-            </div>
-            <div>
+
               <SunriseSunset lat={lat} lon={lon} />
-            </div>
-            <div>
+
               <WeatherAlertBox alerts={alerts} />
             </div>
           </div>
-          {dailyForecast && (
-            <DailyForecastList
-              dailyForecast={dailyForecast}
-              selectedForecastDate={selectedForecastDate}
-              setSelectedForecastDate={setSelectedForecastDate}
-            />
-          )}
-          {filteredForecast && filteredForecast.length > 0 && (
-            <HourlyForecastList
-              selectedForecastDate={selectedForecastDate}
-              filteredForecast={filteredForecast}
-            />
-          )}
+          <div className="forecasts">
+            {dailyForecast && (
+              <DailyForecastList
+                dailyForecast={dailyForecast}
+                selectedForecastDate={selectedForecastDate}
+                setSelectedForecastDate={setSelectedForecastDate}
+              />
+            )}
+            {filteredForecast && filteredForecast.length > 0 && (
+              <HourlyForecastList
+                selectedForecastDate={selectedForecastDate}
+                filteredForecast={filteredForecast}
+              />
+            )}
+          </div>
         </div>
       </div>
     </div>

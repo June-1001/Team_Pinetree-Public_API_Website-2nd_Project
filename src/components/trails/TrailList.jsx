@@ -143,7 +143,7 @@ function TrailList(props) {
             const isExpanded = expandedMountain === name;
             return (
               <div key={name} style={{ marginBottom: "12px" }}>
-                <div className="map-list-item" onClick={() => toggleMountain(name)}>
+                <div className="trail-list-item" onClick={() => toggleMountain(name)}>
                   {name} (총 거리 : {getTotalDistance(trails)} km){" "}
                   {isExpanded ? (
                     <div className="right up">▲</div>
