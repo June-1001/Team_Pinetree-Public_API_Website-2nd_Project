@@ -180,9 +180,12 @@ export default function MainPage() {
               onCenterChanged={(newLat, newLon) => {
                 setLat(newLat);
                 setLon(newLon);
-                setSearchParams((prev) => ({
+                setLastSearch((prev) => ({
                   ...prev,
                   keyword: "",
+                }));
+                setSearchParams((prev) => ({
+                  ...prev,
                   lat: newLat,
                   lon: newLon,
                 }));
