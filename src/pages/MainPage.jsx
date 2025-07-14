@@ -216,7 +216,7 @@ export default function MainPage() {
               setShowWeather((prev) => !prev);
             }}
           >
-            선택 지역 현재 날씨
+            지역 날씨 상황 정보
             <span className="triangle">{showWeather ? "▲" : "▼"}</span>
           </h3>
           {showWeather && (

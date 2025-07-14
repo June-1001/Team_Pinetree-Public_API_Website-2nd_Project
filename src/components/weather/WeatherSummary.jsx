@@ -6,7 +6,7 @@ export default function WeatherSummary({ weatherData }) {
   }
   return (
     <div className="weather-summary">
-      <h4>날씨 정보 요약</h4>
+      <h4>현재 날씨 상황</h4>
       <ul style={{ listStyle: "none", marginTop: 0 }}>
         <li>
           <div style={{ width: 17 }}>🌡️</div> <div>온도: {weatherData.T1H}℃</div>
