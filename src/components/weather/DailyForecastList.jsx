@@ -43,7 +43,7 @@ export default function DailyForecastList({
                 <div>아침 기온: {tempAM}℃</div>
                 <div>낮 기온: {tempPM}℃</div>
                 <div>
-                  강수확률: 오전{popAM}% / 오후 {popPM}%
+                  강수확률: 오전 {popAM}% / 오후 {popPM}%
                 </div>
               </div>
             );

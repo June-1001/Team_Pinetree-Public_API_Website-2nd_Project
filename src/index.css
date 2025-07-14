@@ -2,6 +2,7 @@
   box-sizing: border-box;
   font-family: "Malgun Gothic", sans-serif;
 }
+
 html,
 body,
 #root {
@@ -11,6 +12,12 @@ body,
   height: 100vh;
   overflow: auto;
 }
+
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
 input {
   padding: 0;
   font-size: 16px;
@@ -64,6 +71,10 @@ select:focus-visible {
 }
 .trail-results {
   display: flex;
+  flex-grow: 1;
+  max-height: 600px;
+  overflow-y: auto;
+  margin-left: 20px;
 }
 
 #hiking-map {
@@ -185,9 +196,7 @@ select:focus-visible {
   margin-left: 20px;
   font-weight: 400;
 }
-.map-list {
-  margin-top: 20px;
-}
+
 .list-attribute {
   text-align: right;
   margin-bottom: 20px;
@@ -203,6 +212,7 @@ select:focus-visible {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  min-width: 340px;
   padding: 14px 20px;
   font-weight: bold;
   user-select: none;
@@ -210,7 +220,17 @@ select:focus-visible {
   border: 1px solid #d1d1d1;
   cursor: pointer;
 }
+
+.trail-card-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
 .trail-card {
+  flex: 1 1 150px;
+  min-width: 150px;
+  max-width: 100%;
   padding: 20px 10px;
   cursor: pointer;
   border-radius: 10px;
@@ -239,10 +259,40 @@ select:focus-visible {
   background-position: -154px -350px;
 }
 
+.weather-toggle-header {
+  border-top: 2px solid #ccc;
+  border-bottom: 2px solid #ccc;
+  padding: 8px 12px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 18px;
+  background-color: #f9f9f9;
+}
+
+.weather-toggle-header:hover {
+  background-color: #efefef;
+}
+
+.weather-toggle-header .triangle {
+  font-size: 14px;
+  margin-left: 10px;
+}
+
 .weather-results {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: flex-start;
+}
+
+.weather-summary-row {
+  display: flex;
+  flex-direction: row;
+}
+
+.weather-summary-row div {
+  border: 2px solid black;
 }
 
 .forecasts {
@@ -252,6 +302,7 @@ select:focus-visible {
 .hourly-forecast {
   display: grid;
   grid-template-columns: repeat(4, 140px);
+  height: 300px;
   gap: 12px;
 }
 

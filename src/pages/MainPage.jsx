@@ -26,6 +26,8 @@ export default function MainPage() {
   const [selectedTrail, setSelectedTrail] = useState(null);
   const [collapseAllTrigger, setCollapseAllTrigger] = useState(0);
   const [showMap, setShowMap] = useState(false);
+  const [showWeather, setShowWeather] = useState(false);
+  const weatherRef = useRef(null);
 
   const lastSearch = useRef({
     keyword: "",
@@ -59,6 +61,12 @@ export default function MainPage() {
     if (!forecast || !selectedForecastDate) return null;
     return Object.values(forecast).filter((item) => item.fcstDate === selectedForecastDate);
   }, [forecast, selectedForecastDate]);
+
+  useEffect(() => {
+    if (showWeather && weatherRef.current) {
+      weatherRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [showWeather]);
 
   useEffect(() => {
     if (dailyForecast) {
@@ -183,28 +191,41 @@ export default function MainPage() {
             />
           )}
         </div>
-        <h3 style={{ marginBottom: 8 }}>선택 지역 현재 날씨</h3>
-        <div className="weather-results">
-          <div className="forecasts">
-            {dailyForecast && (
-              <DailyForecastList
-                dailyForecast={dailyForecast}
-                selectedForecastDate={selectedForecastDate}
-                setSelectedForecastDate={setSelectedForecastDate}
-              />
-            )}
-            {filteredForecast && filteredForecast.length > 0 && (
-              <HourlyForecastList
-                selectedForecastDate={selectedForecastDate}
-                filteredForecast={filteredForecast}
-              />
-            )}
-          </div>
-          <div>
-            <WeatherSummary weatherData={weatherData} />
-            <SunriseSunset lat={lat} lon={lon} />
-            <WeatherAlertBox alerts={alerts} />
-          </div>
+
+        <div>
+          <h3
+            className="weather-toggle-header"
+            onClick={() => {
+              setShowWeather((prev) => !prev);
+            }}
+          >
+            선택 지역 현재 날씨
+            <span className="triangle">{showWeather ? "▲" : "▼"}</span>
+          </h3>
+          {showWeather && (
+            <div ref={weatherRef} className="weather-results">
+              <div className="weather-summary-row">
+                <WeatherSummary weatherData={weatherData} />
+                <SunriseSunset lat={lat} lon={lon} />
+                <WeatherAlertBox alerts={alerts} />
+              </div>
+              <div className="forecasts">
+                {dailyForecast && (
+                  <DailyForecastList
+                    dailyForecast={dailyForecast}
+                    selectedForecastDate={selectedForecastDate}
+                    setSelectedForecastDate={setSelectedForecastDate}
+                  />
+                )}
+                {filteredForecast && filteredForecast.length > 0 && (
+                  <HourlyForecastList
+                    selectedForecastDate={selectedForecastDate}
+                    filteredForecast={filteredForecast}
+                  />
+                )}
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
