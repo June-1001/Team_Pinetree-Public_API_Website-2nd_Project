@@ -165,6 +165,9 @@ function HikingMap(props) {
             const position = mouseEvent.latLng;
 
             props.onCenterChanged(lat, lon);
+            if (props.onResetKeyword) {
+              props.onResetKeyword();
+            }
             drawGeomBox(position, 5);
 
             // 클릭 시 기존 일반 마커 제거
@@ -197,6 +200,9 @@ function HikingMap(props) {
             const position = mouseEvent.latLng;
 
             props.onCenterChanged(lat, lon);
+            if (props.onResetKeyword) {
+              props.onResetKeyword();
+            }
             drawGeomBox(position, 5);
 
             // 우클릭 시 기존 일반 마커 제거

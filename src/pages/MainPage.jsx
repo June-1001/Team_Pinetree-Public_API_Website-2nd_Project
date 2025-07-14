@@ -180,10 +180,6 @@ export default function MainPage() {
               onCenterChanged={(newLat, newLon) => {
                 setLat(newLat);
                 setLon(newLon);
-                setLastSearch((prev) => ({
-                  ...prev,
-                  keyword: "",
-                }));
                 setSearchParams((prev) => ({
                   ...prev,
                   lat: newLat,
@@ -191,6 +187,9 @@ export default function MainPage() {
                 }));
               }}
               onClearSelection={clearSelection}
+              onResetKeyword={() => {
+                lastSearch.current.keyword = "";
+              }}
             />
           )}
 
