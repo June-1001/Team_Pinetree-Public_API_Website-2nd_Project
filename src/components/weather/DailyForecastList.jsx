@@ -40,18 +40,20 @@ export default function DailyForecastList({
                 <strong style={{ fontSize: 18 }}>
                   {date.slice(4, 6)}/{date.slice(6)} ({dayName})
                 </strong>
-                <div>
-                  <b>아침 기온</b>
-                  <br /> {tempAM}℃
-                </div>
-                <div>
-                  <b>낮 기온</b>
-                  <br /> {tempPM}℃
-                </div>
-                <div>
-                  <b>강수확률</b>
-                  <br /> 오전: {popAM}% <br />
-                  오후: {popPM}%
+                <div className="day-data-list">
+                  <div>
+                    <b>아침 기온</b>
+                    <br /> {tempAM}℃
+                  </div>
+                  <div>
+                    <b>낮 기온</b>
+                    <br /> {tempPM}℃
+                  </div>
+                  <div>
+                    <b>강수확률</b>
+                    <br /> 오전: {popAM}% <br />
+                    오후: {popPM}%
+                  </div>
                 </div>
               </div>
             );
