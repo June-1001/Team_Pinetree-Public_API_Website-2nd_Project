@@ -23,4 +23,4 @@ export default function WeatherSummary({ weatherData }) {
       </ul>
     </div>
   );
-}
+}  

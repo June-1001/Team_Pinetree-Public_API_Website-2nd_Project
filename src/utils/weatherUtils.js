@@ -5,7 +5,7 @@ export const skyMap = {
 };
 
 export const ptyMap = {
-  0: "없음",
+  0: "- ",
   1: "비",
   2: "비/눈",
   3: "눈",
