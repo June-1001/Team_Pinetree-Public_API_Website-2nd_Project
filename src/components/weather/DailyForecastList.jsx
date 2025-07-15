@@ -8,14 +8,14 @@ export default function DailyForecastList({
   if (!dailyForecast) return null;
 
   return (
-    <div style={{ marginTop: 30 }}>
+    <div style={{ marginTop:10 }}>
       <h3 style={{ marginBottom: 12, fontWeight: "700", color: "#222" }}>
         3일 단기 예보 (클릭 시 시간별 단기예보 표시)
       </h3>
       <div
         style={{
           display: "flex",
-          gap: 16,
+          gap: 13,
           overflowX: "auto",
           paddingBottom: 8,
         }}
