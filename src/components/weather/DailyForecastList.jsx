@@ -8,9 +8,18 @@ export default function DailyForecastList({
   if (!dailyForecast) return null;
 
   return (
-    <div className="daily-container-div" style={{ marginTop: 30 }}>
-      <h3 style={{ marginBottom: 8 }}>3일 단기 예보 (클릭 시 시간별 단기예보 표시)</h3>
-      <div className="daily-forecasts-container-align">
+    <div style={{ marginTop: 30 }}>
+      <h3 style={{ marginBottom: 12, fontWeight: "700", color: "#222" }}>
+        3일 단기 예보 (클릭 시 시간별 단기예보 표시)
+      </h3>
+      <div
+        style={{
+          display: "flex",
+          gap: 16,
+          overflowX: "auto",
+          paddingBottom: 8,
+        }}
+      >
         {Object.entries(dailyForecast)
           .slice(0, 3)
           .map(([date, times]) => {
@@ -24,41 +33,64 @@ export default function DailyForecastList({
               `${date.slice(0, 4)}-${date.slice(4, 6)}-${date.slice(6)}`
             ).toLocaleDateString("ko-KR", { weekday: "short" });
 
+            const isSelected = selectedForecastDate === date;
+
             return (
-              <div className="daily-forecasts-container">
+              <div
+                key={date}
+                onClick={() => setSelectedForecastDate(date)}
+                style={{
+                  minWidth: 200,
+                  borderRadius: 12,
+                  border: isSelected ? "2px solid #6e9bcbff" : "1px solid #ddd",
+                  backgroundColor: isSelected ? "#e6f0ff" : "#fafafa",
+                  cursor: "pointer",
+                  display: "flex",
+                  flexDirection: "column",
+                  padding: 16,
+                  userSelect: "none",
+                  transition: "all 0.25s ease",
+                }}
+              >
                 <div
-                  className="daily-forecasts"
-                  key={date}
-                  onClick={() => setSelectedForecastDate(date)}
                   style={{
-                    padding: 12,
-                    border: selectedForecastDate === date ? "2px solid #007bff" : "1px solid #ccc",
-                    borderRadius: 6,
-                    cursor: "pointer",
-                    backgroundColor: selectedForecastDate === date ? "#e6f0ff" : "transparent",
+                    alignSelf: "center",
+                    width: 70,
+                    height: 70,
+                    borderRadius: "12px",
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    fontWeight: "600",
+                    fontSize: 16,
+                    marginBottom: 12,
+                    transition: "all 0.2s ease-in-out",
                   }}
                 >
-                  <div
-                    className="daily-day-list"
-                    style={{
-                      backgroundColor: selectedForecastDate === date ? "#007bff" : "#ccc",
-                      color: selectedForecastDate === date ? "#fff" : "#333",
-                    }}
-                  >
-                    {date.slice(4, 6)}/{date.slice(6)} ({dayName})
+                  <div style={{ fontSize: 18, marginTop: 2 }}>{dayName}</div>
+
+                  <div>{date.slice(4, 6)}/{date.slice(6)}</div>
+                </div>
+
+
+                <div style={{ flexGrow: 1 }}>
+                  <div style={{ marginBottom: 12 }}>
+                    <b>아침 기온</b>
+                    <div style={{ fontSize: 18, color: "#f05454" }}>
+                      {tempAM}℃
+                    </div>
                   </div>
-                  <div className="daily-list">
-                    <div>
-                      <b>아침 기온</b>
-                      <br /> {tempAM}℃
+                  <div style={{ marginBottom: 12 }}>
+                    <b>낮 기온</b>
+                    <div style={{ fontSize: 18, color: "#ff793f" }}>
+                      {tempPM}℃
                     </div>
-                    <div>
-                      <b>낮 기온</b>
-                      <br /> {tempPM}℃
-                    </div>
-                    <div>
-                      <b>강수확률</b>
-                      <br /> 오전: {popAM}% <br /> 오후: {popPM}%
+                  </div>
+                  <div>
+                    <b>강수확률</b>
+                    <div style={{ fontSize: 16, color: "#4096ff" }}>
+                      오전: {popAM}% <br /> 오후: {popPM}%
                     </div>
                   </div>
                 </div>
