@@ -37,10 +37,16 @@ export default function DailyForecastList({
                   backgroundColor: selectedForecastDate === date ? "#e6f0ff" : "transparent",
                 }}
               >
-                <strong style={{ fontSize: 18 }}>
+                <div 
+                  className="daily-day-list"
+                  style={{
+                    backgroundColor: selectedForecastDate === date ? "#007bff" : "#ccc",
+                    color: selectedForecastDate === date ? "#fff" : "#333",
+                  }}
+                >
                   {date.slice(4, 6)}/{date.slice(6)} ({dayName})
-                </strong>
-                <div className="day-data-list">
+                </div>
+                <div className="daily-list">
                   <div>
                     <b>아침 기온</b>
                     <br /> {tempAM}℃
@@ -51,8 +57,7 @@ export default function DailyForecastList({
                   </div>
                   <div>
                     <b>강수확률</b>
-                    <br /> 오전: {popAM}% <br />
-                    오후: {popPM}%
+                    <br /> 오전: {popAM}% / 오후: {popPM}%
                   </div>
                 </div>
               </div>

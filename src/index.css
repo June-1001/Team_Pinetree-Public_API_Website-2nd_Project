@@ -328,12 +328,34 @@ select:focus-visible {
 .daily-forecasts {
   width: 100%;
   text-align: center;
+  position: relative;
 }
 
 .hourly-forecast {
   display: grid;
   grid-template-columns: repeat(4, auto);
   gap: 12px;
+}
+.daily-day-list{
+  font-size: 18px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+  font-weight: bold;
+}
+.daily-list{
+  display: flex;
+  justify-content: space-around;
+  gap: 20px;
+  padding-left: 100px;
+}
+.daily-list div b{
+  display: inline-block;
+  margin-bottom: 5px;
 }
 
 @media only screen and (max-width: 768px) {
@@ -504,5 +526,23 @@ select:focus-visible {
     font-size: 0.85rem;
     padding: 6px;
     border-radius: 4px;
+  }
+  .daily-day-list{
+    position: relative;
+    background: transparent !important;
+    color: #333 !important;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: center;
+  }
+  .daily-list{
+    display: contents;
+  }
+  .daily-list div{
+    margin-bottom: 10px;
+  }
+  .daily-list div b{
+    display: inline-block;
+    margin-bottom: 5px;
   }
 }
