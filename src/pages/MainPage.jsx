@@ -229,7 +229,7 @@ export default function MainPage() {
           {showWeather && (
             <div ref={weatherRef} className="weather-results">
               <div className="weather-summary-row">
-                <WeatherSummary lat = {lat} lon={lon} />
+                <WeatherSummary lat={lat} lon={lon} />
                 <SunriseSunset lat={lat} lon={lon} />
                 <WeatherAlertBox alerts={alerts} />
               </div>

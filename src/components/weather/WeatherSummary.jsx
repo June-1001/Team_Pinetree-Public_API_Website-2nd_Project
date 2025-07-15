@@ -1,12 +1,15 @@
 import React from "react";
 import { useWeatherData } from "../../hooks/useWeatherData";
 
-
 export default function WeatherSummary({ lat, lon }) {
+  const { weatherData, loading } = useWeatherData(lat, lon);
 
-  const {weatherData, loading} = useWeatherData(lat, lon);
-
-  if(loading) return <p>날씨 정보를 불러오는 중...</p>
+  if (loading)
+    return (
+      <div className="weather-summary">
+        <p>날씨 정보를 불러오는 중...</p>
+      </div>
+    );
 
   if (!weatherData || Object.keys(weatherData).length === 0) {
     return <p>지역을 선택해주세요</p>;
@@ -30,4 +33,4 @@ export default function WeatherSummary({ lat, lon }) {
       </ul>
     </div>
   );
-}  
+}
