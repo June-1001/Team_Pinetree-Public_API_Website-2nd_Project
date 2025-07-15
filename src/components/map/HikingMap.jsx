@@ -437,7 +437,7 @@ function HikingMap(props) {
         });
       }
     });
-  }, [props.searched, props.keyword, mapReady]);
+  }, [props.searched, props.keyword, mapReady, props.searchTrigger]);
 
   const handleCategoryChange = (categoryId) => {
     if (selectedCategory === categoryId) {

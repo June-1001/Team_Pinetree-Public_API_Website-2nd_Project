@@ -28,6 +28,7 @@ export default function MainPage() {
   const [showMap, setShowMap] = useState(false);
   const [showWeather, setShowWeather] = useState(false);
   const weatherRef = useRef(null);
+  const [searchTrigger, setSearchTrigger] = useState(false);
 
   const lastSearch = useRef({
     keyword: "",
@@ -102,9 +103,7 @@ export default function MainPage() {
       lastSearch.current.difficulty === difficulty;
 
     if (sameSearch) {
-      setShowResults(true);
-      setShowMap(true);
-      return;
+      setSearchTrigger(false);
     }
 
     lastSearch.current = {
@@ -115,7 +114,7 @@ export default function MainPage() {
       maxRange,
       difficulty,
     };
-
+    setSearchTrigger(sameSearch);
     setKeyword(inputKeyword);
     setSearchParams({
       keyword: inputKeyword,
@@ -197,6 +196,7 @@ export default function MainPage() {
                 }));
               }}
               onClearSelection={clearSelection}
+              searchTrigger={searchTrigger}
             />
           )}
 
