@@ -110,7 +110,7 @@ export default function MainPage() {
       maxRange,
       difficulty,
     };
-    setSearchTrigger(sameSearch);
+
     setKeyword(inputKeyword);
     setSearchParams({
       keyword: inputKeyword,
@@ -120,7 +120,7 @@ export default function MainPage() {
       maxRange,
       difficulty,
     });
-
+    setSearchTrigger(sameSearch);
     setShowResults(true);
     setShowMap(true);
   }
