@@ -324,7 +324,6 @@ select:focus-visible {
   width: 100%;
   flex-direction: row;
   justify-content: center;
-  gap: 12px;
 }
 
 .daily-forecasts-container {
