@@ -102,10 +102,6 @@ export default function MainPage() {
       lastSearch.current.maxRange === maxRange &&
       lastSearch.current.difficulty === difficulty;
 
-    if (sameSearch) {
-      setSearchTrigger(false);
-    }
-
     lastSearch.current = {
       keyword: inputKeyword,
       lat,
