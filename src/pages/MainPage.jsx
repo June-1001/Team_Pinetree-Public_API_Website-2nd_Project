@@ -102,11 +102,7 @@ export default function MainPage() {
       lastSearch.current.maxRange === maxRange &&
       lastSearch.current.difficulty === difficulty;
 
-    if (sameSearch) {
-      setShowResults(true);
-      setShowMap(true);
-      return;
-    }
+    setSearchTrigger(sameSearch);
 
     lastSearch.current = {
       keyword: inputKeyword,
@@ -126,7 +122,6 @@ export default function MainPage() {
       maxRange,
       difficulty,
     });
-    setSearchTrigger(sameSearch);
     setShowResults(true);
     setShowMap(true);
   }
