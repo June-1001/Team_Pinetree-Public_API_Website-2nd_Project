@@ -102,6 +102,12 @@ export default function MainPage() {
       lastSearch.current.maxRange === maxRange &&
       lastSearch.current.difficulty === difficulty;
 
+    if (sameSearch) {
+      setShowResults(true);
+      setShowMap(true);
+      return;
+    }
+
     lastSearch.current = {
       keyword: inputKeyword,
       lat,
