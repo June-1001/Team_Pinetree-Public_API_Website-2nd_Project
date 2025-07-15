@@ -324,10 +324,10 @@ select:focus-visible {
   flex: 1;
   gap: 20px;
 }
-.daily-container-div{
+.daily-container-div {
   width: 40%;
 }
-.hourly-forecast-div{
+.hourly-forecast-div {
   width: 60%;
 }
 .daily-forecasts-container-align {
@@ -380,15 +380,15 @@ select:focus-visible {
   margin-bottom: 5px;
 }
 @media only screen and (max-width: 1300px) {
-  .daily-container-div{
+  .daily-container-div {
     width: 100%;
     margin: 0 !important;
   }
-  .hourly-forecast-div{
+  .hourly-forecast-div {
     width: 100%;
     margin: 0 !important;
-  }  
-  .forecasts{
+  }
+  .forecasts {
     justify-content: flex-start;
     flex-direction: column;
     gap: 0;
@@ -641,5 +641,9 @@ select:focus-visible {
   .daily-list div b {
     display: inline-block;
     margin-bottom: 5px;
+  }
+
+  #category {
+    zoom: 0.8;
   }
 }
