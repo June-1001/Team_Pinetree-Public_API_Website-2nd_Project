@@ -1,4 +1,3 @@
-// components/weather/SunriseSunset.jsx
 import React from "react";
 import { useSunriseSunset } from "../../hooks/useSunriseSunset";
 

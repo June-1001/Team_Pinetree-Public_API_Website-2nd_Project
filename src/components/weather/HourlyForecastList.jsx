@@ -1,5 +1,5 @@
 import React from "react";
-import {Line,Bar,XAxis,YAxis,CartesianGrid,Tooltip,Legend,ResponsiveContainer,ComposedChart,} from "recharts";
+import { Line, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, ComposedChart, } from "recharts";
 import { getSkyLabel, getPtyLabel } from "../../utils/weatherUtils";
 
 export default function HourlyForecastList({ selectedForecastDate, filteredForecast }) {
@@ -28,7 +28,7 @@ export default function HourlyForecastList({ selectedForecastDate, filteredForec
 
   return (
 
-    <div style={{width: 700, overflowX: "auto",marginTop: 32,padding: 24,backgroundColor: "#ffffff",borderRadius: 16, boxShadow: "0 6px 18px rgba(0,0,0,0.08)",}}>
+    <div style={{ width: 700, overflowX: "auto", marginTop: 32, padding: 24, backgroundColor: "#ffffff", borderRadius: 16, boxShadow: "0 6px 18px rgba(0,0,0,0.08)", }}>
       <h3 style={{ fontSize: 20, fontWeight: "700", color: "#222", marginBottom: 16 }}>
         {formattedDate} 시간별 예보
       </h3>
@@ -62,7 +62,7 @@ export default function HourlyForecastList({ selectedForecastDate, filteredForec
             <div style={{ color: "#1890ff" }}>{item.pop}%</div>
           </div>
         ))}
->>>>>>> Stashed changes
+
       </div>
 
       <ResponsiveContainer width="100%" height={320}>
@@ -76,10 +76,12 @@ export default function HourlyForecastList({ selectedForecastDate, filteredForec
           />
 
           <YAxis
+
             yAxisId="left"
             label={{
-              angle: -90,
-              position: "insideLeft",
+              value: "강수 확률", 
+              position: "insideTop", 
+              offset: -30,
               style: { fill: "#666", fontWeight: 600 },
             }}
             tick={{ fill: "#444", fontSize: 12 }}
@@ -89,11 +91,13 @@ export default function HourlyForecastList({ selectedForecastDate, filteredForec
           />
 
           <YAxis
+
             yAxisId="right"
             orientation="right"
             label={{
-              angle: -90,
-              position: "insideRight",
+              value: "온도", 
+              position: "insideTop", 
+              offset: -30,
               style: { fill: "#666", fontWeight: 600 },
             }}
             tick={{ fill: "#444", fontSize: 12 }}
