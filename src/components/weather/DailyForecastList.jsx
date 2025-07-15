@@ -8,7 +8,7 @@ export default function DailyForecastList({
   if (!dailyForecast) return null;
 
   return (
-    <div style={{ marginTop: 30 }}>
+    <div className="daily-container-div" style={{ marginTop: 30 }}>
       <h3 style={{ marginBottom: 8 }}>3일 단기 예보 (클릭 시 시간별 단기예보 표시)</h3>
       <div className="daily-forecasts-container-align">
         {Object.entries(dailyForecast)

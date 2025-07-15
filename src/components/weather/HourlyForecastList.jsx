@@ -17,7 +17,7 @@ export default function HourlyForecastList({ selectedForecastDate, filteredForec
   console.log("Filtered Forecast", filteredForecast);
 
   return (
-    <div style={{ marginTop: 20 }}>
+    <div className="hourly-forecast-div" style={{ marginTop: 20 }}>
       <h4 style={{ marginBottom: 6 }}>{formattedDate} 시간별 예보</h4>
       <div className="hourly-forecast">
         {filteredForecast

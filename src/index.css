@@ -319,11 +319,16 @@ select:focus-visible {
 
 .forecasts {
   display: flex;
-  justify-content: center;
   width: 100%;
   flex-direction: row;
   flex: 1;
-  gap: 12px;
+  gap: 20px;
+}
+.daily-container-div{
+  width: 40%;
+}
+.hourly-forecast-div{
+  width: 60%;
 }
 .daily-forecasts-container-align {
   display: flex;
@@ -338,6 +343,7 @@ select:focus-visible {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  width: 100%;
 }
 
 .daily-forecasts {
@@ -372,6 +378,57 @@ select:focus-visible {
 .daily-list div b {
   display: inline-block;
   margin-bottom: 5px;
+}
+@media only screen and (max-width: 1300px) {
+  .daily-container-div{
+    width: 100%;
+    margin: 0 !important;
+  }
+  .hourly-forecast-div{
+    width: 100%;
+    margin: 0 !important;
+  }  
+  .forecasts{
+    justify-content: flex-start;
+    flex-direction: column;
+    gap: 0;
+  }
+  .daily-forecasts-container-align {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+  }
+  .daily-forecasts-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: calc(100% / 3);
+  }
+  .daily-forecasts {
+    display: flex;
+    flex-direction: column;
+  }
+  .daily-day-list {
+    position: relative;
+    background: transparent !important;
+    color: #333 !important;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: center;
+  }
+  .daily-list {
+    display: contents;
+  }
+  .daily-list div {
+    margin-bottom: 10px;
+  }
+  .daily-list div b {
+    display: inline-block;
+    margin-bottom: 5px;
+  }
 }
 
 @media only screen and (max-width: 768px) {
