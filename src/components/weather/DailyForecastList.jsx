@@ -10,7 +10,7 @@ export default function DailyForecastList({
   return (
     <div style={{ marginTop: 30 }}>
       <h3 style={{ marginBottom: 8 }}>3일 단기 예보 (클릭 시 시간별 단기예보 표시)</h3>
-      <div style={{ display: "flex", gap: 12, overflowX: "auto" }}>
+      <div classname="daily-forecasts-container">
         {Object.entries(dailyForecast)
           .slice(0, 3)
           .map(([date, times]) => {
@@ -37,7 +37,7 @@ export default function DailyForecastList({
                   backgroundColor: selectedForecastDate === date ? "#e6f0ff" : "transparent",
                 }}
               >
-                <div 
+                <div
                   className="daily-day-list"
                   style={{
                     backgroundColor: selectedForecastDate === date ? "#007bff" : "#ccc",

@@ -322,7 +322,14 @@ select:focus-visible {
 .forecasts {
   display: flex;
   width: 100%;
-  flex-direction: column;
+  flex-direction: row;
+  justify-content: center;
+  gap: 12px;
+}
+
+.daily-forecasts-container {
+  display: flex;
+  gap: 12px;
 }
 
 .daily-forecasts {
@@ -336,7 +343,7 @@ select:focus-visible {
   grid-template-columns: repeat(4, auto);
   gap: 12px;
 }
-.daily-day-list{
+.daily-day-list {
   font-size: 18px;
   position: absolute;
   top: 0;
@@ -347,13 +354,13 @@ select:focus-visible {
   padding: 0 10px;
   font-weight: bold;
 }
-.daily-list{
+.daily-list {
   display: flex;
   justify-content: space-around;
   gap: 20px;
   padding-left: 100px;
 }
-.daily-list div b{
+.daily-list div b {
   display: inline-block;
   margin-bottom: 5px;
 }
@@ -499,6 +506,8 @@ select:focus-visible {
   }
 
   .weather-results {
+    display: flex;
+    flex-direction: column;
     width: 100%;
   }
 
@@ -510,6 +519,8 @@ select:focus-visible {
   }
 
   .forecasts {
+    display: flex;
+    flex-direction: column;
     width: 100%;
   }
 
@@ -527,7 +538,13 @@ select:focus-visible {
     padding: 6px;
     border-radius: 4px;
   }
-  .daily-day-list{
+
+  .daily-forecasts {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .daily-day-list {
     position: relative;
     background: transparent !important;
     color: #333 !important;
@@ -535,13 +552,13 @@ select:focus-visible {
     display: flex;
     justify-content: center;
   }
-  .daily-list{
+  .daily-list {
     display: contents;
   }
-  .daily-list div{
+  .daily-list div {
     margin-bottom: 10px;
   }
-  .daily-list div b{
+  .daily-list div b {
     display: inline-block;
     margin-bottom: 5px;
   }
