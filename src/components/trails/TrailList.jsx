@@ -84,20 +84,7 @@ function TrailList(props) {
 
   let sortedMountainNames = [...mountainNames];
 
-  if (sortOption === "0") {
-    // 거리순: 각 산의 모든 등산로 거리 합계 기준 오름차순(낮은 순)
-    sortedMountainNames.sort((a, b) => {
-      const totalA = groupedByMountain[a].reduce(
-        (sum, trail) => sum + parseFloat(trail.properties.sec_len || 0),
-        0
-      );
-      const totalB = groupedByMountain[b].reduce(
-        (sum, trail) => sum + parseFloat(trail.properties.sec_len || 0),
-        0
-      );
-      return totalA - totalB;
-    });
-  } else if (sortOption === "1") {
+  if (sortOption === "1") {
     // 가나다순: 산 이름 오름차순
     sortedMountainNames.sort((a, b) => a.localeCompare(b));
   } else if (sortOption === "2") {

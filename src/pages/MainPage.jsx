@@ -94,12 +94,12 @@ export default function MainPage() {
     }
 
     const sameSearch =
-      inputKeyword === lastSearch.current.keyword &&
-      lat === lastSearch.current.lat &&
-      lon === lastSearch.current.lon &&
-      minRange === lastSearch.current.minRange &&
-      maxRange === lastSearch.current.maxRange &&
-      difficulty === lastSearch.current.difficulty;
+      lastSearch.current.keyword === inputKeyword &&
+      lastSearch.current.lat === lat &&
+      lastSearch.current.lon === lon &&
+      lastSearch.current.minRange === minRange &&
+      lastSearch.current.maxRange === maxRange &&
+      lastSearch.current.difficulty === difficulty;
 
     if (sameSearch) {
       setShowResults(true);
@@ -134,6 +134,16 @@ export default function MainPage() {
     setSelectedTrail(null);
     setCollapseAllTrigger((prev) => prev + 1);
   }
+
+  useEffect(() => {
+    if (lat !== null && lon !== null) {
+      setSearchParams((prev) => ({
+        ...prev,
+        lat,
+        lon,
+      }));
+    }
+  }, [lat, lon]);
 
   useEffect(() => {
     setShowWeather(false);
@@ -187,9 +197,6 @@ export default function MainPage() {
                 }));
               }}
               onClearSelection={clearSelection}
-              onResetKeyword={() => {
-                lastSearch.current.keyword = "";
-              }}
             />
           )}
 

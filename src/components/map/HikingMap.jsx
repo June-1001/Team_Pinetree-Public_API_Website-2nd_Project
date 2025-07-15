@@ -165,9 +165,6 @@ function HikingMap(props) {
             const position = mouseEvent.latLng;
 
             props.onCenterChanged(lat, lon);
-            if (props.onResetKeyword) {
-              props.onResetKeyword();
-            }
             drawGeomBox(position, 5);
 
             // 클릭 시 기존 일반 마커 제거
@@ -200,9 +197,7 @@ function HikingMap(props) {
             const position = mouseEvent.latLng;
 
             props.onCenterChanged(lat, lon);
-            if (props.onResetKeyword) {
-              props.onResetKeyword();
-            }
+
             drawGeomBox(position, 5);
 
             // 우클릭 시 기존 일반 마커 제거
@@ -419,8 +414,8 @@ function HikingMap(props) {
           position: position,
         });
         drawGeomBox(position, 5);
-        props.onCenterChanged(lat, lon);
         resetMyLocation();
+        props.onCenterChanged(lat, lon);
       } else {
         const ps = new window.kakao.maps.services.Places();
         ps.keywordSearch(props.keyword, (result2, status2) => {
