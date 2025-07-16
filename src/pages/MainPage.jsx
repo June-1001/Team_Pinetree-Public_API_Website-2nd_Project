@@ -94,15 +94,13 @@ export default function MainPage() {
       return;
     }
 
-    const sameSearch =
-      lastSearch.current.keyword === inputKeyword &&
-      lastSearch.current.lat === lat &&
-      lastSearch.current.lon === lon &&
-      lastSearch.current.minRange === minRange &&
-      lastSearch.current.maxRange === maxRange &&
-      lastSearch.current.difficulty === difficulty;
+    const sameKeyword = lastSearch.current.keyword === inputKeyword;
+    const sameLat = lastSearch.current.lat === lat;
+    const sameLon = lastSearch.current.lon === lon;
 
-    setSearchTrigger(sameSearch);
+    if (sameKeyword && sameLat && sameLon) {
+      return;
+    }
 
     lastSearch.current = {
       keyword: inputKeyword,
@@ -122,6 +120,7 @@ export default function MainPage() {
       maxRange,
       difficulty,
     });
+    setSearchTrigger((prev) => prev + 1);
     setShowResults(true);
     setShowMap(true);
   }
