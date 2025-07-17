@@ -27,8 +27,7 @@ export default function HourlyForecastList({ selectedForecastDate, filteredForec
     }));
 
   return (
-
-    <div style={{ width: 700, overflowX: "auto", marginTop: 32, padding: 24, backgroundColor: "#ffffff", borderRadius: 16, boxShadow: "0 6px 18px rgba(0,0,0,0.08)", }}>
+    <div className="hourlycard-back">
       <h3 style={{ fontSize: 20, fontWeight: "700", color: "#222", marginBottom: 16 }}>
         {formattedDate} 시간별 예보
       </h3>
