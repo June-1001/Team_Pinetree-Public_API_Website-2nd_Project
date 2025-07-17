@@ -8,7 +8,7 @@ export default function DailyForecastList({
   if (!dailyForecast) return null;
 
   return (
-    <div style={{ marginTop:10 }}>
+    <div className="daily-card">
       <h3 style={{ marginBottom: 12, fontWeight: "700", color: "#222" }}>
         3일 단기 예보 (클릭 시 시간별 단기예보 표시)
       </h3>
@@ -16,7 +16,6 @@ export default function DailyForecastList({
         style={{
           display: "flex",
           gap: 13,
-          overflowX: "auto",
           paddingBottom: 8,
         }}
       >
@@ -40,7 +39,7 @@ export default function DailyForecastList({
                 key={date}
                 onClick={() => setSelectedForecastDate(date)}
                 style={{
-                  minWidth: 200,
+                  width: "100%",
                   borderRadius: 12,
                   border: isSelected ? "2px solid #6e9bcbff" : "1px solid #ddd",
                   backgroundColor: isSelected ? "#e6f0ff" : "#fafafa",
@@ -63,7 +62,7 @@ export default function DailyForecastList({
                     justifyContent: "center",
                     alignItems: "center",
                     fontWeight: "600",
-                    fontSize: 16,
+                    fontSize: 14,
                     marginBottom: 12,
                     transition: "all 0.2s ease-in-out",
                   }}
@@ -77,13 +76,13 @@ export default function DailyForecastList({
                 <div style={{ flexGrow: 1 }}>
                   <div style={{ marginBottom: 12 }}>
                     <b>아침 기온</b>
-                    <div style={{ fontSize: 18, color: "#f05454" }}>
+                    <div style={{ fontSize: 12, color: "#f05454" }}>
                       {tempAM}℃
                     </div>
                   </div>
                   <div style={{ marginBottom: 12 }}>
                     <b>낮 기온</b>
-                    <div style={{ fontSize: 18, color: "#ff793f" }}>
+                    <div style={{ fontSize: 12, color: "#ff793f" }}>
                       {tempPM}℃
                     </div>
                   </div>
