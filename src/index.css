@@ -1,6 +1,7 @@
 * {
   box-sizing: border-box;
   font-family: "Malgun Gothic", sans-serif;
+  user-select: none;
 }
 
 html,
@@ -435,6 +436,11 @@ select:focus-visible {
   background-color: #ffffff;
   border-radius: 16px;
   box-shadow: 0px 6px 18px rgba(0, 0, 0, 0.08);
+}
+
+.hourlycard-back > div > div {
+  flex-shrink: 0;
+  word-break: keep-all;
 }
 
 .daily-card {
