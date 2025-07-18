@@ -429,10 +429,17 @@ select:focus-visible {
 }
 
 
+
 @media only screen and (max-width: 1300px) {
   .daily-container-div {
     width: 100%;
     margin: 0 !important;
+  }
+
+  .daily-card {
+    margin-top: 10px;
+    width: 100%;
+
   }
 
   .hourly-forecast-div {
@@ -643,6 +650,14 @@ select:focus-visible {
     width: 100%;
     height: auto;
   }
+.daily-card {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+  word-break: break-word;
+}
+
 
   .forecasts {
     display: flex;
