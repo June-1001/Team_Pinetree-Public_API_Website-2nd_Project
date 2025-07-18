@@ -39,10 +39,6 @@ function setAttrFilter(min, max, diff) {
     filters.push(`sec_len:<=:${max}`);
   }
 
-  if (diff && diff !== "전체") {
-    filters.push(`cat_nam:=:${diff}`);
-  }
-
   return filters.join("|");
 }
 
