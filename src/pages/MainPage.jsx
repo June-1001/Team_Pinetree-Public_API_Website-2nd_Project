@@ -144,18 +144,29 @@ export default function MainPage() {
     setShowWeather(false);
   }, [searchParams]);
 
-  // 페이지 스케일링
-  function updateViewport() {
-    const meta = document.querySelector("#viewport-meta");
-    if (window.innerWidth <= 768) {
-      meta.setAttribute("content", "width=480, user-scalable=no");
-    } else {
-      meta.setAttribute("content", "width=device-width, initial-scale=1.0");
+  useEffect(() => {
+    function updateViewport() {
+      const meta = document.querySelector("#viewport-meta");
+      if (!meta) {
+        return;
+      }
+      if (window.innerWidth <= 768) {
+        meta.setAttribute("content", "width=480, user-scalable=no");
+      } else {
+        meta.setAttribute("content", "width=device-width, initial-scale=1.0");
+      }
     }
-  }
 
-  window.addEventListener("resize", updateViewport);
-  window.addEventListener("DOMContentLoaded", updateViewport);
+    updateViewport();
+
+    window.addEventListener("resize", updateViewport);
+    window.addEventListener("orientationchange", updateViewport);
+
+    return () => {
+      window.removeEventListener("resize", updateViewport);
+      window.removeEventListener("orientationchange", updateViewport);
+    };
+  }, []);
 
   return (
     <div className="main-container">
