@@ -8,12 +8,7 @@ export default function SunriseSunset({ lat, lon }) {
     return time && time.length === 6 ? `${time.slice(0, 2)}:${time.slice(2, 4)}` : "-";
   };
 
-  if (!data)
-    return (
-      <div>
-        <p>일출/일몰 정보 불러오는중...</p>
-      </div>
-    );
+  if (!data) return <div style={{ marginTop: "12px" }}>일출/일몰 정보 불러오는중...</div>;
 
   return (
     <div>

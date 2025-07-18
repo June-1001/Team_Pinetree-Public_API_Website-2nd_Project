@@ -54,19 +54,7 @@ function TrailList(props) {
     return null;
   }
 
-  const filteredGroupedByMountain = props.trailData.reduce((acc, trail) => {
-    const len = parseFloat(trail.properties.sec_len || 0);
-    const diff = trail.properties.cat_nam;
-
-    const minOk = props.minRange === "" || len >= parseFloat(props.minRange);
-    const maxOk = props.maxRange === "" || len <= parseFloat(props.maxRange);
-    const diffOk =
-      props.difficulty === "" || props.difficulty === "전체" || diff === props.difficulty;
-
-    if (!minOk || !maxOk || !diffOk) {
-      return acc;
-    }
-
+  const groupedByMountain = props.trailData.reduce((acc, trail) => {
     const mountain = trail.properties.mntn_nm || "Unknown";
     if (!acc[mountain]) {
       acc[mountain] = [];
@@ -75,7 +63,7 @@ function TrailList(props) {
     return acc;
   }, {});
 
-  const mountainNames = Object.keys(filteredGroupedByMountain);
+  const mountainNames = Object.keys(groupedByMountain);
 
   function toggleMountain(mountain) {
     setExpandedMountain((prev) => {
@@ -97,20 +85,20 @@ function TrailList(props) {
   } else if (sortOption === "2") {
     sortedMountainNames.sort((a, b) => {
       const minA = Math.min(
-        ...filteredGroupedByMountain[a].map((trail) => parseFloat(trail.properties.sec_len || 0))
+        ...groupedByMountain[a].map((trail) => parseFloat(trail.properties.sec_len || 0))
       );
       const minB = Math.min(
-        ...filteredGroupedByMountain[b].map((trail) => parseFloat(trail.properties.sec_len || 0))
+        ...groupedByMountain[b].map((trail) => parseFloat(trail.properties.sec_len || 0))
       );
       return minA - minB;
     });
   } else if (sortOption === "3") {
     sortedMountainNames.sort((a, b) => {
       const maxA = Math.max(
-        ...filteredGroupedByMountain[a].map((trail) => parseFloat(trail.properties.sec_len || 0))
+        ...groupedByMountain[a].map((trail) => parseFloat(trail.properties.sec_len || 0))
       );
       const maxB = Math.max(
-        ...filteredGroupedByMountain[b].map((trail) => parseFloat(trail.properties.sec_len || 0))
+        ...groupedByMountain[b].map((trail) => parseFloat(trail.properties.sec_len || 0))
       );
       return maxB - maxA;
     });
@@ -126,13 +114,13 @@ function TrailList(props) {
 
   return (
     <div className="trail-list">
-      {Object.keys(filteredGroupedByMountain).length === 0 ? (
+      {props.trailData.length === 0 ? (
         <div className="no-info">산 정보 없음</div>
       ) : (
         <>
           <SortOptionSelector value={sortOption} onChange={handleSortChange} />
           {sortedMountainNames.map((name) => {
-            const trails = filteredGroupedByMountain[name];
+            const trails = groupedByMountain[name];
             if (!trails) {
               return null;
             }

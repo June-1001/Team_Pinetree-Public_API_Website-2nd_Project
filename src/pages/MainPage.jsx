@@ -236,10 +236,16 @@ export default function MainPage() {
           {trailsLoading && showResults && <LoadingDots />}
           {!trailsLoading && !trailsError && showResults && (
             <TrailList
-              trailData={trailData}
-              minRange={minRange}
-              maxRange={maxRange}
-              difficulty={difficulty}
+              trailData={trailData.filter((trail) => {
+                const len = parseFloat(trail.properties.sec_len);
+                const matchMin = minRange === "" || len >= parseFloat(minRange);
+                const matchMax = maxRange === "" || len <= parseFloat(maxRange);
+                const matchDiff =
+                  difficulty === "전체" ||
+                  difficulty === "" ||
+                  trail.properties.cat_nam === difficulty;
+                return matchMin && matchMax && matchDiff;
+              })}
               selectedTrail={selectedTrail}
               setSelectedTrail={setSelectedTrail}
               collapseAllTrigger={collapseAllTrigger}
@@ -270,7 +276,9 @@ export default function MainPage() {
                       데이터를 불러오던 중 오류가 발생했습니다.
                     </p>
                   ) : !weatherData || !forecast ? (
-                    <p style={{ padding: "2rem", textAlign: "center" }}>정보가 없습니다.</p>
+                    <p style={{ padding: "2rem", textAlign: "center" }}>
+                      정보가 없습니다.
+                    </p>
                   ) : (
                     <>
                       <div className="weather-summary-row">
@@ -301,6 +309,9 @@ export default function MainPage() {
               )}
             </>
           )}
+
+
+
         </div>
       </div>
     </div>
