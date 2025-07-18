@@ -61,7 +61,7 @@ export default function MainPage() {
 
   const [selectedForecastDate, setSelectedForecastDate] = useState(null);
 
-  const { weatherData, forecast } = useWeatherData(lat, lon);
+  const { weatherData, forecast, loading, error } = useWeatherData(lat, lon);
   const { dailyForecast } = useLongTermWeatherData(lat, lon);
 
   const selectedDateTime = selectedForecastDate ? selectedForecastDate + "1500" : null;
@@ -268,33 +268,50 @@ export default function MainPage() {
               ※ 해당 지역은 지원되지 않습니다. 대한민국만 지원됩니다.
             </p>
           ) : (
-            showWeather && (
-              <div ref={weatherRef} className="weather-results">
-                <div className="weather-summary-row">
-                  <WeatherSummary lat={lat} lon={lon} />
-                  <SunriseSunset lat={lat} lon={lon} />
-                  <WeatherAlertBox alerts={alerts} />
-                </div>
+            <>
+              {showWeather && (
+                <div ref={weatherRef} className="weather-results">
+                  {error ? (
+                    <p style={{ padding: "2rem", textAlign: "center", color: "red" }}>
+                      데이터를 불러오던 중 오류가 발생했습니다.
+                    </p>
+                  ) : !weatherData || !forecast ? (
+                    <p style={{ padding: "2rem", textAlign: "center" }}>
+                      정보가 없습니다.
+                    </p>
+                  ) : (
+                    <>
+                      <div className="weather-summary-row">
+                        <WeatherSummary lat={lat} lon={lon} />
+                        <SunriseSunset lat={lat} lon={lon} />
+                        <WeatherAlertBox alerts={alerts} />
+                      </div>
 
-                <div className="forecasts">
-                  {dailyForecast && (
-                    <DailyForecastList
-                      dailyForecast={dailyForecast}
-                      selectedForecastDate={selectedForecastDate}
-                      setSelectedForecastDate={setSelectedForecastDate}
-                    />
-                  )}
+                      <div className="forecasts">
+                        {dailyForecast && (
+                          <DailyForecastList
+                            dailyForecast={dailyForecast}
+                            selectedForecastDate={selectedForecastDate}
+                            setSelectedForecastDate={setSelectedForecastDate}
+                          />
+                        )}
 
-                  {filteredForecast && filteredForecast.length > 0 && (
-                    <HourlyForecastList
-                      selectedForecastDate={selectedForecastDate}
-                      filteredForecast={filteredForecast}
-                    />
+                        {filteredForecast && filteredForecast.length > 0 && (
+                          <HourlyForecastList
+                            selectedForecastDate={selectedForecastDate}
+                            filteredForecast={filteredForecast}
+                          />
+                        )}
+                      </div>
+                    </>
                   )}
                 </div>
-              </div>
-            )
+              )}
+            </>
           )}
+
+
+
         </div>
       </div>
     </div>
