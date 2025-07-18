@@ -168,6 +168,20 @@ export default function MainPage() {
     };
   }, []);
 
+  function LoadingDots() {
+    const [dots, setDots] = useState(".");
+
+    useEffect(() => {
+      const interval = setInterval(() => {
+        setDots((prev) => (prev.length < 3 ? prev + "." : "."));
+      }, 100);
+
+      return () => clearInterval(interval);
+    }, []);
+
+    return <div className="loading-message">로딩중{dots}</div>;
+  }
+
   return (
     <div className="main-container">
       <div className={`search-wrapper ${showResults ? "searched" : ""}`}>
@@ -207,6 +221,7 @@ export default function MainPage() {
             />
           )}
 
+          {trailsLoading && showResults && <LoadingDots />}
           {!trailsLoading && !trailsError && showResults && (
             <TrailList
               trailData={trailData.filter((trail) => {
