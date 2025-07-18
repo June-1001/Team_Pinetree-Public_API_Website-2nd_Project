@@ -9,8 +9,9 @@ export default function DailyForecastList({
 
   return (
     <div className="daily-card">
-      <h3 style={{ marginBottom: 12, fontWeight: "700", color: "#222" }}>
-        3일 단기 예보 (클릭 시 시간별 단기예보 표시)
+      <h3 style={{ marginBottom: 12, fontWeight: "700", color: "#222", textAlign: "center" }}>
+        3일 단기 예보 <br />
+        (클릭 시 시간별 단기예보 표시)
       </h3>
       <div
         style={{
@@ -69,22 +70,19 @@ export default function DailyForecastList({
                 >
                   <div style={{ fontSize: 18, marginTop: 2 }}>{dayName}</div>
 
-                  <div>{date.slice(4, 6)}/{date.slice(6)}</div>
+                  <div>
+                    {date.slice(4, 6)}/{date.slice(6)}
+                  </div>
                 </div>
-
 
                 <div style={{ flexGrow: 1 }}>
                   <div style={{ marginBottom: 12 }}>
                     <b>아침 기온</b>
-                    <div style={{ fontSize: 12, color: "#f05454" }}>
-                      {tempAM}℃
-                    </div>
+                    <div style={{ fontSize: 12, color: "#f05454" }}>{tempAM}℃</div>
                   </div>
                   <div style={{ marginBottom: 12 }}>
                     <b>낮 기온</b>
-                    <div style={{ fontSize: 12, color: "#ff793f" }}>
-                      {tempPM}℃
-                    </div>
+                    <div style={{ fontSize: 12, color: "#ff793f" }}>{tempPM}℃</div>
                   </div>
                   <div>
                     <b>강수확률</b>
