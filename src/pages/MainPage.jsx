@@ -236,16 +236,10 @@ export default function MainPage() {
           {trailsLoading && showResults && <LoadingDots />}
           {!trailsLoading && !trailsError && showResults && (
             <TrailList
-              trailData={trailData.filter((trail) => {
-                const len = parseFloat(trail.properties.sec_len);
-                const matchMin = minRange === "" || len >= parseFloat(minRange);
-                const matchMax = maxRange === "" || len <= parseFloat(maxRange);
-                const matchDiff =
-                  difficulty === "전체" ||
-                  difficulty === "" ||
-                  trail.properties.cat_nam === difficulty;
-                return matchMin && matchMax && matchDiff;
-              })}
+              trailData={trailData}
+              minRange={minRange}
+              maxRange={maxRange}
+              difficulty={difficulty}
               selectedTrail={selectedTrail}
               setSelectedTrail={setSelectedTrail}
               collapseAllTrigger={collapseAllTrigger}
