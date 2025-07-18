@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { latlonToGrid } from "../utils/latlonToGrid";
 
+
 const SERVICE_KEY = encodeURIComponent(
   "Fn8nBDNNZn0hIRp85JkxCQhQUBSuaxYLC11J5xocF5WqxiLpogKvhdaKPkfyX5nyYhp9VAJKgLVNWSJ/n/J+Cw=="
 );
@@ -44,7 +45,6 @@ export function useWeatherData(lat, lon) {
   const [weatherData, setWeatherData] = useState(null);
   const [forecast, setForecast] = useState(null);
   const [loading, setLoading] = useState(false);
-
   useEffect(() => {
     if (lat == null || lon == null) {
       console.log("위도, 경도 값이 없습니다.");
