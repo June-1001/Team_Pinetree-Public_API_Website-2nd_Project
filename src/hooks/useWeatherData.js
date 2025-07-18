@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { latlonToGrid } from "../utils/latlonToGrid";
 
-
 const SERVICE_KEY = encodeURIComponent(
   "Fn8nBDNNZn0hIRp85JkxCQhQUBSuaxYLC11J5xocF5WqxiLpogKvhdaKPkfyX5nyYhp9VAJKgLVNWSJ/n/J+Cw=="
 );
@@ -45,14 +44,21 @@ export function useWeatherData(lat, lon) {
   const [weatherData, setWeatherData] = useState(null);
   const [forecast, setForecast] = useState(null);
   const [loading, setLoading] = useState(false);
+
+  const [error, setError] = useState(null);
+
   useEffect(() => {
     if (lat == null || lon == null) {
       console.log("위도, 경도 값이 없습니다.");
+      setWeatherData(null);
+      setForecast(null);
+      setError("위도 또는 경도 값이 없습니다.");
       return;
     }
 
     async function fetchData() {
       setLoading(true);
+      setError(null); // 새 요청 시작 전 에러 초기화
 
       const { baseDate, baseTime } = getBaseDateTime();
       const { x: nx, y: ny } = latlonToGrid(lat, lon);
@@ -64,11 +70,12 @@ export function useWeatherData(lat, lon) {
         // 1) 초단기 실황 (현재 날씨)
         const url1 = `https://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getUltraSrtNcst?serviceKey=${SERVICE_KEY}&base_date=${baseDate}&base_time=${baseTime}&nx=${nx}&ny=${ny}&dataType=JSON`;
         const res1 = await fetch(url1);
+        if (!res1.ok) throw new Error(`초단기 실황 API 응답 오류: ${res1.status}`);
         const json1 = await res1.json();
         console.log("초단기 실황 API 응답:", json1);
 
         const ultra = {};
-        if (json1?.response?.body?.items?.item) {
+        if (json1?.response?.body?.items?.item && Array.isArray(json1.response.body.items.item)) {
           json1.response.body.items.item.forEach(i => {
             ultra[i.category] = isNaN(i.obsrValue) ? i.obsrValue : Number(i.obsrValue);
           });
@@ -76,16 +83,18 @@ export function useWeatherData(lat, lon) {
         } else {
           setWeatherData(null);
           console.warn("초단기 실황 데이터 없음");
+          setError("초단기 실황 데이터가 없습니다.");
         }
 
         // 2) 단기 예보
         const url2 = `https://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst?serviceKey=${SERVICE_KEY}&numOfRows=1500&pageNo=1&base_date=${baseDate}&base_time=${baseTime}&nx=${nx}&ny=${ny}&dataType=JSON`;
         const res2 = await fetch(url2);
+        if (!res2.ok) throw new Error(`단기 예보 API 응답 오류: ${res2.status}`);
         const json2 = await res2.json();
         console.log("단기 예보 API 응답:", json2);
 
         const grouped = {};
-        if (json2?.response?.body?.items?.item) {
+        if (json2?.response?.body?.items?.item && Array.isArray(json2.response.body.items.item)) {
           json2.response.body.items.item.forEach(({ fcstDate, fcstTime, category, fcstValue }) => {
             const key = fcstDate + fcstTime;
             if (!grouped[key]) {
@@ -97,12 +106,14 @@ export function useWeatherData(lat, lon) {
         } else {
           setForecast(null);
           console.warn("단기 예보 데이터 없음");
+          setError("단기 예보 데이터가 없습니다.");
         }
 
       } catch (error) {
         console.error("기상청 API 호출 실패:", error);
         setWeatherData(null);
         setForecast(null);
+        setError(error.message || "기상청 API 호출 중 알 수 없는 오류 발생");
       } finally {
         setLoading(false);
       }
@@ -111,5 +122,5 @@ export function useWeatherData(lat, lon) {
     fetchData();
   }, [lat, lon]);
 
-  return { weatherData, forecast, loading };
+  return { weatherData, forecast, loading, error };
 }
