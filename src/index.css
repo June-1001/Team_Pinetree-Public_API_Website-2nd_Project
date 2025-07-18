@@ -103,6 +103,8 @@ select:focus-visible {
 
 .title {
   text-align: center;
+  word-break: keep-all;
+  transition: 0.3s ease;
 }
 
 .main-container {
@@ -128,6 +130,13 @@ select:focus-visible {
 
 .search-wrapper.searched {
   transform: translateY(0);
+}
+
+.search-wrapper > h1 {
+  font-size: 60px;
+}
+.search-wrapper.searched > h1 {
+  font-size: 30px;
 }
 
 .search-design {
@@ -422,7 +431,7 @@ select:focus-visible {
 .hourlycard-back {
   width: 100%;
   overflow-x: auto;
-  padding: 24px;
+  padding: 10px;
   background-color: #ffffff;
   border-radius: 16px;
   box-shadow: 0px 6px 18px rgba(0, 0, 0, 0.08);
@@ -507,6 +516,7 @@ select:focus-visible {
   body,
   #root {
     padding: 0;
+    overflow-x: hidden;
   }
 
   select {
@@ -583,7 +593,7 @@ select:focus-visible {
 
   #hiking-map {
     width: 100% !important;
-    aspect-ratio: 5 / 3 !important;
+    aspect-ratio: 10 / 7 !important;
     height: auto !important;
     max-height: none !important;
     flex-shrink: 0;
@@ -635,6 +645,7 @@ select:focus-visible {
 
   .trail-card-list {
     justify-content: center;
+    zoom: 0.8;
   }
 
   .trail-card {

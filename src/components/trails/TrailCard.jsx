@@ -37,7 +37,9 @@ const TrailCard = React.forwardRef((props, ref) => {
       }}
       onClick={handleClick}
     >
-      <div>산명칭 : {props.trail.properties.mntn_nm}</div>
+      <div>
+        <b>{props.trail.properties.mntn_nm}</b>
+      </div>
       <div>길이 : {props.trail.properties.sec_len}m</div>
       <div>난이도 : {props.trail.properties.cat_nam}</div>
       <div>상행속도 : {props.trail.properties.up_min}분</div>
