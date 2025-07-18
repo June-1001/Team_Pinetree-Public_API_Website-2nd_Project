@@ -4,7 +4,7 @@ const vworldApiKey = `31198BF5-179E-3380-947F-F97448ED7D34`;
 
 const hiking = {
   url: "https://api.vworld.kr/req/data?",
-  domain: "localhost:3000",
+  domain: "https://pinetree.dothome.co.kr",
   service: "data",
   request: "getfeature",
   format: "json",
@@ -28,20 +28,6 @@ function setGeomFilter(point, bufferKm) {
   return `BOX(${minx},${miny},${maxx},${maxy})`;
 }
 
-function setAttrFilter(min, max, diff) {
-  const filters = [];
-
-  if (min && max) {
-    filters.push(`sec_len:between:${min},${max}`);
-  } else if (min) {
-    filters.push(`sec_len:>=:${min}`);
-  } else if (max) {
-    filters.push(`sec_len:<=:${max}`);
-  }
-
-  return filters.join("|");
-}
-
 export function getHikingUrl(lat, lon, min, max, diff, page = 1) {
   const params = [];
 
@@ -60,13 +46,6 @@ export function getHikingUrl(lat, lon, min, max, diff, page = 1) {
   if (lat !== null && lon !== null) {
     geomFilter = setGeomFilter({ x: lon, y: lat }, 5);
     params.push("geomFilter=" + geomFilter);
-  }
-
-  if (geomFilter) {
-    attrFilter = setAttrFilter(min, max, diff);
-    if (attrFilter) {
-      params.push("attrFilter=" + attrFilter);
-    }
   }
 
   return hiking.url + params.join("&");

@@ -18,7 +18,7 @@ const SearchFilterSection = ({
     if (keyword.trim() !== "") {
       handleSearch();
     }
-  }, [difficulty]);
+  }, difficulty);
 
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {

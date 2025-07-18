@@ -59,6 +59,17 @@ export default function MainPage() {
     difficulty: "",
   });
 
+  useEffect(() => {
+    if (lat !== null && lon !== null) {
+      setSearchParams((prev) => ({
+        ...prev,
+        lat,
+        lon,
+        difficulty,
+      }));
+    }
+  }, [difficulty]);
+
   const [selectedForecastDate, setSelectedForecastDate] = useState(null);
 
   const { weatherData, forecast, loading, error } = useWeatherData(lat, lon);
@@ -229,7 +240,6 @@ export default function MainPage() {
                 }));
               }}
               onClearSelection={clearSelection}
-              searchTrigger={searchTrigger}
             />
           )}
 
@@ -249,6 +259,7 @@ export default function MainPage() {
               selectedTrail={selectedTrail}
               setSelectedTrail={setSelectedTrail}
               collapseAllTrigger={collapseAllTrigger}
+              searchTrigger={searchTrigger}
             />
           )}
         </div>
@@ -276,9 +287,7 @@ export default function MainPage() {
                       데이터를 불러오던 중 오류가 발생했습니다.
                     </p>
                   ) : !weatherData || !forecast ? (
-                    <p style={{ padding: "2rem", textAlign: "center" }}>
-                      정보가 없습니다.
-                    </p>
+                    <p style={{ padding: "2rem", textAlign: "center" }}>정보가 없습니다.</p>
                   ) : (
                     <>
                       <div className="weather-summary-row">
@@ -309,9 +318,6 @@ export default function MainPage() {
               )}
             </>
           )}
-
-
-
         </div>
       </div>
     </div>
