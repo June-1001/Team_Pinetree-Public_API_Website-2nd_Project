@@ -7,7 +7,7 @@ export default function WeatherSummary({ lat, lon }) {
   if (loading)
     return (
       <div className="weather-summary">
-        <p>날씨 정보를 불러오는 중...</p>
+        <p>현재 지역 날씨 정보를 불러오는 중...</p>
       </div>
     );
 
@@ -15,9 +15,9 @@ export default function WeatherSummary({ lat, lon }) {
     !weatherData ||
     Object.keys(weatherData).length === 0 ||
     ["T1H", "RN1", "WSD", "REH"].some(
-      (key) => weatherData[key] === -999 || weatherData[key] === undefined || weatherData[key] === null
+      (key) =>
+        weatherData[key] <= -900 || weatherData[key] === undefined || weatherData[key] === null
     );
-
 
   return (
     <div className="weather-summary">

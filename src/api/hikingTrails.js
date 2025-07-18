@@ -28,20 +28,6 @@ function setGeomFilter(point, bufferKm) {
   return `BOX(${minx},${miny},${maxx},${maxy})`;
 }
 
-function setAttrFilter(min, max, diff) {
-  const filters = [];
-
-  if (min && max) {
-    filters.push(`sec_len:between:${min},${max}`);
-  } else if (min) {
-    filters.push(`sec_len:>=:${min}`);
-  } else if (max) {
-    filters.push(`sec_len:<=:${max}`);
-  }
-
-  return filters.join("|");
-}
-
 export function getHikingUrl(lat, lon, min, max, diff, page = 1) {
   const params = [];
 
@@ -64,9 +50,6 @@ export function getHikingUrl(lat, lon, min, max, diff, page = 1) {
 
   if (geomFilter) {
     attrFilter = setAttrFilter(min, max, diff);
-    if (attrFilter) {
-      params.push("attrFilter=" + attrFilter);
-    }
   }
 
   return hiking.url + params.join("&");
