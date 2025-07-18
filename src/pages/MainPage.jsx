@@ -59,17 +59,6 @@ export default function MainPage() {
     difficulty: "",
   });
 
-  useEffect(() => {
-    if (lat !== null && lon !== null) {
-      setSearchParams((prev) => ({
-        ...prev,
-        lat,
-        lon,
-        difficulty,
-      }));
-    }
-  }, [difficulty]);
-
   const [selectedForecastDate, setSelectedForecastDate] = useState(null);
 
   const { weatherData, forecast, loading, error } = useWeatherData(lat, lon);
@@ -111,23 +100,26 @@ export default function MainPage() {
     searchParams.keyword
   );
 
-  function handleSearch() {
-    if (inputKeyword.trim() === "") {
+  function handleSearch(passedLat = lat, passedLon = lon) {
+    if (inputKeyword.trim() === "" || passedLat === null || passedLon === null) {
       return;
     }
 
     const sameKeyword = lastSearch.current.keyword === inputKeyword;
-    const sameLat = lastSearch.current.lat === lat;
-    const sameLon = lastSearch.current.lon === lon;
+    const sameLat = parseFloat(lastSearch.current.lat) === parseFloat(passedLat);
+    const sameLon = parseFloat(lastSearch.current.lon) === parseFloat(passedLon);
+    const sameMin = lastSearch.current.minRange === minRange;
+    const sameMax = lastSearch.current.maxRange === maxRange;
+    const sameDiff = lastSearch.current.difficulty === difficulty;
 
-    if (sameKeyword && sameLat && sameLon) {
+    if (sameKeyword && sameLat && sameLon && sameMin && sameMax && sameDiff) {
       return;
     }
 
     lastSearch.current = {
       keyword: inputKeyword,
-      lat,
-      lon,
+      lat: passedLat,
+      lon: passedLon,
       minRange,
       maxRange,
       difficulty,
@@ -136,8 +128,8 @@ export default function MainPage() {
     setKeyword(inputKeyword);
     setSearchParams({
       keyword: inputKeyword,
-      lat,
-      lon,
+      lat: passedLat,
+      lon: passedLon,
       minRange,
       maxRange,
       difficulty,
@@ -151,16 +143,6 @@ export default function MainPage() {
     setSelectedTrail(null);
     setCollapseAllTrigger((prev) => prev + 1);
   }
-
-  useEffect(() => {
-    if (lat !== null && lon !== null) {
-      setSearchParams((prev) => ({
-        ...prev,
-        lat,
-        lon,
-      }));
-    }
-  }, [lat, lon]);
 
   useEffect(() => {
     setShowWeather(false);
