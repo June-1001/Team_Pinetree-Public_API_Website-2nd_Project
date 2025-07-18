@@ -14,6 +14,17 @@ import HourlyForecastList from "../components/weather/HourlyForecastList";
 import SunriseSunset from "../components/weather/SunriseSunset";
 import WeatherAlertBox from "../components/weather/WeatherAlertBox";
 
+function isInKorea(lat, lon) {
+  const latNum = parseFloat(lat);
+  const lonNum = parseFloat(lon);
+  const inMainRange = latNum >= 33.0 && latNum <= 38.45 && lonNum >= 124.5 && lonNum <= 131.9;
+
+  // 개성/해주 등 북한 접경 차단
+  const inKaesongArea = latNum >= 37.8 && lonNum <= 126.3;
+
+  return inMainRange && !inKaesongArea;
+}
+
 export default function MainPage() {
   const [inputKeyword, setInputKeyword] = useState("");
   const [keyword, setKeyword] = useState("");
@@ -198,6 +209,7 @@ export default function MainPage() {
           setDifficulty={setDifficulty}
         />
       </div>
+
       <div className={`search-results ${showResults ? "visible" : ""}`}>
         <div className="trail-results">
           {showMap && (
@@ -240,7 +252,6 @@ export default function MainPage() {
             />
           )}
         </div>
-
         <div>
           <h3
             className="weather-toggle-header"
@@ -251,29 +262,38 @@ export default function MainPage() {
             지역 날씨 상황 정보
             <span className="triangle">{showWeather ? "▲" : "▼"}</span>
           </h3>
-          {showWeather && (
-            <div ref={weatherRef} className="weather-results">
-              <div className="weather-summary-row">
-                <WeatherSummary lat={lat} lon={lon} />
-                <SunriseSunset lat={lat} lon={lon} />
-                <WeatherAlertBox alerts={alerts} />
+
+          {!lat || !lon || !isInKorea(lat, lon) ? (
+            <p style={{ padding: "2rem", textAlign: "center", color: "red" }}>
+              ※ 해당 지역은 지원되지 않습니다. 대한민국만 지원됩니다.
+            </p>
+          ) : (
+            showWeather && (
+              <div ref={weatherRef} className="weather-results">
+                <div className="weather-summary-row">
+                  <WeatherSummary lat={lat} lon={lon} />
+                  <SunriseSunset lat={lat} lon={lon} />
+                  <WeatherAlertBox alerts={alerts} />
+                </div>
+
+                <div className="forecasts">
+                  {dailyForecast && (
+                    <DailyForecastList
+                      dailyForecast={dailyForecast}
+                      selectedForecastDate={selectedForecastDate}
+                      setSelectedForecastDate={setSelectedForecastDate}
+                    />
+                  )}
+
+                  {filteredForecast && filteredForecast.length > 0 && (
+                    <HourlyForecastList
+                      selectedForecastDate={selectedForecastDate}
+                      filteredForecast={filteredForecast}
+                    />
+                  )}
+                </div>
               </div>
-              <div className="forecasts">
-                {dailyForecast && (
-                  <DailyForecastList
-                    dailyForecast={dailyForecast}
-                    selectedForecastDate={selectedForecastDate}
-                    setSelectedForecastDate={setSelectedForecastDate}
-                  />
-                )}
-                {filteredForecast && filteredForecast.length > 0 && (
-                  <HourlyForecastList
-                    selectedForecastDate={selectedForecastDate}
-                    filteredForecast={filteredForecast}
-                  />
-                )}
-              </div>
-            </div>
+            )
           )}
         </div>
       </div>
