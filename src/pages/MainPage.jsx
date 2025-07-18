@@ -99,27 +99,34 @@ export default function MainPage() {
     searchParams.difficulty,
     searchParams.keyword
   );
+  useEffect(() => {
+    if (lat !== null && lon !== null) {
+      setSearchParams((prev) => ({
+        ...prev,
+        lat,
+        lon,
+        difficulty,
+      }));
+    }
+  }, [difficulty]);
 
-  function handleSearch(passedLat = lat, passedLon = lon) {
-    if (inputKeyword.trim() === "" || passedLat === null || passedLon === null) {
+  function handleSearch() {
+    if (inputKeyword.trim() === "") {
       return;
     }
 
     const sameKeyword = lastSearch.current.keyword === inputKeyword;
-    const sameLat = parseFloat(lastSearch.current.lat) === parseFloat(passedLat);
-    const sameLon = parseFloat(lastSearch.current.lon) === parseFloat(passedLon);
-    const sameMin = lastSearch.current.minRange === minRange;
-    const sameMax = lastSearch.current.maxRange === maxRange;
-    const sameDiff = lastSearch.current.difficulty === difficulty;
+    const sameLat = parseFloat(lastSearch.current.lat) === parseFloat(lat);
+    const sameLon = parseFloat(lastSearch.current.lon) === parseFloat(lon);
 
-    if (sameKeyword && sameLat && sameLon && sameMin && sameMax && sameDiff) {
+    if (sameKeyword && sameLat && sameLon) {
       return;
     }
 
     lastSearch.current = {
       keyword: inputKeyword,
-      lat: passedLat,
-      lon: passedLon,
+      lat,
+      lon,
       minRange,
       maxRange,
       difficulty,
@@ -128,13 +135,14 @@ export default function MainPage() {
     setKeyword(inputKeyword);
     setSearchParams({
       keyword: inputKeyword,
-      lat: passedLat,
-      lon: passedLon,
+      lat,
+      lon,
       minRange,
       maxRange,
       difficulty,
     });
-    setSearchTrigger((prev) => prev + 1);
+
+    setSearchTrigger(Date.now());
     setShowResults(true);
     setShowMap(true);
   }
