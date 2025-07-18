@@ -19,7 +19,7 @@ const SearchBar = ({ keyword, setKeyword, onSearch }) => {
           setKeyword(e.target.value);
         }}
         onKeyDown={handleKeyDown}
-        placeholder="지역검색 및 산명칭 검색"
+        placeholder="지역 검색"
       />
       <button onClick={onSearch}>검색</button>
     </div>
