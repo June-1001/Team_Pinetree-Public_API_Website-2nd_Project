@@ -65,7 +65,7 @@ export default function HourlyForecastList({ selectedForecastDate, filteredForec
       </div>
 
       <ResponsiveContainer width="100%" height={320}>
-        <ComposedChart data={chartData} margin={{ top: 20, right: 40, bottom: 20, left: 20 }}>
+        <ComposedChart data={chartData} margin={{ top: 20, right: 30, bottom: 20, left: 10 }}>
           <CartesianGrid strokeDasharray="4 4" stroke="#eaeaea" />
           <XAxis
             dataKey="time"
@@ -152,7 +152,6 @@ export default function HourlyForecastList({ selectedForecastDate, filteredForec
             dot={{ r: 4, strokeWidth: 2, fill: "#40a9ff", stroke: "#fff" }}
             activeDot={{ r: 6 }}
             name="강수확률"
-            animationDuration={300}
           />
         </ComposedChart>
       </ResponsiveContainer>
