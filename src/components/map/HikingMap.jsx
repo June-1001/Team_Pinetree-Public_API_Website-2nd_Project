@@ -150,7 +150,7 @@ function HikingMap(props) {
         const isMobile = window.innerWidth <= 768;
         const options = {
           center,
-          level: isMobile ? 3 : 6,
+          level: isMobile ? 5 : 7,
           draggable: true,
           pinchZoom: true,
         };

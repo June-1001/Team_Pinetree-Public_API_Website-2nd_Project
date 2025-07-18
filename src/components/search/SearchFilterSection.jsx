@@ -14,12 +14,6 @@ const SearchFilterSection = ({
   difficulty,
   setDifficulty,
 }) => {
-  useEffect(() => {
-    if (keyword.trim() !== "") {
-      handleSearch();
-    }
-  }, difficulty);
-
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {
       handleSearch();
